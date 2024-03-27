@@ -14,6 +14,7 @@ while True:
         first_value = tag['EPC-96'][0:24].decode('utf-8')
         print(first_value)
         #print(tag)
+
         
 
 
