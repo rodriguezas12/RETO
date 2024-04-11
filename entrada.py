@@ -65,25 +65,16 @@ conexion.commit()
 
 ###############
 #LECTORES RFID#
-###############
-reader_1 = R420('192.168.0.20')
-reader_2 = reader_1
-reader_3 = reader_1
-reader_4 = reader_1
-reader_5 = reader_1
-reader_6 = reader_1
-reader_7 = reader_1
-
-reader_IN = reader_1
-reader_OUT = reader_1
-#reader_OUT = R420('192.168.0.20')
+############### 
+reader_IN = R420('192.168.0.44')
+reader_OUT = R420('192.168.0.42')
 
 
 durationn=0.001
 
 while True:
     # Detectar tags con el lector RFID de entrada
-    tags_IN = reader_IN.detectTags(powerDBm=reader_IN.power_table[-1], freqMHz=reader_IN.freq_table[0], mode=1002, session=2, population=1, duration=durationn, searchmode=2)
+    tags_IN = reader_IN.detectTags(powerDBm=reader_IN.power_table[1], freqMHz=reader_IN.freq_table[0], mode=1002, session=2, population=1, duration=durationn, searchmode=2)
     for tag_IN in tags_IN:
         tag_id_IN = tag_IN['EPC-96'].decode('utf-8')
         print("Tag detectado en entrada:", tag_id_IN)
@@ -149,36 +140,3 @@ while True:
                     # como actualizar el registro existente o ignorarlo.
                 else:
                     print("Error al insertar/actualizar el tag (entrada):", err)  
-    
-    ############
-    #ESTACIONES#
-    ############
-    print("inicio")
-    tags_1 = reader_1.detectTags(powerDBm=reader_1.power_table[-1], freqMHz=reader_1.freq_table[0], mode=1002, session=2, population=1, duration=durationn, searchmode=2)
-    tags_2 = reader_2.detectTags(powerDBm=reader_2.power_table[-1], freqMHz=reader_2.freq_table[0], mode=1002, session=2, population=1, duration=durationn, searchmode=2)
-    tags_3 = reader_3.detectTags(powerDBm=reader_3.power_table[-1], freqMHz=reader_3.freq_table[0], mode=1002, session=2, population=1, duration=durationn, searchmode=2)
-    tags_4 = reader_4.detectTags(powerDBm=reader_4.power_table[-1], freqMHz=reader_4.freq_table[0], mode=1002, session=2, population=1, duration=durationn, searchmode=2)
-    tags_5 = reader_5.detectTags(powerDBm=reader_5.power_table[-1], freqMHz=reader_5.freq_table[0], mode=1002, session=2, population=1, duration=durationn, searchmode=2)
-    tags_6 = reader_6.detectTags(powerDBm=reader_6.power_table[-1], freqMHz=reader_6.freq_table[0], mode=1002, session=2, population=1, duration=durationn, searchmode=2)
-    tags_7 = reader_7.detectTags(powerDBm=reader_7.power_table[-1], freqMHz=reader_7.freq_table[0], mode=1002, session=2, population=1, duration=durationn, searchmode=2)
-    for tag in tags_1:
-        first_value_1 = tag['EPC-96'][0:24].decode('utf-8')
-    for tag in tags_2:
-        first_value_2 = tag['EPC-96'][0:24].decode('utf-8')
-    for tag in tags_3:
-        first_value_3 = tag['EPC-96'][0:24].decode('utf-8')
-    for tag in tags_4:
-        first_value_4 = tag['EPC-96'][0:24].decode('utf-8')
-    for tag in tags_5:
-        first_value_5 = tag['EPC-96'][0:24].decode('utf-8')
-    for tag in tags_6:
-        first_value_6 = tag['EPC-96'][0:24].decode('utf-8')
-    for tag in tags_7:
-        first_value_7 = tag['EPC-96'][0:24].decode('utf-8')
-    print("fin")
-
-                    
-
-# Cerrar el cursor y la conexión
-cursor.close()
-conexion.close()
