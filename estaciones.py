@@ -122,13 +122,10 @@ while True:
     
     # Detectar tags con el lector RFID de las estaciones 1, 2 y 3
     tags_1 = reader_1.detectTags(powerDBm=reader_1.power_table[35], freqMHz=reader_1.freq_table[0], mode=1002, session=2, population=1, duration=0.2, searchmode=2)
-    tags_2 = reader_2.detectTags(powerDBm=reader_1.power_table[35], freqMHz=reader_1.freq_table[0], mode=1002, session=2, population=1, duration=3, searchmode=2)
+    tags_2 = reader_2.detectTags(powerDBm=reader_1.power_table[35], freqMHz=reader_1.freq_table[0], mode=1002, session=2, population=1, duration=0.2, searchmode=2)
 
     
-    if tag_2 not in tags_2:
-        tag_id_2 = tag_2['EPC-96'].decode('utf-8')            
-        tag_antenna = tag_2['AntennaID']
-        print("Tag: ",tag_id_2,"Estación: ",tag_antenna)
+
         
     for tag_1 in tags_1:
         tag_id_1 = tag_1['EPC-96'].decode('utf-8')            
@@ -201,6 +198,8 @@ while True:
                     print("Error al insertar el tag en la tabla de la Estación 3:", err)
    
     for tag_2 in tags_2:
+        
+
         tag_id_2 = tag_2['EPC-96'].decode('utf-8')            
         tag_antenna = tag_2['AntennaID']   
         print(tag_id_2)
