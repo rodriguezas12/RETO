@@ -3,7 +3,7 @@ import Home from "../src/pages/Home";
 import Login from "../src/pages/Login";
 import Nopage from "../src/pages/Nopage";
 import Register from "../src/pages/Register";
-import base from "../src/pages/base";
+
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/base" element={<base />} />
+        
         <Route path="/*" element={<Nopage />}/>
       </Routes>
     </BrowserRouter>
