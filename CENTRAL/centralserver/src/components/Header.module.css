@@ -1,0 +1,16 @@
+.banner {
+    background-color: #FFA500; /* Color de fondo naranja claro */
+    padding: 20px; /* Espaciado interno de 20px */
+    display: flex; /* Usa un contenedor flexible para alinear elementos */
+    align-items: center; /* Alinea los elementos verticalmente en el centro */
+  }
+  
+  .logo {
+    width: 50px; /* Ancho de la imagen del logo */
+    height: auto; /* Altura automática para mantener la proporción */
+    margin-right: 20px; /* Margen derecho de 20px para separar el logo del título */
+  }
+  
+  .title {
+    margin: 0; /* Elimina el margen predeterminado del título */
+  }
