@@ -335,7 +335,7 @@ class R420(Reader):
 			**kwargs
 		)
 
-	def detectTags(self, powerDBm=60, freqMHz=866.9, mode=1002, searchmode=0, **kwargs):
+	def detectTags(self, powerDBm=31.2, freqMHz=866.9, mode=1002, searchmode=0, **kwargs):
 		'''
 		:param searchmode: Impinj specific parameter which controls Tag muting 
 			in combination with session. Can be 0 (disabled), 1, 2 or 3
@@ -343,7 +343,7 @@ class R420(Reader):
 		self.impinj_searchmode = searchmode # update searchmode
 		return super().detectTags(powerDBm=powerDBm, freqMHz=freqMHz, mode=mode, **kwargs)
 	
-	def startLiveReports(self, reportCallback, powerDBm=60, freqMHz=866.9, mode=1002, searchmode=0, **kwargs):
+	def startLiveReports(self, reportCallback, powerDBm=1, freqMHz=866.9, mode=1002, searchmode=0, **kwargs):
 		self.impinj_searchmode = searchmode # update searchmode
 		return super().startLiveReports(reportCallback, powerDBm=powerDBm, freqMHz=freqMHz, mode=mode,**kwargs)
 
