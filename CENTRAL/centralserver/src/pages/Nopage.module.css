@@ -1,0 +1,51 @@
+/* Nopage.module.css */
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Ocupa al menos toda la altura de la ventana del navegador */
+  margin: 0; /* Elimina el margen predeterminado del body */
+  background-image: linear-gradient(
+    to bottom right,
+    #ffffff,
+    #ffd700
+  ); /* Fondo degradado de blanco a amarillo */
+}
+/* styles.css */
+
+@font-face {
+  font-family: "ChauPhilomeneOne-Regular";
+  src: url("../Media/ChauPhilomeneOne-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ChauPhilomeneOne-Italic";
+  src: url("../Media/ChauPhilomeneOne-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic; /* Especifica el estilo itálico */
+}
+
+
+.container {
+  display: flex; /* Usa flexbox para organizar los elementos */
+  justify-content: space-between; /* Distribuye los elementos horizontalmente */
+  align-items: flex-start; /* Alinea los elementos verticalmente en la parte superior */
+  margin-top: 0vh; /* Alinea el contenedor al 15% de la altura de la ventana */
+}
+
+.container h1 {
+  font-family: 'ChauPhilomeneOne-Regular', sans-serif; /* Utiliza la fuente regular */
+  font-size: 86px; /* Tamaño de letra aumentado */
+  font-weight: bold;
+  color: black; /* Color de texto negro */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Agrega sombra al texto */
+  margin: 0; /* Elimina el margen predeterminado */
+}
+
+.container img {
+  width: 400px; /* Ancho de la imagen */
+  height: auto; /* Altura automática para mantener la proporción */
+  margin-top: 20px; /* Espacio superior */
+}
