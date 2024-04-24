@@ -6,9 +6,9 @@ body {
   min-height: 100vh; /* Ocupa al menos toda la altura de la ventana del navegador */
   margin: 0; /* Elimina el margen predeterminado del body */
   background-image: linear-gradient(
-    to bottom right,
-    #ffffff,
-    #ffd700
+    to bottom,
+    #ffde59,
+    #ff914d
   ); /* Fondo degradado de blanco a amarillo */
 }
 /* styles.css */
@@ -27,25 +27,41 @@ body {
   font-style: italic; /* Especifica el estilo itálico */
 }
 
-
 .container {
   display: flex; /* Usa flexbox para organizar los elementos */
-  justify-content: space-between; /* Distribuye los elementos horizontalmente */
-  align-items: flex-start; /* Alinea los elementos verticalmente en la parte superior */
-  margin-top: 0vh; /* Alinea el contenedor al 15% de la altura de la ventana */
+  flex-direction: column; /* Alinea los elementos verticalmente */
+  justify-content: space-between; /* Distribuye el espacio entre los elementos */
+  margin: 10vh; /* Margen de 20% del alto de la ventana */
+}
+
+.text-container {
+  display: flex; /* Usa flexbox para organizar los elementos */
+  flex-direction: column; /* Alinea los elementos verticalmente */
+  align-items: flex-start; /* Alinea los elementos a la izquierda */
 }
 
 .container h1 {
-  font-family: 'ChauPhilomeneOne-Regular', sans-serif; /* Utiliza la fuente regular */
-  font-size: 86px; /* Tamaño de letra aumentado */
+  font-family: "ChauPhilomeneOne-Regular", sans-serif; /* Utiliza la fuente regular */
+  font-size: 8vw; /* Tamaño de letra relativo al ancho de la ventana */
   font-weight: bold;
   color: black; /* Color de texto negro */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Agrega sombra al texto */
   margin: 0; /* Elimina el margen predeterminado */
 }
 
+.container p {
+  font-size: 14px; /* Tamaño de letra para el subtexto */
+  text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.image-container {
+  display: flex; /* Usa flexbox para organizar los elementos */
+  justify-content: flex-end; /* Centra los elementos horizontalmente */
+}
+
 .container img {
-  width: 400px; /* Ancho de la imagen */
+  max-width: 30%; /* Ancho máximo del contenedor del 30% */
+  width: 100%; /* Ancho del 100% para que la imagen se ajuste al contenedor */
   height: auto; /* Altura automática para mantener la proporción */
   margin-top: 20px; /* Espacio superior */
 }
