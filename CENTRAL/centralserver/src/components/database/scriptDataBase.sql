@@ -1,14 +1,10 @@
 create database loginbase;
-use loginbase;
+USE loginbase;
 
-
-CREATE TABLE login (
-    username varchar(50) not null,
-    password varchar(50) not null,
-    primary key(username,password)
+CREATE TABLE IF NOT EXISTS register (
+   
+    nombre_completo VARCHAR(100) DEFAULT '',
+    codigo_estudiantil VARCHAR(50) DEFAULT '',
+    NRC INT DEFAULT 12341,
+    
 );
-
-INSERT INTO login (username, password) VALUES
-    ('user1', 'contraseña1'),
-    ('user2', 'contraseña2'),
-    ('user3', 'contraseña3');
