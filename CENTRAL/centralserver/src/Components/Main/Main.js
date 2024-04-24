@@ -1,4 +1,4 @@
-const { default: Home } = require("../Home/Home");
+import Home from "../Home/Home";
 const { default: Login } = require("../Login/login");
 
 
