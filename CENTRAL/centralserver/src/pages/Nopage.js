@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import Helmet from "react-helmet";
 import notFoundImage from "../Media/404.png"; // Importa la imagen
 import Styles from "./Nopage.module.css"; // Importa los estilos CSS específicos para Nopage
 
