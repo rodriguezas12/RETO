@@ -15,8 +15,13 @@ export default function Nopage() {
         {/* Otros metadatos si es necesario */}
       </Helmet>
       <div className={Styles.container}>
-        <h1>NO PAGE FOUND</h1>
-        <img src={notFoundImage}  alt="Imagen asociada" />
+        <div className={Styles.textContainer}>
+          <h1>NO PAGE FOUND</h1>
+          <p>Lo sentimos, no se encontró la página que buscabas</p>
+        </div>
+        <div className={Styles.imageContainer}>
+          <img src={notFoundImage} alt="Imagen asociada" />
+        </div>
       </div>
     </>
   );
