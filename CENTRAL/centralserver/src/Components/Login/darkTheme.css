@@ -1,0 +1,36 @@
+/* darkTheme.css */
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #fff;
+  }
+  
+  .login-form {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-form label,
+  .login-form input,
+  .login-form button {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .login-form button {
+    background-color: #444;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .login-form button:hover {
+    background-color: #555;
+  }
+  
