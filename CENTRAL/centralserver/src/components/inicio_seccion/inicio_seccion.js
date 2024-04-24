@@ -1,9 +1,10 @@
+import React, { useState } from "react";
+import './darkTheme.css';
 
-
-const inicio_seccion = () => {
+const InicioSeccion = () => {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-    const [loginsuccesfully, setloginsuccessfully]=useState(false);
+    const [loginsuccesfully, setloginsuccessfully] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -42,28 +43,30 @@ const inicio_seccion = () => {
     }
 
     return (
-        <>{loginsuccesfully?<Home/>:
-            <div className="login-container">
-                <form className="login-form">
-                    <label htmlFor="username">Username:</label>
-                    <input 
-                        onChange={(event) => setUsername(event.target.value)}
-                        type="text" 
-                        id="username" 
-                        name="username" 
-                    />
-                    <label htmlFor="password">Password:</label>
-                    <input 
-                        onChange={(event) => setPassword(event.target.value)}
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                    />
-                    <button onClick={handleLogin} type="submit">Login</button>
-                </form>
-            </div>
-        }</>
+        <>
+            {loginsuccesfully?<casal/>:
+                <div className="login-container">
+                    <form className="login-form">
+                        <label htmlFor="username">Username:</label>
+                        <input 
+                            onChange={(event) => setUsername(event.target.value)}
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                        />
+                        <label htmlFor="password">Password:</label>
+                        <input 
+                            onChange={(event) => setPassword(event.target.value)}
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                        />
+                        <button onClick={handleLogin} type="submit">Login</button> {/* Corregido */}
+                    </form>
+                </div>
+            }
+        </>
     );
 }
 
-export default inicio_seccion;
+export default InicioSeccion;
