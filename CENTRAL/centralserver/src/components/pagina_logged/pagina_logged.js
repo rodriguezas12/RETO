@@ -1,5 +1,5 @@
-import Home from "../Home/Home";
-const { default: Login } = require("../Login/login");
+const {default:inicio_seccion}=require("../inicio_seccion/inicio_seccion.js")
+const {default:casal}=require("../casal/casal.js")
 
 
 function parsejwt(token){
@@ -20,11 +20,11 @@ const tokenIsStillValid = tokenExpirationTime > currentTime;
 
 
 
-const Main=()=>{
+const pagina_logged=()=>{
     return(
-        <>{tokenIsStillValid ? <Home/>: <Login/>} /</>
+        <>{tokenIsStillValid ? <casal/>: <inicio_seccion/>} /</>
     );
 
 }
 
-export default Main;
+export default pagina_logged;

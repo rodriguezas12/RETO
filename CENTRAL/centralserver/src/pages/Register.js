@@ -1,7 +1,7 @@
 export default function Register() {
   return (
     <>
-      <h2>Registter Page</h2>
+      <h2>hola login</h2>
     </>
   );
 }

@@ -1,11 +1,6 @@
-import React, { useState } from 'react';
-import './darkTheme.css'; // Importar el archivo CSS de tema oscuro
-import Home from '../Home/Home.js';
 
 
-
-
-const Login = () => {
+const inicio_seccion = () => {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [loginsuccesfully, setloginsuccessfully]=useState(false);
@@ -14,7 +9,7 @@ const Login = () => {
         e.preventDefault();
         
         try {
-            const response = await fetch('http://localhost:3000/login', {
+            const response = await fetch('http://localhost:3000/inicio_seccion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -71,4 +66,4 @@ const Login = () => {
     );
 }
 
-export default Login;
+export default inicio_seccion;
