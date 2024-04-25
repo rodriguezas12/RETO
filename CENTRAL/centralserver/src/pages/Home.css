@@ -7,6 +7,7 @@
     transform: translate(-50%, -50%);
     background: #f5f5dc; /* Fondo blanco hueso */
     text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 2); /* Sombras */
   }
   
   .login-box img {

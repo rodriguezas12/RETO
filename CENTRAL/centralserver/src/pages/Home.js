@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import './Home.css';
-import logo from '../Media/logo.png';
 import axios from 'axios';
+import React, { useState } from 'react';
+import logo from '../Media/logo.png';
+import './Home.css';
 
 export default function Home() {
   const [usuario, setUsuario] = useState('');
@@ -26,7 +26,7 @@ export default function Home() {
 
       // Si el usuario es encontrado en la base de datos, redirige a la página de inicio de sesión
       if (response.data.mensaje === 'Usuario encontrado') {
-        window.location.href = 'http://localhost:3001/login';
+        window.location.href = 'http://localhost:3001/menú';
       }
     } catch (error) {
       console.error('Error al verificar el usuario:', error);
