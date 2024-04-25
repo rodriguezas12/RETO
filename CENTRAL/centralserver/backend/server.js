@@ -56,6 +56,24 @@ app.post('/verificarUsuario', (req, res) => {
   });
 });
 
+app.get('/', (req, res) => {
+  db.query('SELECT * FROM register2', (err, results) => {
+    if (err) {
+      console.error('Error al seleccionar registros de la tabla register2:', err);
+      res.status(500).send('Error interno del servidor');
+      return;
+    }
+
+    let table = '<h1>Registros de la tabla register2</h1><table><tr><th>ID</th><th>Nombre completo</th><th>Código estudiantil</th></tr>';
+    results.forEach(row => {
+      table += `<tr><td>${row.id}</td><td>${row.nombre_completo}</td><td>${row.codigo_estudiantil}</td></tr>`;
+    });
+    table += '</table>';
+
+    res.send(table);
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

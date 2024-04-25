@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './Home.css';
 import logo from '../Media/logo.png';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Importa Link desde react-router-dom
 
 export default function Home() {
   const [usuario, setUsuario] = useState('');
@@ -24,6 +23,11 @@ export default function Home() {
       });
 
       setMensaje(response.data.mensaje);
+
+      // Si el usuario es encontrado en la base de datos, redirige a la página de inicio de sesión
+      if (response.data.mensaje === 'Usuario encontrado') {
+        window.location.href = 'http://localhost:3001/login';
+      }
     } catch (error) {
       console.error('Error al verificar el usuario:', error);
       setMensaje('Error al verificar el usuario');
@@ -48,9 +52,9 @@ export default function Home() {
           {mensaje && <p>{mensaje}</p>}
         </form>
         {/* Enlace al componente Register */}
-        <Link to="/register">
+        <a href="/register">
           <button type="button">Registrarse</button>
-        </Link>
+        </a>
       </div>
     </>
   );
