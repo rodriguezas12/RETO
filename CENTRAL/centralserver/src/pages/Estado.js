@@ -1,7 +1,7 @@
 import React from "react";
 
 
-export default function Login() {
+export default function Estado() {
     return (
       <>
         <h1>davo</h1>
