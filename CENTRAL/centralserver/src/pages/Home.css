@@ -13,7 +13,6 @@ body {
 .container {
   padding: 0 10%; /* Añade un relleno horizontal del 10% */
   background-color: black;
-  padding: 20px;
 }
 
 .login-box {
@@ -33,7 +32,7 @@ body {
   }
 
   .login-box {
-    margin: 20px; /* Añade un margen en dispositivos móviles para separar del borde */
+    margin: 20px auto; /* Añade un margen en dispositivos móviles para centrar */
   }
 }
 
