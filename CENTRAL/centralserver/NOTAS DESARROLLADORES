@@ -7,7 +7,7 @@ Insertar los siguientes comandos:
     *//En una nueva terminal//*
 
     cd CENTRAL/centralserver
-    npm i react-scripts
+    npm i react-scripts(solo se hace la primera vez, luego no se necesita)
     npm start
 
 Automaticamente se abre el localhost/3000, se debe ver la pagina sin nigun problema
