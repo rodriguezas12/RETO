@@ -1,11 +1,16 @@
 PASOS PARA CORRER EL CODIGO
 Insertar los siguientes comandos:
 
+    cd CENTRAL/centralserver/backend
+    node serverjs
+
+    *//En una nueva terminal//*
+
     cd CENTRAL/centralserver
-    
+    npm i react-scripts
     npm start
 
-Automaticamente se abre el localhost/3000
+Automaticamente se abre el localhost/3000, se debe ver la pagina sin nigun problema
 --------------------------------------------------------------
 
 App.js es el archivo principal, editar solo para administrar conexiones a la base de datos o envio TCP.
