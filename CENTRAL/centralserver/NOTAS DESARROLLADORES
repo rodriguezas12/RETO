@@ -2,7 +2,7 @@ PASOS PARA CORRER EL CODIGO
 Insertar los siguientes comandos:
 
     cd CENTRAL/centralserver/backend
-    node serverjs
+    node server.js
 
     *//En una nueva terminal//*
 

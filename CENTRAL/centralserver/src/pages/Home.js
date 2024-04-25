@@ -39,7 +39,7 @@ export default function Home() {
       <h2>Home Page</h2>
       <div className="login-box">
         <img src={logo} alt="Logo" />
-        <h3>PORTAL DE GESTION INDUSTRIAL</h3>
+        <h3>PORTAL DE GESTION INDUSTRIAL f</h3>
         <form>
           <label>INGRESE SU USUARIO:</label>
           <input
