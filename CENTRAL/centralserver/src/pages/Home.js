@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import logo from "../Media/logo.png";
+import "./Home.css";
+ 
 
 export default function Home() {
   const [usuario, setUsuario] = useState("");
@@ -38,13 +41,21 @@ export default function Home() {
 
   return (
     <>
+      <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          rel="stylesheet"
+        />
+      </Helmet>
       <div className="container">
         <h2>Home Page</h2>
         <div className="login-box">
           <img src={logo} alt="Logo" />
           <h3>PORTAL DE GESTION INDUSTRIAL</h3>
           <form>
-            <label>INGRESE SU CODIGO ESTUDIANTIL:</label>
+            <h4>INGRESE SU CODIGO ESTUDIANTIL:</h4>
             <input
               type="text"
               placeholder="Usuario"
