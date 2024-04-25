@@ -26,7 +26,7 @@ export default function Home() {
 
       // Si el usuario es encontrado en la base de datos, redirige a la página de inicio de sesión
       if (response.data.mensaje === 'Usuario encontrado') {
-        window.location.href = 'http://localhost:3001/Login';
+        window.location.href = 'http://localhost:3001/Menu';
       }
     } catch (error) {
       console.error('Error al verificar el usuario:', error);
