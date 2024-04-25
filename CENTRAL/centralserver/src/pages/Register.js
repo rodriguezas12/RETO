@@ -12,7 +12,7 @@ export default function Register() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/register', {
+      const response = await axios.post('/register', {  // Modificado para usar la URL relativa
         nombre_completo: nombreCompleto,
         codigo_estudiantil: codigoEstudiantil
       });

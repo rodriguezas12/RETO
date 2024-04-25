@@ -14,6 +14,7 @@ const db = mysql.createPool({
 
 // Maneja la solicitud para registrar un nuevo usuario
 router.post('/register', async (req, res) => {
+  console.log(req.body); // Agregar esta línea para verificar los datos recibidos desde el cliente
   const { nombre_completo, codigo_estudiantil } = req.body;
   try {
     // Inserta el nuevo usuario en la base de datos
