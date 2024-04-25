@@ -1,18 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
-const cors = require('cors'); // Importa el middleware de CORS
+const cors = require('cors');
 
 const app = express();
 
-// Middleware para analizar el cuerpo de las solicitudes
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// Configura el middleware de CORS para permitir solicitudes desde cualquier origen
 app.use(cors());
 
-// Configura la conexión a la base de datos
 const db = mysql.createConnection({
   host: 'db-retorfid.cdsc040qszy0.us-east-2.rds.amazonaws.com',
   user: 'admin',
@@ -20,7 +16,6 @@ const db = mysql.createConnection({
   database: 'RETORFID'
 });
 
-// Conecta a la base de datos
 db.connect((err) => {
   if (err) {
     console.error('Error de conexión a la base de datos:', err);
@@ -30,10 +25,8 @@ db.connect((err) => {
   console.log('El servidor de base de datos está corriendo en el puerto:', db.config.port);
 });
 
-// Ruta para manejar la solicitud de registro
 app.post('/register', (req, res) => {
   const { nombre_completo, codigo_estudiantil } = req.body;
-  // Inserta los datos en la tabla 'register2'
   db.query('INSERT INTO register2 (nombre_completo, codigo_estudiantil) VALUES (?, ?)', [nombre_completo, codigo_estudiantil], (err, results) => {
     if (err) {
       console.error('Error al insertar el registro:', err);
@@ -45,7 +38,24 @@ app.post('/register', (req, res) => {
   });
 });
 
-// Puerto de escucha
+app.post('/verificarUsuario', (req, res) => {
+  const { codigoEstudiantil } = req.body;
+
+  db.query('SELECT * FROM register2 WHERE codigo_estudiantil = ?', [codigoEstudiantil], (err, results) => {
+    if (err) {
+      console.error('Error al verificar el usuario:', err);
+      res.status(500).send('Error interno del servidor');
+      return;
+    }
+
+    if (results.length > 0) {
+      res.status(200).json({ mensaje: 'Usuario encontrado' });
+    } else {
+      res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
