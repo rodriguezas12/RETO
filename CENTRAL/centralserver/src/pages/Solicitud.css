@@ -1,0 +1,84 @@
+.logo {
+    height: 50px; /* Ajusta este valor según necesites */
+    width: auto; /* Esto mantendrá las proporciones de la imagen */
+    margin-right: 20px; /* Ajusta el margen para alinear el texto y la imagen adecuadamente */
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Asegura que el logo y el texto estén centrados */
+    font-family: 'ChauPhilomeneOne', sans-serif;
+    padding: 10px 0; /* Añade padding vertical para más espacio alrededor del contenido */
+}
+
+.container-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centra los items horizontalmente */
+    align-items: flex-start; /* Alinea los items al inicio verticalmente */
+    gap: 20px; /* Añade un espacio entre las columnas y las filas */
+    max-width: 1200px; /* Establece un ancho máximo para el contenedor */
+    margin: 0 auto; /* Centra el contenedor en la página */
+}
+
+.Kit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1 1 45%;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #D89758; /* Color cálido para el fondo del kit */
+    min-width: 250px;
+}
+
+.icono {
+    width: 100px; /* Establece un ancho fijo para las imágenes */
+    height: auto; /* Mantiene la proporción de la imagen */
+    
+}
+
+.info-product {
+    flex-grow: 1; /* Permite que el contenido textual ocupe el espacio restante */
+    padding-left: 20px; /* Añade padding izquierdo para separar de la imagen */
+    display: flex;
+    flex-direction: column; /* Orienta los elementos verticalmente */
+    justify-content: center; /* Centra el contenido verticalmente */
+}
+
+.info-text {
+    text-align: center; /* Centra el texto horizontalmente */
+    width: 100%; /* Asegura que el texto ocupe todo el ancho disponible */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Centra los botones horizontalmente */
+    width: 100%; /* Asegura que los botones ocupen todo el ancho disponible */
+}
+
+.button {
+    background-color: white; /* Fondo blanco para los botones */
+    color: black; /* Texto en negro para los símbolos + y - */
+    border: 2px solid black; /* Borde negro para destacar el botón sobre el fondo */
+    padding: 10px 15px; /* Padding para un diseño espacioso */
+    font-size: 16px; /* Tamaño de fuente visible */
+    border-radius: 5px; /* Bordes redondeados para los botones */
+    cursor: pointer; /* Cursor en forma de mano */
+    margin: 5px 10px; /* Ajusta el margen para espaciar los botones uniformemente */
+}
+
+.button:last-child {
+    margin-right: 0; /* Elimina margen derecho del último botón */
+}
+
+.button:hover {
+    background-color: #f8f8f8; /* Color de fondo más claro al pasar el mouse */
+}
+
+
+
+
