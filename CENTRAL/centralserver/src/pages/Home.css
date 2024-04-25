@@ -1,63 +1,70 @@
+body {
+  margin: 10vh 10vw; /* Margen del 10% tanto en vertical como en horizontal */
+  padding: 0; /* Elimina el relleno predeterminado */
+}
+
+.container {
+  padding: 0; /* Elimina el relleno para que los elementos estén al borde */
+  background-color: #ff4500;
+}
+
 .login-box {
-    width: 300px;
-    padding: 40px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #f5f5dc; /* Fondo blanco hueso */
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 2); /* Sombras */
-  }
-  
-  .login-box img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin: 0 auto;
-    display: block;
-  }
-  
-  .login-box h3 {
-    margin: 10px 0 30px;
-    padding-bottom: 20px;
-    position: relative;
-    color: #8b4513; /* Letras marrones */
-  }
-  
-  .login-box form {
-    position: relative;
-  }
-  
-  .login-box form input {
-    width: 100%;
-    margin-bottom: 20px;
-    border: none;
-    border-bottom: 1px solid #8b4513; /* Color de la línea del input */
-    background: #ffdab9; /* Fondo naranja pastel */
-    outline: none;
-    height: 40px;
-    color: #8b4513; /* Letras marrones */
-  }
-  
-  .login-box form button {
-    width: 100%;
-    background: #ff4500; /* Fondo naranja más fuerte */
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #ffffff; /* Letras blancas */
-  }
-  
-  .login-box button {
-    width: 100%;
-    background: #ff4500; /* Fondo naranja más fuerte */
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #ffffff;
-    margin-bottom: 10px; /* Letras blancas */
-  }
-  
+  width: 100%; /* Ancho del 100% para que se adapte al ancho de la ventana */
+  max-width: 500px; /* Ancho máximo */
+  padding: 40px; /* Relleno */
+  background: #f5f5dc; /* Fondo blanco hueso */
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombras */
+  margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */
+}
+
+.login-box img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 0 auto 20px; /* Margen inferior de 20px y centrado horizontal */
+  display: block;
+}
+
+.login-box h3 {
+  margin: 10px 0 20px; /* Margen superior de 10px, inferior de 20px */
+  padding-bottom: 20px; /* Relleno inferior */
+  position: relative;
+  color: #8b4513; /* Letras marrones */
+}
+
+.login-box form {
+  position: relative;
+}
+
+.login-box form input {
+  width: calc(100% - 40px); /* Ancho del 100% menos 40px de relleno para tener en cuenta el padding */
+  margin: 0 auto 20px; /* Margen inferior de 20px y centrado horizontal */
+  border: none;
+  border-bottom: 1px solid #8b4513; /* Color de la línea del input */
+  background: #ffdab9; /* Fondo naranja pastel */
+  outline: none;
+  height: 40px;
+  color: #8b4513; /* Letras marrones */
+}
+
+.login-box form button {
+  width: calc(100% - 40px); /* Ancho del 100% menos 40px de relleno para tener en cuenta el padding */
+  background: #ff4500; /* Fondo naranja más fuerte */
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #ffffff; /* Letras blancas */
+}
+
+.login-box button {
+  width: calc(100% - 40px); /* Ancho del 100% menos 40px de relleno para tener en cuenta el padding */
+  background: #ff4500; /* Fondo naranja más fuerte */
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #ffffff; /* Letras blancas */
+  margin-bottom: 20px; /* Margen inferior de 20px */
+}
