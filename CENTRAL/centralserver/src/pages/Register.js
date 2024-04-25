@@ -3,27 +3,29 @@
 import React, { useState } from 'react';
 import './Register.css';
 import logo from '../Media/logo.png';
-import axios from 'axios';
+import axios from 'axios'; // Importa axios para hacer solicitudes HTTP
 
 export default function Register() {
   const [nombreCompleto, setNombreCompleto] = useState('');
   const [codigoEstudiantil, setCodigoEstudiantil] = useState('');
+  const [registroExitoso, setRegistroExitoso] = useState(null);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/register', {  // Modificado para usar la URL relativa
+      // Envía una solicitud POST al servidor para registrar los datos
+      await axios.post('http://localhost:3000/register', {
         nombre_completo: nombreCompleto,
         codigo_estudiantil: codigoEstudiantil
       });
 
-      console.log(response.data.message);
-      // Restablece los campos después de que se haya registrado el usuario
+      setRegistroExitoso('Registro exitoso');
+      // Restablece los campos después de enviar los datos
       setNombreCompleto('');
       setCodigoEstudiantil('');
     } catch (error) {
       console.error('Error al registrar el usuario:', error);
-      // Maneja el error aquí
+      setRegistroExitoso('Error de registro');
     }
   };
 
@@ -49,6 +51,8 @@ export default function Register() {
           />
           <button type="submit">Registrar</button>
         </form>
+        {/* Muestra el mensaje de registro exitoso o de error */}
+        {registroExitoso && <p>{registroExitoso}</p>}
       </div>
     </>
   );
