@@ -75,40 +75,19 @@ app.get('/', (req, res) => {
 });
 
 
-app.post('/pedido', (req, res) => {
-  const sqlCreateTable = `
-    CREATE TABLE IF NOT EXISTS Solicitudes (
-      Número_de_solicitud INT AUTO_INCREMENT NOT NULL,
-      Solicitud TEXT NOT NULL,
-      PRIMARY KEY (Número_de_solicitud)
-    ) COMMENT 'Contabilidad de los kits';
-  `;
-
-  db.query(sqlCreateTable, (err, results) => {
-    if (err) {
-      console.error('Error creating table:', err.message);
-      return res.status(500).send('Error creating table');
-    }
-    console.log('Table checked/created successfully');
-
-    // Procesamos el pedido si la tabla está lista
-    const nuevoPedido = req.body.nuevoPedido; // Asegúrate de que 'nuevoPedido' se envíe como parte del cuerpo de la solicitud
-    if (!nuevoPedido) {
-      return res.status(400).send("No se proporcionó 'nuevoPedido'.");
-    }
-
-    const valores = [[nuevoPedido]]; // Formateamos para la consulta, cada entrada debe ser un array
-
-    const sqlInsert = `INSERT INTO Solicitudes (Solicitud) VALUES (?)`; // Solo insertamos la solicitud; el número de solicitud es autoincremental
-    db.query(sqlInsert, [valores], (err, results) => {
+app.post('/solicitar', (req, res) => {
+  const { nuevoPedido } = req.body; // Corrección aquí para coincidir con la estructura del objeto enviado
+  db.query('INSERT INTO Solicitud (Pedido) VALUES (?)', [nuevoPedido], (err, results) => {
       if (err) {
-        console.error('Error inserting values:', err.message);
-        return res.status(500).send('Error inserting values');
+          console.error('Error al insertar el registro:', err);
+          res.status(500).send('Error interno del servidor');
+          return;
       }
-      res.status(200).send(`Values inserted successfully, ID de la solicitud: ${results.insertId}`);
-    });
+      console.log('Registro insertado correctamente');
+      res.status(201).send('Registro insertado correctamente');
   });
 });
+
 
 
 const PORT = process.env.PORT || 3000;
