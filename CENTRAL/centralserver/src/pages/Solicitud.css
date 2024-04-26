@@ -1,83 +1,126 @@
 .logo {
-    height: 50px; /* Ajusta este valor según necesites */
-    width: auto; /* Esto mantendrá las proporciones de la imagen */
-    margin-right: 20px; /* Ajusta el margen para alinear el texto y la imagen adecuadamente */
+    height: 50px;
+    width: auto;
+    margin-right: 20px;
 }
 
 .header {
     display: flex;
     align-items: center;
-    justify-content: center; /* Asegura que el logo y el texto estén centrados */
+    justify-content: center;
     font-family: 'ChauPhilomeneOne', sans-serif;
-    padding: 10px 0; /* Añade padding vertical para más espacio alrededor del contenido */
+    padding: 10px 0;
 }
 
 .container-items {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Centra los items horizontalmente */
-    align-items: flex-start; /* Alinea los items al inicio verticalmente */
-    gap: 20px; /* Añade un espacio entre las columnas y las filas */
-    max-width: 1200px; /* Establece un ancho máximo para el contenedor */
-    margin: 0 auto; /* Centra el contenedor en la página */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .Kit {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex: 1 1 45%;
     margin-bottom: 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     padding: 10px;
     border-radius: 20px;
-    background-color: #D89758; /* Color cálido para el fondo del kit */
-    min-width: 250px;
+    background-color: #D89758;
+    flex-direction: row;
 }
 
 .icono {
-    width: 100px; /* Establece un ancho fijo para las imágenes */
-    height: auto; /* Mantiene la proporción de la imagen */
-    
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
 }
 
 .info-product {
-    flex-grow: 1; /* Permite que el contenido textual ocupe el espacio restante */
-    padding-left: 20px; /* Añade padding izquierdo para separar de la imagen */
+    flex-grow: 1;
     display: flex;
-    flex-direction: column; /* Orienta los elementos verticalmente */
-    justify-content: center; /* Centra el contenido verticalmente */
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 20px;
+    gap: 5px;
 }
 
 .info-text {
-    text-align: center; /* Centra el texto horizontalmente */
-    width: 100%; /* Asegura que el texto ocupe todo el ancho disponible */
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    font-size: 16px;
 }
 
 .button-container {
     display: flex;
-    justify-content: center; /* Centra los botones horizontalmente */
-    width: 100%; /* Asegura que los botones ocupen todo el ancho disponible */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
 .button {
-    background-color: white; /* Fondo blanco para los botones */
-    color: black; /* Texto en negro para los símbolos + y - */
-    border: 2px solid black; /* Borde negro para destacar el botón sobre el fondo */
-    padding: 10px 15px; /* Padding para un diseño espacioso */
-    font-size: 16px; /* Tamaño de fuente visible */
-    border-radius: 5px; /* Bordes redondeados para los botones */
-    cursor: pointer; /* Cursor en forma de mano */
-    margin: 5px 10px; /* Ajusta el margen para espaciar los botones uniformemente */
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 5px;
+    user-select: none;
 }
 
-.button:last-child {
-    margin-right: 0; /* Elimina margen derecho del último botón */
+.button:focus {
+    outline: none;
+}
+
+.button:active {
+    background-color: #eaeaea;
 }
 
 .button:hover {
-    background-color: #f8f8f8; /* Color de fondo más claro al pasar el mouse */
+    background-color: #f8f8f8;
 }
+
+.button-panel {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.action-button {
+    background-color: #f8f8f8;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+    background-color: #e2e2e2;
+}
+
+.action-button:active {
+    background-color: #d1d1d1;
+}
+
 
 
 

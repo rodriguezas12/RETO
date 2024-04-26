@@ -7,6 +7,9 @@ import kit3 from '../Media/kit 3.png';
 import kit4 from '../Media/kit 4.png';
 import kit5 from '../Media/kit 5.png';
 import kit6 from '../Media/kit 6.png';
+import axios from 'axios';
+
+
 
 export default function Picking() {
     const [pedido, setPedido] = useState([]);
@@ -16,6 +19,7 @@ export default function Picking() {
             const nuevoPedido = [...pedido, kitNumero];
             setPedido(nuevoPedido);
             alert(`Kit ${kitNumero} añadido al carrito.\nPedido actual: ${nuevoPedido.join(', ')}`);
+            console.log(nuevoPedido);
         }
     };
 
@@ -33,6 +37,44 @@ export default function Picking() {
         setPedido([]);
         alert('Carrito limpiado');
     };
+
+    
+    const solicitar = () => {
+        if (pedido.length === 0) {
+            alert('No hay kits en el carrito para solicitar.');
+            return;
+        }
+    
+        const data = {
+            nuevoPedido: pedido.join(',')
+        };
+    
+        fetch('http://localhost:3000/pedido', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Solicitud realizada con éxito: ' + data);
+            setPedido([]);
+        })
+        .catch(error => {
+            console.error('Error al realizar la solicitud:', error);
+            alert('Error al realizar la solicitud: ' + error.message);
+        });
+    };
+    
+      
+    
+
 
     // Arreglo de imágenes para facilitar la selección basada en el índice
     const kitImages = [kit1, kit2, kit3, kit4, kit5, kit6];
@@ -61,6 +103,10 @@ export default function Picking() {
                         </figure>
                     </div>
                 ))}
+            </div>
+            <div className="button-panel">
+                <button className="action-button" onClick={solicitar}>Solicitar</button>
+                <button className="action-button" onClick={limpiarCarrito}>Limpiar carrito</button>
             </div>
         </>
     );
