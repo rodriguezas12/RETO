@@ -26,7 +26,7 @@ db.connect((err) => {
 });
 
 
-const PORT = 5000; // Cambio del puerto a 5000
+const PORT = 3000; // Cambio del puerto a 5000
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
