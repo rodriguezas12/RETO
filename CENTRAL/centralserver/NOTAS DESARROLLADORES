@@ -1,4 +1,8 @@
 PASOS PARA CORRER EL CODIGO
+
+Instalar extensiones:
+Git Actions
+
 Insertar los siguientes comandos:
 
     cd CENTRAL/centralserver
@@ -17,3 +21,4 @@ No crear nuevas capertas independientes, pueden generar desorden.
 Antes de trabajar, siempre hacer pull a la rama mas actualizada, PREGUNTAR CUAL ES.
 
 Todos los archivos multimedia, como imagenes o funetes, en la carpeta MEDIA.
+
