@@ -1,11 +1,6 @@
 PASOS PARA CORRER EL CODIGO
 Insertar los siguientes comandos:
 
-    cd CENTRAL/centralserver/backend
-    node server.js
-
-    *//En una nueva terminal//*
-
     cd CENTRAL/centralserver
     npm i react-scripts(solo se hace la primera vez, luego no se necesita)
     npm start
