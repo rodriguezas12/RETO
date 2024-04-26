@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import logo from "../Media/logo.png";
+import logo from "../../Media/logo.png";
 import "./Home.css";
  
 
@@ -49,7 +49,6 @@ export default function Home() {
           rel="stylesheet"
         />
       </Helmet>
-      <div className="container">
         <h2>Home Page</h2>
         <div className="login-box">
           <img src={logo} alt="Logo" />
@@ -72,7 +71,6 @@ export default function Home() {
             <button type="button">Registrarse</button>
           </a>
         </div>
-      </div>
     </>
   );
 }

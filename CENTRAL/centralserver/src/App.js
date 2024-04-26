@@ -1,12 +1,12 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Estado from "./pages/Estado";
-import Home from "./pages/Home";
+import Home from "./pages/Home/Home";
 import IngresoMaterial from "./pages/IngresoMaterial";
 import Inventario from "./pages/Inventario";
 import Menu from "./pages/Menu";
 import Nopage from "./pages/Nopage";
-import Register from "./pages/Register";
+import Register from "./pages/Register/Register";
 import Solicitud from "./pages/Solicitud";
 
 function App() {

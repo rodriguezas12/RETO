@@ -1,10 +1,9 @@
-// Register.js
-
-import React, { useState } from 'react';
-import './Register.css';
-import logo from '../Media/logo.png';
 import axios from 'axios'; // Importa axios para hacer solicitudes HTTP
+import React, { useState } from 'react';
+import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
+import logo from "../../Media/logo.png";
+import './Register.css';
 
 
 export default function Register() {
@@ -72,25 +71,32 @@ export default function Register() {
 
   return (
     <>
-      <h2>REGISTRATE</h2>
+    <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          rel="stylesheet"
+        />
+      </Helmet>
       <div className="login-box">
         <img src={logo} alt="Logo" />
         <form onSubmit={handleFormSubmit}>
-          <label>NOMBRE COMPLETO:</label>
+          <h3>NOMBRE COMPLETO:</h3>
           <input
             type="text"
             placeholder="Nombre completo"
             value={nombreCompleto}
             onChange={(e) => setNombreCompleto(e.target.value)}
           />
-          <label>CODIGO ESTUDIANTIL:</label>
+          <h3>CODIGO ESTUDIANTIL:</h3>
           <input
             type="text"
             placeholder="Código estudiantil"
             value={codigoEstudiantil}
             onChange={(e) => setCodigoEstudiantil(e.target.value)}
           />
-          <label>NRC:</label>
+          <h3>NRC:</h3>
           <input
             type="text"
             placeholder="NRC"

@@ -1,0 +1,78 @@
+body {
+  margin: 10vh 10vw; /* Margen del 10% tanto en vertical como en horizontal */
+  padding: 0; /* Elimina el relleno predeterminado */
+}
+
+@font-face {
+  font-family: "ChauPhilomeneOne-Regular";
+  src: url("../../Media/ChauPhilomeneOne-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.login-box {
+  width: 90%; /* Ancho del 90% para que se ajuste al ancho de la pantalla */
+  max-width: 400px; /* Ancho máximo de 400px */
+  border-radius: 20px;
+  padding: 40px; /* Relleno */
+  background: #ebebbc; /* Fondo blanco hueso */
+  text-align: center;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.2); /* Sombras */
+  margin: 0 auto; /* Centrado horizontal */
+  margin-left: max(10px); /* Mínimo de 10px o 10vh, lo que sea mayor */
+  margin-right: max(10px); /* Mínimo de 10px o 10vh, lo que sea mayor */
+}
+
+
+.login-box img {
+  width: 40%;
+  height: auto;
+  border-radius: 50%;
+  margin: 0 auto 20px; /* Margen inferior de 20px y centrado horizontal */
+  display: block;
+}
+
+.login-box h3 {
+  font-family: "ChauPhilomeneOne-Regular"; /* Utiliza la fuente regular */
+  margin: 10px 0 20px; /* Margen superior de 10px, inferior de 20px */
+  padding-bottom: 20px; /* Relleno inferior */
+  position: relative;
+  width: auto;
+  color: #8b4513; /* Letras marrones */
+}
+
+.login-box h4 {
+  font-family: "Nunito", sans-serif; /* Utiliza la fuente Nunito */
+  width: auto;
+}
+
+.login-box form {
+  position: relative;
+  width: auto;
+}
+
+.login-box form input {
+  width: auto;/* Ancho del 100% menos 40px de relleno para tener en cuenta el padding */
+  margin: 0 auto 20px; /* Margen inferior de 20px y centrado horizontal */
+  border-radius: 10px;
+  border-bottom: 1px solid #8b4513; /* Color de la línea del input */
+  background: #ffdab9; /* Fondo naranja pastel */
+  outline: none;
+  height: 40px;
+  color: #8b4513; /* Letras marrones */
+}
+
+.login-box form button,
+.login-box button {
+  font-family: "Nunito", sans-serif; /* Utiliza la fuente Nunito */
+  width:auto;/* Ancho del 100% menos 40px de relleno para tener en cuenta el padding */
+  background: #ff4500; /* Fondo naranja más fuerte */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombras */
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #ffffff; /* Letras blancas */
+  margin-bottom: 20px; /* Margen inferior de 20px */
+  border-radius: 10px; /* Borde redondeado de 20px */
+}
