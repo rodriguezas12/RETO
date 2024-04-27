@@ -46,10 +46,10 @@ export default function Picking() {
         }
     
         const data = {
-            nuevoPedido: pedido.join(',')
+            nuevoPedido: pedido.join(',') // asegúrate de que este es el formato que quieres en la base de datos
         };
     
-        fetch('http://localhost:3000/pedido', {
+        fetch('http://localhost:3000/solicitar', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -60,10 +60,10 @@ export default function Picking() {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.json();
+            return response.text(); // Cambiado de json() a text(), asumiendo que el servidor solo envía un mensaje de texto
         })
-        .then(data => {
-            alert('Solicitud realizada con éxito: ' + data);
+        .then(message => {
+            alert('Solicitud realizada con éxito: ' + message);
             setPedido([]);
         })
         .catch(error => {
