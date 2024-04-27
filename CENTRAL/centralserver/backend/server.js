@@ -89,6 +89,24 @@ app.post('/solicitar', (req, res) => {
 });
 
 
+app.post('/posicion', (req, res) => {
+  const { 'Col 1': col1, 'Col 2': col2, 'Col 3': col3, 'Col 4': col4, 'Col 5': col5, 'Col 6': col6, 'Col 7': col7, 'Col 8': col8, 'Col 9': col9, 'Col 10': col10 } = req.body;
+  db.query('INSERT INTO Ubicaciones_matriz (`Col 1`, `Col 2`, `Col 3`, `Col 4`, `Col 5`, `Col 6`, `Col 7`, `Col 8`, `Col 9`, `Col 10`) VALUES (?,?,?,?,?,?,?,?,?,?)',
+  [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10], (err, results) => {
+      if (err) {
+          console.error('Error al insertar el registro:', err);
+          res.status(500).send('Error interno del servidor');
+          return;
+      }
+      console.log('Registro insertado correctamente');
+      res.status(201).send('Registro insertado correctamente');
+  });
+});
+
+
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
