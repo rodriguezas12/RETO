@@ -20,13 +20,3 @@ Insertar los siguientes comandos:
 Automaticamente se abre el localhost/3000, se debe ver la pagina sin nigun problema
 --------------------------------------------------------------
 
-App.js es el archivo principal, editar solo para administrar conexiones a la base de datos o envio TCP.
-
-Si se va a trabajar en una pagina especifica, modificar unicamente los archivos en la ruta src/pages, solo el .js y el css. respectivo a la pagina de trabajo. 
-
-No crear nuevas capertas independientes, pueden generar desorden.
-
-Antes de trabajar, siempre hacer pull a la rama mas actualizada, PREGUNTAR CUAL ES.
-
-Todos los archivos multimedia, como imagenes o funetes, en la carpeta MEDIA.
-
