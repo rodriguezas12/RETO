@@ -61,4 +61,10 @@
     color: #ffffff;
     margin-bottom: 10px; /* Letras blancas */
   }
+
+  .error-message {
+    font-size: 10px;
+    color: red;
+  }
+  
   
