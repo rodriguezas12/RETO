@@ -14,8 +14,8 @@ nombres_tags = {
 }
 
 # Establecer la conexión a la base de datos MySQL
-conexion = mysql.connector.connect(user='root', password='123456', host='localhost',
-                                   database='base_de_datos', port='3306')
+conexion = mysql.connector.connect(user='admin', password='usuario123', host='db-retorfid.cdsc040qszy0.us-east-2.rds.amazonaws.com',
+                                   database='RETORFID', port='3306')
 
 # Crear un cursor
 cursor = conexion.cursor()
@@ -98,6 +98,8 @@ conexion.commit()
 
 cursor.execute(sql_create_table_estacion7)
 conexion.commit()
+
+
 
 # Conectar al lector RFID de la estación 1 a la 3
 reader_1 = R420('192.168.0.20')
