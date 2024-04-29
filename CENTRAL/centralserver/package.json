@@ -27,7 +27,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "start cmd /k \"cd C:\\Users\\Juan\\Documents\\Proyectos\\repogit\\RETO\\CENTRAL\\centralserver\\backend && node server.js\" && start cmd /k \"cd C:\\Users\\Juan\\Documents\\Proyectos\\repogit\\RETO\\CENTRAL\\centralserver && npm start\""
+
   },
   "eslintConfig": {
     "extends": [

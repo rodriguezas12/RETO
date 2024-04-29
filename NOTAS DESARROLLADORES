@@ -14,8 +14,10 @@ Git Actions
 Insertar los siguientes comandos:
 
     cd CENTRAL/centralserver
+
     npm i react-scripts(solo se hace la primera vez, luego no se necesita)
-    npm start
+    npm run server
+
 
 Automaticamente se abre el localhost/3000, se debe ver la pagina sin nigun problema
 --------------------------------------------------------------
