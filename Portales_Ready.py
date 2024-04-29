@@ -14,8 +14,8 @@ nombres_tags = {
 tags_detectados_IN = []
 tags_detectados_OUT = []
 # Establecer la conexión a la base de datos MySQL
-conexion = mysql.connector.connect(user='root', password='123456', host='localhost',
-                                   database='base_de_datos', port='3306')
+conexion = mysql.connector.connect(user='admin', password='usuario123', host='db-retorfid.cdsc040qszy0.us-east-2.rds.amazonaws.com',
+                                   database='RETORFID', port='3306')
 
 # Crear un cursor
 cursor = conexion.cursor()
