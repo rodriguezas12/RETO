@@ -1,10 +1,8 @@
-// Register.js
-
-import React, { useState } from 'react';
-import './Register.css';
-import logo from '../Media/logo.png';
 import axios from 'axios'; // Importa axios para hacer solicitudes HTTP
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import logo from '../Media/logo.png';
+import './Register.css';
 
 
 export default function Register() {
