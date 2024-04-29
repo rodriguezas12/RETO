@@ -78,7 +78,6 @@
     align-items: center;
     cursor: pointer;
     margin: 5px;
-    user-select: none;
 }
 
 .button:focus {
