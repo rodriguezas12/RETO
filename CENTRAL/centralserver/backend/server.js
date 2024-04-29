@@ -102,6 +102,35 @@ app.post('/posicion', (req, res) => {
     });
 });
 
+// crear tabla en sql 
+
+app.post('/crear-tabla', (req, res) => {
+  const sql = `
+      CREATE TABLE IF NOT EXISTS mi_tabla (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          tags VARCHAR(100),
+          bahia VARCHAR(50),
+          kit VARCHAR(50),
+          inv VARCHAR(50),
+          fecha_de_ingreso DATE,
+          fecha_de_ingreso_al_local DATETIME,
+          fecha_de_salida_del_local DATETIME
+      )
+  `;
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error('Error al crear la tabla:', err);
+      res.status(500).send('Error al crear la tabla');
+      return;
+    }
+    res.send('Tabla creada con éxito');
+  });
+});
+
+app.listen(3000, () => {
+  console.log('Servidor ejecutándose en http://localhost:3000');
+});
+
 
 
 
