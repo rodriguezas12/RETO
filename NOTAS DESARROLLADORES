@@ -6,19 +6,17 @@ Installar extensiones:
 Git Action 
 Git Pull Request
 
-PASOS PARA CORRER EL CODIGO
-
-Instalar extensiones:
-Git Actions
-
-Insertar los siguientes comandos:
-
-    cd CENTRAL/centralserver
-
-    npm i react-scripts(solo se hace la primera vez, luego no se necesita)
-    npm run server
+PASOS PARA CORRER EL CODIGO:
+Primera vez: 
+cd CENTRAL/centralserver && npm i react-scripts
 
 
-Automaticamente se abre el localhost/3000, se debe ver la pagina sin nigun problema
+Copiar y pegar el siguiente comando en la terminal:
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+cd CENTRAL/centralserver && npm run server
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+Automaticamente se abre el localhost/3001, se debe ver la pagina sin nigun problema
 --------------------------------------------------------------
 
