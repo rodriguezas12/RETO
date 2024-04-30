@@ -10,17 +10,11 @@ body {
   font-style: normal;
 }
 
-.container {
-  padding: 0 10%; /* Añade un relleno horizontal del 10% */
-  background-color: black;
-  padding: 20px;
-}
-
 .login-box {
   width: 100%; /* Ancho del 100% para que se ajuste al ancho de la pantalla */
   max-width: 500px; /* Ancho máximo */
   padding: 40px; /* Relleno */
-  background: #f5f5dc; /* Fondo blanco hueso */
+  background: #f3f303; /* Fondo blanco hueso */
   text-align: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombras */
   margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */

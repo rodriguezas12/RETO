@@ -49,7 +49,6 @@ export default function Home() {
           rel="stylesheet"
         />
       </Helmet>
-      <div className="container">
         <h2>Home Page</h2>
         <div className="login-box">
           <img src={logo} alt="Logo" />
@@ -76,7 +75,6 @@ export default function Home() {
             <button type="button">Registrarse</button>
           </a>
         </div>
-      </div>
     </>
   );
 }
