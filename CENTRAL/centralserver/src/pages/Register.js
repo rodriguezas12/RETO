@@ -1,4 +1,4 @@
-import axios from "axios"; // Importa axios para hacer solicitudes HTTP
+import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../Media/logo.png";
@@ -9,80 +9,56 @@ export default function Register() {
   const [codigoEstudiantil, setCodigoEstudiantil] = useState("");
   const [nrc, setNRC] = useState("");
   const [registroExitoso, setRegistroExitoso] = useState(null);
+  const [errorNombre, setErrorNombre] = useState(false);
+  const [errorNRC, setErrorNRC] = useState(false);
   const [camposVacios, setCamposVacios] = useState(false);
-  const [errorNombre, setErrorNombre] = useState(false); // Cambiado a false
-  const [errorCodigoEstudiantil, setErrorCodigoEstudiantil] = useState(false); // Cambiado a false
-  const [errorNRC, setErrorNRC] = useState(false); // Cambiado a false
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // Verifica si hay errores en los campos
-    if (errorNombre || errorCodigoEstudiantil || errorNRC) {
+    if (nombre === "" || codigoEstudiantil === "" || nrc === "") {
+      setCamposVacios(true);
+      return;
+    }
+
+    if (errorNombre || errorNRC) {
       return;
     }
 
     try {
-      // Envía una solicitud POST al servidor para registrar los datos
-      await axios.post("http://localhost:3000/register", {
+      await axios.post("http://localhost:5000/register", {
         nombre: nombre,
-        codigo_estudiantil: codigoEstudiantil,
+        codigoEstudiantil: codigoEstudiantil,
         nrc: nrc,
       });
 
       setRegistroExitoso("Registro exitoso");
-      // Restablece los campos después de enviar los datos
       setNombre("");
       setCodigoEstudiantil("");
       setNRC("");
+      setCamposVacios(false);
+      setErrorNombre(false); // Limpiar errores
+      setErrorNRC(false); // Limpiar errores
     } catch (error) {
       console.error("Error al registrar el usuario:", error);
       setRegistroExitoso("Error de registro");
     }
   };
 
-  // Función para validar el nombre
   const validarNombre = () => {
     const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$/;
     if (!nombreRegex.test(nombre)) {
-      setErrorNombre(true); // Cambiado a true
+      setErrorNombre(true);
     } else {
-      setErrorNombre(false); // Cambiado a false
+      setErrorNombre(false);
     }
   };
 
-  // Función para validar el código estudiantil y verificar la existencia del usuario
-  const validarCodigoEstudiantil = async () => {
-    const codigoEstudiantilNumerico = /^\d+$/;
-    if (!codigoEstudiantilNumerico.test(codigoEstudiantil)) {
-      setErrorCodigoEstudiantil(true); // Cambiado a true
-    } else {
-      try {
-        // Verifica si el usuario ya existe en la base de datos
-        const response = await axios.post(
-          "http://localhost:3000/verificarUsuario",
-          {
-            codigoEstudiantil: codigoEstudiantil,
-          }
-        );
-        if (response.data.mensaje === "Usuario no encontrado") {
-          setErrorCodigoEstudiantil(false); // Cambiado a false
-        } else {
-          setErrorCodigoEstudiantil(true); // Cambiado a true
-        }
-      } catch (error) {
-        console.error("Error al verificar el usuario:", error);
-        setErrorCodigoEstudiantil(true); // Cambiado a true
-      }
-    }
-  };
-
-  // Función para validar el NRC
   const validarNRC = () => {
     if (nrc !== "12341") {
-      setErrorNRC(true); // Cambiado a true
+      setErrorNRC(true);
     } else {
-      setErrorNRC(false); // Cambiado a false
+      setErrorNRC(false);
     }
   };
 
@@ -100,18 +76,13 @@ export default function Register() {
             onChange={(e) => setNombre(e.target.value)}
             onBlur={validarNombre}
           />
-          {errorNombre && <p className="error-message">Nombre no válido</p>}
           <label>CODIGO ESTUDIANTIL:</label>
           <input
             type="text"
             placeholder="Código estudiantil"
             value={codigoEstudiantil}
             onChange={(e) => setCodigoEstudiantil(e.target.value)}
-            onBlur={validarCodigoEstudiantil}
           />
-          {errorCodigoEstudiantil && (
-            <p className="error-message">Código Estudiantil no válido</p>
-          )}
           <label>NRC:</label>
           <input
             type="text"
@@ -120,14 +91,13 @@ export default function Register() {
             onChange={(e) => setNRC(e.target.value)}
             onBlur={validarNRC}
           />
-          {errorNRC && <p className="error-message">NRC no válido</p>}
-          {/* Muestra el mensaje de campos vacíos */}
           {camposVacios && (
             <p className="error-message">
               Error: Todos los campos son obligatorios
             </p>
           )}
-          {/* Muestra el mensaje de registro exitoso o de error */}
+          {errorNombre && <p className="error-message">Nombre no válido</p>}
+          {errorNRC && <p className="error-message">NRC no válido</p>}
           {registroExitoso && <p>{registroExitoso}</p>}
           <button type="submit">Registrar</button>
         </form>

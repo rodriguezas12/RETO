@@ -21,7 +21,7 @@ export default function Home() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/verificarUsuario",
+        "http://localhost:5000/verificarUsuario",
         {
           codigoEstudiantil: usuario,
         }
@@ -31,7 +31,7 @@ export default function Home() {
 
       // Si el usuario es encontrado en la base de datos, redirige a la página de inicio de sesión
       if (response.data.mensaje === "Usuario encontrado") {
-        window.location.href = "http://localhost:3001/Menu";
+        window.location.href = "http://localhost:3000/Menu";
       }
     } catch (error) {
       console.error("Error al verificar el usuario:", error);
