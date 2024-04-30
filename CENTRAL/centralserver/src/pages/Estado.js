@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import React, { useEffect, useState } from "react";
 import logo from '../Media/logo.png';
 import './Estado.css'; // Asegúrate de que el archivo CSS está en la ubicación correcta y se llama Estado.css
 

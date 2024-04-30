@@ -82,6 +82,8 @@ export default function Picking() {
     return (
         <>
             <header className="header">
+            <button className="back-button" onClick={() =>
+                 window.location.href = '/Menu'}>Regresar al Menú</button>
                 <img src={logo} alt="Logo" className="logo" />
                 <h1>SOLICITUD DE MATERIALES</h1>
             </header>

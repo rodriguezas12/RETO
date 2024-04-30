@@ -1,0 +1,18 @@
+.back-button {
+    position: absolute; /* Posición absoluta respecto a su contenedor relativo */
+    left: 75px;
+    padding: 10px 20px; /* Espaciado interno para hacer el botón más grande */
+    background: #f76b1c; /* Color de fondo sólido, ajusta esto para que coincida con el degradado exacto si es necesario */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25); /* Sombra suave para el efecto 3D */
+    text-transform: uppercase; /* Texto en mayúsculas */
+    font-weight: bold; /* Texto en negrita */
+    cursor: pointer; /* Cursor en forma de mano */
+    transition: background-color 0.3s; /* Suave transición para el hover */
+  }
+  
+  .back-button:hover {
+    background-color: #e9651d; /* Oscurecer el botón un poco cuando se pasa el ratón por encima */
+  }

@@ -54,19 +54,23 @@ export default function Home() {
         <div className="login-box">
           <img src={logo} alt="Logo" />
           <h3>PORTAL DE GESTION INDUSTRIAL</h3>
-          <form>
-            <h4>INGRESE SU CODIGO ESTUDIANTIL:</h4>
-            <input
-              type="text"
-              placeholder="Usuario"
-              value={usuario}
-              onChange={handleInputChange}
-            />
-            <button type="button" onClick={verificarUsuario}>
-              Iniciar Sesión
-            </button>
-            {mensaje && <p>{mensaje}</p>}
-          </form>
+      <form onSubmit={(e) => {
+        e.preventDefault(); // Previene la recarga de la página
+        verificarUsuario();
+      }}>
+      <h4>INGRESE SU CODIGO ESTUDIANTIL:</h4>
+      <input
+        type="text"
+        placeholder="Usuario"
+        value={usuario}
+        onChange={handleInputChange}
+        autoFocus // opcional: pone el foco en el input al cargar el componente
+      />
+      <button type="submit">
+        Iniciar Sesión
+      </button>
+      {mensaje && <p>{mensaje}</p>}
+    </form>
           {/* Enlace al componente Register */}
           <a href="/register">
             <button type="button">Registrarse</button>

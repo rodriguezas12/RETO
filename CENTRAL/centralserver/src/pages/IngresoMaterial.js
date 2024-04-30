@@ -46,6 +46,8 @@ export default function Inventario() {
   return (
     <>
       <header className="header">
+      <button className="back-button" onClick={() =>
+        window.location.href = '/Menu'}>Regresar al Menú</button>
         <img src={logo} alt="logo" className="logo" />
         <h1>INGRESO DE MATERIALES</h1>
       </header>
