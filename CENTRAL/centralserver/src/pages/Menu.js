@@ -14,7 +14,7 @@ const Home = () => {
           <Link to="/solicitud">
             <button>Solicitud Pick to Light</button>
           </Link>
-          <Link to="/estadodeprocesos">
+          <Link to="/estado">
             <button>Estado de procesos</button>
           </Link>
           <Link to="/inventario">
