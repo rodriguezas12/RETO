@@ -131,6 +131,21 @@ app.listen(3000, () => {
   console.log('Servidor ejecutándose en http://localhost:3000');
 });
 
+app.get('/tablaenpagina', (req, res) => {
+  db.query("SELECT * FROM register2", (err, results) => {
+    if (err) {
+      console.error(
+        "Error al seleccionar registros de la tabla register2:",
+        err
+      );
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+  })
+
+
+})
+
 
 
 
