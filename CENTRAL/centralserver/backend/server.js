@@ -104,8 +104,8 @@ app.post('/posicion', (req, res) => {
 
 // inventario llamado de tabla a sql
 app.get('/michi', (req, res) => {
-  // Asegúrate que la tabla se llama 'datos' y no 'datis', y que la consulta SQL esté bien formada
-  db.query('SELECT * FROM Datos', (err, results) => {
+
+  db.query('SELECT * FROM RETORFID.Datos', (err, results) => {
     if (err) {
       console.error('Error al obtener los datos:', err);
       res.status(500).send('Error en el servidor');
@@ -116,7 +116,8 @@ app.get('/michi', (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Servidor ejecutándose en http://localhost:3000/inventario');
+  console.log('Servidor ejecutándose en http://localhost:3000');
+
 });
 
 
