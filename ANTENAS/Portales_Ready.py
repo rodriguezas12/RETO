@@ -38,9 +38,12 @@ sql_create_table_datos = """
 CREATE TABLE IF NOT EXISTS Datos (
   Tag VARCHAR(25) NOT NULL,
   Nombre TEXT NOT NULL,
-  Cantidad INT NOT NULL, Hora_entrada_lab TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Cantidad INT NOT NULL, 
+  Hora_entrada_lab TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida_lab TIMESTAMP DEFAULT NULL,
+  INV ENUM('si', 'no') NOT NULL DEFAULT 'no', -- Nueva columna 'inv' con valores 'si' o 'no'
   PRIMARY KEY (Tag)
+  
 ) COMMENT 'Base de datos de los tags'
 """
 

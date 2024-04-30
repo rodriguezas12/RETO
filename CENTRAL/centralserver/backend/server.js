@@ -105,7 +105,7 @@ app.post('/posicion', (req, res) => {
 // inventario llamado de tabla a sql
 app.get('/michi', (req, res) => {
 
-  db.query('SELECT * FROM RETORFID.Datos', (err, results) => {
+  db.query('SELECT * FROM RETORFID.Registro_tags', (err, results) => {
     if (err) {
       console.error('Error al obtener los datos:', err);
       res.status(500).send('Error en el servidor');

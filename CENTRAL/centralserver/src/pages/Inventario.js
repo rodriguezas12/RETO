@@ -33,7 +33,7 @@ function Inventario() {
             <tr>
               <th>Tag</th>
               <th>Nombre</th>
-              <th>Cantidad</th>
+              <th>INV</th>
               <th>Hora de entrada al laboratorio</th>
               <th>Hora de salida del laboratorio</th>
               <th>Hora de entrada a bodega</th>
