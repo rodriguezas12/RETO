@@ -104,6 +104,7 @@ app.post('/posicion', (req, res) => {
 
 // inventario llamado de tabla a sql
 app.get('/michi', (req, res) => {
+  // Asegúrate que la tabla se llama 'datos' y no 'datis', y que la consulta SQL esté bien formada
   db.query('SELECT * FROM Datos', (err, results) => {
     if (err) {
       console.error('Error al obtener los datos:', err);
