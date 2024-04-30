@@ -16,6 +16,7 @@ const db = mysql.createConnection({
   database: "RETORFID",
 });
 
+
 db.connect((err) => {
   if (err) {
     console.error("Error de conexión a la base de datos:", err);
