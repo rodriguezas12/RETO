@@ -1,0 +1,141 @@
+body {
+    background-color: #BE7530; /* Color de fondo de la página */
+    color: #292929; /* Color principal del texto */
+    font-family: 'Arial', sans-serif; /* Fuente general de la página */
+  }
+  
+  .contenedor-gigante {
+    width: 95vw; /* Ancho del contenedor basado en el ancho de la ventana */
+    height: 60vw; /* Altura del contenedor igual al ancho para hacer un cuadrado */
+    max-width: 1340px; /* Máximo ancho que puedes ajustar según necesites */
+    max-height: 620px; /* Máximo altura para mantener la proporción de un cuadrado */
+    
+    margin: 5vh auto; /* Centrado verticalmente y con espacio superior e inferior */
+    padding: 20px; /* Espacio interior */
+    
+    display: flex; /* Para el centrado de elementos interiores si es necesario */
+    justify-content: center; /* Centrado horizontal de los elementos interiores */
+    align-items: center; /* Centrado vertical de los elementos interiores */
+    
+    background-color: #ECD4B6; /* Color de fondo */
+    border-radius: 100px; /* Esquinas redondeadas */
+    clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 10%); /* Recorta las esquinas para crear un efecto de 'esquinas recortadas' */
+    
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* Sombra para añadir profundidad */
+    overflow: hidden; /* Asegura que el contenido no se desborde del contorno recortado */
+}
+
+  
+body, html {
+    margin: 0;
+    height: 100%;
+  }
+  
+  #banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #D89758;
+    padding: 40px;
+    margin-bottom: 20px; /* O elimina esto si usas position: fixed */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  
+    position: fixed; /* Fija el banner en la parte superior */
+    top: 0; /* Alinea el banner en la parte superior de la página */
+    left: 0; /* Alinea el banner en la izquierda de la página */
+    width: 100%; /* Asegura que el banner se extienda a lo largo de toda la página */
+    z-index: 1000; /* Asegura que el banner se mantenga por encima de otros elementos */
+  }
+  
+  #banner h1 {
+    color: #292929;
+    margin-left: 15px;
+  }
+  
+  #kitsContainer, #productosContainer {
+    flex: 1;
+    padding: 15px;
+    margin: 10px;
+    background-color: #ECD4B6; /* Color de fondo para los contenedores de kits y productos */
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  
+  #kitsContainer h2, #productosContainer h2 {
+    margin-bottom: 10px;
+    color: #292929;
+  }
+  
+  #antenaContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #ECD4B6;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  
+  #antenaContainer h3 {
+    color: #292929;
+  }
+  
+  #antenaContainer select {
+    background-color: #fff;
+    color: #292929;
+  }
+  
+  #tableContainer {
+    background-color: #ECD4B6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table, th, td {
+    border: 1px solid #292929;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #D89758;
+    color: white;
+  }
+  
+  td {
+    background-color: #ECD4B6;
+  }
+  
+  #returnButton {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #292929;
+    color: #ECD4B6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  
+  button:hover {
+    background-color: #1e1e1e;
+  }
+  
