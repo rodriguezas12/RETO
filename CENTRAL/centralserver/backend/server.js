@@ -113,21 +113,33 @@ app.get("/", (req, res) => {
 });
 
 app.post("/solicitar", (req, res) => {
-  const { nuevoPedido } = req.body; // Corrección aquí para coincidir con la estructura del objeto enviado
-  db.query(
-    "INSERT INTO Solicitud (Pedido) VALUES (?)",
-    [nuevoPedido],
-    (err, results) => {
+  const { nuevoPedido } = req.body;
+
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS Solicitud (
+      Pedido VARCHAR(45)
+    );
+  `;
+
+  db.query(createTableQuery, (err) => {
+    if (err) {
+      console.error("Error al crear la tabla Solicitud:", err);
+      res.status(500).send("Error al crear la tabla");
+      return;
+    }
+
+    const insertQuery = "INSERT INTO Solicitud (Pedido) VALUES (?)";
+    db.query(insertQuery, [nuevoPedido], (err, results) => {
       if (err) {
         console.error("Error al insertar el registro:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
-      console.log("Registro insertado correctamente");
       res.status(201).send("Registro insertado correctamente");
-    }
-  );
+    });
+  });
 });
+
 
 app.post("/posicion", (req, res) => {
   const {
