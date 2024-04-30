@@ -1,12 +1,12 @@
 // App.js
+import React, { useEffect, useState } from 'react';
 import './Inventario.css';
-import React, { useState, useEffect } from 'react';
 
 function Inventario() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/michi')
+    fetch('http://localhost:5000/michi')
       .then(response => response.json())
       .then(data => setData(data))
       .catch(error => console.error('Error:', error));

@@ -16,12 +16,38 @@ def tiempo_suficiente_ultima_deteccion(tag_id, tiempo_actual):
 
 # Diccionario para asignar nombres a los tags
 nombres_tags = {
-    "110000000000000000000305": "Kit 1",
-    "110000000000000000000308": "Kit 2",
-    "110000000000000000000306": "Kit 3",
-    "110000000000000000000307": "Kit 3",
-    "ad8a14004440b5874c000064": "Kit 1"
+    "ad89180010d68d8b39000080": "Kit 1",
+    "ad89180010d6958b3a000081": "Kit 1",
+    "ad89180010d6a98c39000083": "Kit 1",
+    "ad89180010d8e58d3a0000c6": "Kit 1",
+    "ad89180010d98188390000d7": "Kit 1",
+    "ad89180010d4b98d38000049": "Kit 2",
+    "ad89180010d67d8b3900007d": "Kit 2",
+    "ad89180010d6858a3900007f": "Kit 2",
+    "ad89180010d6878a3900007e": "Kit 2",
+    "ad89180010d7318b39000093": "Kit 2",
+    "ad89180010d6a1883a000082": "Kit 3",
+    "ad89180010d6c58c39000085": "Kit 3",
+    "ad89180010d6d38a35000088": "Kit 3",
+    "ad89180010d705873900008e": "Kit 3",
+    "ad89180010d97d903a0000d8": "Kit 3",
+    "ad89180010d6c3873c000086": "Kit 4",
+    "ad89180010d6cb8e38000087": "Kit 4",
+    "ad89180010d6fd8e3a00008d": "Kit 4",
+    "ad89180010d94d8f390000d1": "Kit 4",
+    "ad89180010dad5893b000000": "Kit 4",
+    "ad89180010d6dd8a36000089": "Kit 5",
+    "ad89180010d6e58c3600008a": "Kit 5",
+    "ad89180010d6f58f3600008b": "Kit 5",
+    "ad89180010d6ff8c3600008c": "Kit 5",
+    "ad89180010d9318f3a0000cf": "Kit 5",
+    "ad89180010d65b8d3800007a": "Kit 6",
+    "ad89180010d6638f3900007b": "Kit 6",
+    "ad89180010d66d8c3a00007c": "Kit 6",
+    "ad89180010d7398a39000094": "Kit 6",
+    "ad89180010dacd8c3a0000ff": "Kit 6"
 }
+
 tags_detectados_IN = []
 tags_detectados_OUT = []
 tags_detectados_RACK= []
@@ -207,12 +233,54 @@ while True:
         conexion.commit()
         
 
-    
-
 
     for tag_OUT in tags_OUT:
         tag_id_OUT = tag_OUT['EPC-96'].decode('utf-8')
         if tag_id_OUT in tags_detectados_OUT:
             cursor.execute("UPDATE Datos SET Hora_salida_lab = %s WHERE Tag = %s", (obtener_hora_actual(), tag_id_OUT))
             conexion.commit()
+    #################
+    cursor.execute("""
+    SELECT COUNT(*) FROM Datos
+    WHERE Nombre = 'Kit 1' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+    """)
+    cantidad_kit1_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 1' disponible en bodega: {cantidad_kit1_disponible}")
+    #####################
+    cursor.execute("""
+    SELECT COUNT(*) FROM Datos
+    WHERE Nombre = 'Kit 2' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+    """)
+    cantidad_kit2_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 2' disponible en bodega: {cantidad_kit2_disponible}")
+   ############
+    cursor.execute("""
+    SELECT COUNT(*) FROM Datos
+    WHERE Nombre = 'Kit 3' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+    """)
+    cantidad_kit3_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 3' disponible en bodega: {cantidad_kit3_disponible}")
+    #################
+    cursor.execute("""
+    SELECT COUNT(*) FROM Datos
+    WHERE Nombre = 'Kit 4' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+    """)
+    cantidad_kit4_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 4' disponible en bodega: {cantidad_kit4_disponible}")
+       ############
+    cursor.execute("""
+    SELECT COUNT(*) FROM Datos
+    WHERE Nombre = 'Kit 5' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+    """)
+    cantidad_kit5_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 5' disponible en bodega: {cantidad_kit5_disponible}")
+    #################
+    cursor.execute("""
+    SELECT COUNT(*) FROM Datos
+    WHERE Nombre = 'Kit 6' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+    """)
+    cantidad_kit6_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 6' disponible en bodega: {cantidad_kit6_disponible}")
+
+
 
