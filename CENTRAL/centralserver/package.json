@@ -25,14 +25,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"npm run server\" \"react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "start cmd /k \"cd backend && node server.js\" && start cmd /k \"cd .. && cd centralserver && npm start\""
+    "server": "cd backend && node server.js"
   },
   "eslintConfig": {
-
     "extends": [
       "react-app",
       "react-app/jest"
@@ -54,6 +53,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
+    "concurrently": "^8.2.2",
     "crypto-browserify": "^3.12.0",
     "node-polyfill-webpack-plugin": "^3.0.0",
     "process": "^0.11.10",

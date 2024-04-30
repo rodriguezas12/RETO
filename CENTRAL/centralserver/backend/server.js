@@ -28,6 +28,26 @@ db.connect((err) => {
   );
 });
 
+app.post("/register", (req, res) => {
+  const { nombre, codigoEstudiantil, nrc } = req.body;
+
+  db.query(
+    "INSERT INTO register2 (nombre_completo, codigo_estudiantil, nrc) VALUES (?, ?, ?)",
+    [nombre, codigoEstudiantil, nrc],
+    (err, results) => {
+      if (err) {
+        console.error("Error al registrar el usuario:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+
+      console.log("Usuario registrado correctamente");
+      res.status(201).send("Usuario registrado correctamente");
+    }
+  );
+});
+
+
 // Endpoint para verificar la existencia de un usuario
 app.post("/verificarUsuario", (req, res) => {
   const { codigoEstudiantil } = req.body;
@@ -116,7 +136,7 @@ app.get('/michi', (req, res) => {
 });
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
