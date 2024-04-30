@@ -142,10 +142,33 @@ app.post("/posicion", (req, res) => {
     "Col 9": col9,
     "Col 10": col10,
   } = req.body;
-  db.query(
-    "INSERT INTO Ubicaciones_matriz (`Col 1`, `Col 2`, `Col 3`, `Col 4`, `Col 5`, `Col 6`, `Col 7`, `Col 8`, `Col 9`, `Col 10`) VALUES (?,?,?,?,?,?,?,?,?,?)",
-    [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10],
-    (err, results) => {
+
+  // Crear la tabla si no existe
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS M1 (
+      \`Col 1\` VARCHAR(255),
+      \`Col 2\` VARCHAR(255),
+      \`Col 3\` VARCHAR(255),
+      \`Col 4\` VARCHAR(255),
+      \`Col 5\` VARCHAR(255),
+      \`Col 6\` VARCHAR(255),
+      \`Col 7\` VARCHAR(255),
+      \`Col 8\` VARCHAR(255),
+      \`Col 9\` VARCHAR(255),
+      \`Col 10\` VARCHAR(255)
+    );
+  `;
+
+  db.query(createTableQuery, (createErr) => {
+    if (createErr) {
+      console.error("Error al crear/verificar la tabla M1:", createErr);
+      res.status(500).send("Error al crear la tabla M1");
+      return;
+    }
+
+    // Insertar datos en la tabla una vez creada
+    const insertQuery = "INSERT INTO M1 (`Col 1`, `Col 2`, `Col 3`, `Col 4`, `Col 5`, `Col 6`, `Col 7`, `Col 8`, `Col 9`, `Col 10`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    db.query(insertQuery, [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10], (err, results) => {
       if (err) {
         console.error("Error al insertar el registro:", err);
         res.status(500).send("Error interno del servidor");
@@ -153,8 +176,8 @@ app.post("/posicion", (req, res) => {
       }
       console.log("Registro insertado correctamente");
       res.status(201).send("Registro insertado correctamente");
-    }
-  );
+    });
+  });
 });
 
 app.get("/inventario_rack", (req, res) => {

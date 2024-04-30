@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import logo from '../Media/logo.png';
 
 export default function Inventario() {
-  // Inicializar el estado con un array de 5x10
+  // Inicializar el estado con un array de 3x10
   const [celdas, setCeldas] = useState(
-    Array(5).fill(null).map(() => Array(10).fill(''))
+    Array(3).fill(null).map(() => Array(10).fill(''))
   );
 
   // Manejador para actualizar el estado cuando el input cambia
@@ -24,7 +24,7 @@ export default function Inventario() {
   
     // Envía cada fila de la matriz
     Promise.all(filasParaEnviar.map(fila => 
-      fetch('http://localhost:3000/posicion', {
+      fetch('http://localhost:5000/posicion', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -36,7 +36,7 @@ export default function Inventario() {
     .then(messages => {
       console.log('Todas las solicitudes fueron realizadas con éxito:', messages);
       // Limpiar el estado de las celdas una vez que se hayan enviado todos los datos
-      setCeldas(Array(5).fill(null).map(() => Array(10).fill('')));
+      setCeldas(Array(3).fill(null).map(() => Array(10).fill('')));
     })
     .catch(error => {
       console.error('Error al realizar la solicitud:', error);
