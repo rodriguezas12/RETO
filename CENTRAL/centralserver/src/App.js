@@ -19,7 +19,7 @@ function App() {
         <Route path="/solicitud" element={<Solicitud />} />
         <Route path="/inventario" element={<Inventario />} />
         <Route path="/ingresomaterial" element={<IngresoMaterial />} />
-        <Route path="/estadodeprocesos" element={<Estado />} />
+        <Route path="/estado" element={<Estado />} />
         <Route path="*" element={<Nopage />} />
       </Routes>
     </BrowserRouter>
