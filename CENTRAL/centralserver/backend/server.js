@@ -102,49 +102,21 @@ app.post('/posicion', (req, res) => {
     });
 });
 
-// crear tabla en sql 
-
-app.post('/crear-tabla', (req, res) => {
-  const sql = `
-      CREATE TABLE IF NOT EXISTS mi_tabla (
-          id INT AUTO_INCREMENT PRIMARY KEY,
-          tags VARCHAR(100),
-          bahia VARCHAR(50),
-          kit VARCHAR(50),
-          inv VARCHAR(50),
-          fecha_de_ingreso DATE,
-          fecha_de_ingreso_al_local DATETIME,
-          fecha_de_salida_del_local DATETIME
-      )
-  `;
-  db.query(sql, (err, result) => {
+// inventario llamado de tabla a sql
+app.get('/tablaenpagina', (req, res) => {
+  db.query('SELECT * RETORFID.datis', (err, results) => {
     if (err) {
-      console.error('Error al crear la tabla:', err);
-      res.status(500).send('Error al crear la tabla');
+      console.error('Error al obtener los datos:', err);
+      res.status(500).send('Error en el servidor');
       return;
     }
-    res.send('Tabla creada con éxito');
+    res.json(results);
   });
 });
 
 app.listen(3000, () => {
   console.log('Servidor ejecutándose en http://localhost:3000');
 });
-
-app.get('/tablaenpagina', (req, res) => {
-  db.query("SELECT * FROM register2", (err, results) => {
-    if (err) {
-      console.error(
-        "Error al seleccionar registros de la tabla register2:",
-        err
-      );
-      res.status(500).send("Error interno del servidor");
-      return;
-    }
-  })
-
-
-})
 
 
 
