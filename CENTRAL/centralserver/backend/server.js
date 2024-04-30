@@ -120,6 +120,26 @@ app.post("/posicion", (req, res) => {
   );
 });
 
+
+app.get("/inventario_rack", (req, res) => {
+  const query = `
+    SELECT Nombre, COUNT(*) as Cantidad
+    FROM Datos
+    WHERE Nombre LIKE 'Kit %'
+    GROUP BY Nombre
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error al seleccionar registros:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+    res.json(results);
+  });
+});
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

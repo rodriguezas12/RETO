@@ -248,36 +248,36 @@ while True:
     SELECT COUNT(*) FROM Datos
     WHERE Nombre = 'Kit 2' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
     """)
-    cantidad_kit1_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 2' disponible en bodega: {cantidad_kit1_disponible}")
+    cantidad_kit2_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 2' disponible en bodega: {cantidad_kit2_disponible}")
    ############
     cursor.execute("""
     SELECT COUNT(*) FROM Datos
     WHERE Nombre = 'Kit 3' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
     """)
-    cantidad_kit1_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 3' disponible en bodega: {cantidad_kit1_disponible}")
+    cantidad_kit3_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 3' disponible en bodega: {cantidad_kit3_disponible}")
     #################
     cursor.execute("""
     SELECT COUNT(*) FROM Datos
     WHERE Nombre = 'Kit 4' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
     """)
-    cantidad_kit1_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 4' disponible en bodega: {cantidad_kit1_disponible}")
+    cantidad_kit4_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 4' disponible en bodega: {cantidad_kit4_disponible}")
        ############
     cursor.execute("""
     SELECT COUNT(*) FROM Datos
     WHERE Nombre = 'Kit 5' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
     """)
-    cantidad_kit1_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 5' disponible en bodega: {cantidad_kit1_disponible}")
+    cantidad_kit5_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 5' disponible en bodega: {cantidad_kit5_disponible}")
     #################
     cursor.execute("""
     SELECT COUNT(*) FROM Datos
     WHERE Nombre = 'Kit 6' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
     """)
-    cantidad_kit1_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 6' disponible en bodega: {cantidad_kit1_disponible}")
+    cantidad_kit6_disponible = cursor.fetchone()[0]
+    print(f"Cantidad de 'Kit 6' disponible en bodega: {cantidad_kit6_disponible}")
 
 
 
