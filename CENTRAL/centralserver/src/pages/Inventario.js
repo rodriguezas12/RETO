@@ -6,7 +6,7 @@ function Inventario() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/tablaenpagina')
+    fetch('http://localhost:3000/michi')
       .then(response => response.json())
       .then(data => setData(data))
       .catch(error => console.error('Error:', error));
