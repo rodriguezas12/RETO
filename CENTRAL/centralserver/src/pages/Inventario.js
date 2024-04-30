@@ -1,13 +1,62 @@
-import React from "react";
+// App.js
+import './Inventario.css';
+import React, { useState, useEffect } from 'react';
 
+function Inventario() {
+  const [data, setData] = useState([]);
 
-export default function Inventario() {
-    return (
-      <>
-      <button className="back-button" onClick={() =>
-      window.location.href = '/Menu'}>Regresar al Menú</button>
-        <h1>davo</h1>
-        <h2>Bienvenido mi papá</h2> {/* Usar el componente PaginaLogged */}
-      </>
-    );
+  useEffect(() => {
+    fetch('http://localhost:3000/michi')
+      .then(response => response.json())
+      .then(data => setData(data))
+      .catch(error => console.error('Error:', error));
+  }, []);
+
+  return (
+    <div>
+      <div className="intro-container">
+        <div className="intro-box">
+          <img src="../Media/logo.png" alt="Logo" className="logo" />
+          <h1 className="title">Inventario</h1>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="header">
+          <h1>Inventario</h1>
+        </div>
+        <div className="brown-container">
+          {/* Contenido adicional si es necesario */}
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Tag</th>
+              <th>Nombre</th>
+              <th>Cantidad</th>
+              <th>Hora de entrada al laboratorio</th>
+              <th>Hora de salida del laboratorio</th>
+              <th>Hora de entrada a bodega</th>
+              <th>Hora de salida de bodega</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index}>
+                <td>{item.Tag}</td>
+                <td>{item.Nombre}</td>
+                <td>{item.Cantidad}</td>
+                <td>{item.Hora_entrada_lab}</td>
+                <td>{item.Hora_salida_lab}</td>
+                <td>{item.Hora_entrada_bodega}</td>
+                <td>{item.Hora_salida_bodega}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
+
+export default Inventario;
