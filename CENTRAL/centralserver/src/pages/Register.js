@@ -11,7 +11,9 @@ export default function Register() {
   const [registroExitoso, setRegistroExitoso] = useState(null);
   const [errorNombre, setErrorNombre] = useState(false);
   const [errorNRC, setErrorNRC] = useState(false);
+  const [errorCodigoEstudiantil, setErrorCodigoEstudiantil] = useState(false); // Nuevo estado para el mensaje de error del código estudiantil
   const [camposVacios, setCamposVacios] = useState(false);
+  const [usuarioExistente, setUsuarioExistente] = useState(false);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +23,7 @@ export default function Register() {
       return;
     }
 
-    if (errorNombre || errorNRC) {
+    if (errorNombre || errorNRC || errorCodigoEstudiantil) { // Agregamos errorCodigoEstudiantil aquí
       return;
     }
 
@@ -37,11 +39,17 @@ export default function Register() {
       setCodigoEstudiantil("");
       setNRC("");
       setCamposVacios(false);
-      setErrorNombre(false); // Limpiar errores
-      setErrorNRC(false); // Limpiar errores
+      setErrorNombre(false);
+      setErrorNRC(false);
+      setErrorCodigoEstudiantil(false); // Limpiar mensaje de error del código estudiantil
+      setUsuarioExistente(false);
     } catch (error) {
-      console.error("Error al registrar el usuario:", error);
-      setRegistroExitoso("Error de registro");
+      if (error.response && error.response.status === 400) {
+        setUsuarioExistente(true);
+      } else {
+        console.error("Error al registrar el usuario:", error);
+        setRegistroExitoso("Error de registro");
+      }
     }
   };
 
@@ -59,6 +67,15 @@ export default function Register() {
       setErrorNRC(true);
     } else {
       setErrorNRC(false);
+    }
+  };
+
+  const validarCodigoEstudiantil = () => {
+    const codigoEstudiantilRegex = /^\d+$/; // Expresión regular para verificar si el código estudiantil solo contiene dígitos
+    if (!codigoEstudiantilRegex.test(codigoEstudiantil)) {
+      setErrorCodigoEstudiantil(true); // Si no pasa la validación, mostrar mensaje de error
+    } else {
+      setErrorCodigoEstudiantil(false); // Si pasa la validación, limpiar mensaje de error
     }
   };
 
@@ -82,7 +99,9 @@ export default function Register() {
             placeholder="Código estudiantil"
             value={codigoEstudiantil}
             onChange={(e) => setCodigoEstudiantil(e.target.value)}
+            onBlur={validarCodigoEstudiantil} // Agregamos la función de validación aquí
           />
+          {errorCodigoEstudiantil && <p className="error-message">Código estudiantil inválido</p>} {/* Mostrar mensaje de error */}
           <label>NRC:</label>
           <input
             type="text"
@@ -98,6 +117,9 @@ export default function Register() {
           )}
           {errorNombre && <p className="error-message">Nombre no válido</p>}
           {errorNRC && <p className="error-message">NRC no válido</p>}
+          {usuarioExistente && (
+            <p className="error-message">El usuario ya está registrado</p>
+          )}
           {registroExitoso && <p>{registroExitoso}</p>}
           <button type="submit">Registrar</button>
         </form>

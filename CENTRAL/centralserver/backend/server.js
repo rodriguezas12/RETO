@@ -31,21 +31,42 @@ db.connect((err) => {
 app.post("/register", (req, res) => {
   const { nombre, codigoEstudiantil, nrc } = req.body;
 
+  // Verificar si el nombre completo o el código estudiantil ya existen en la base de datos
   db.query(
-    "INSERT INTO register2 (nombre_completo, codigo_estudiantil, nrc) VALUES (?, ?, ?)",
-    [nombre, codigoEstudiantil, nrc],
+    "SELECT * FROM register2 WHERE nombre_completo = ? OR codigo_estudiantil = ?",
+    [nombre, codigoEstudiantil],
     (err, results) => {
       if (err) {
-        console.error("Error al registrar el usuario:", err);
+        console.error("Error al verificar el usuario:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
 
-      console.log("Usuario registrado correctamente");
-      res.status(201).send("Usuario registrado correctamente");
+      if (results.length > 0) {
+        // Si el usuario ya está registrado, enviar un mensaje de error
+        console.log("El usuario ya está registrado");
+        res.status(400).send("El usuario ya está registrado");
+      } else {
+        // Si el usuario no está registrado, proceder con el registro
+        db.query(
+          "INSERT INTO register2 (nombre_completo, codigo_estudiantil, nrc) VALUES (?, ?, ?)",
+          [nombre, codigoEstudiantil, nrc],
+          (err, results) => {
+            if (err) {
+              console.error("Error al registrar el usuario:", err);
+              res.status(500).send("Error interno del servidor");
+              return;
+            }
+
+            console.log("Usuario registrado correctamente");
+            res.status(201).send("Usuario registrado correctamente");
+          }
+        );
+      }
     }
   );
 });
+
 
 
 // Endpoint para verificar la existencia de un usuario
