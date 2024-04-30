@@ -239,6 +239,30 @@ while True:
         if tag_id_OUT in tags_detectados_OUT:
             cursor.execute("UPDATE Datos SET Hora_salida_lab = %s WHERE Tag = %s", (obtener_hora_actual(), tag_id_OUT))
             conexion.commit()
+    
+    for tag_IN in tags_detectados_IN:
+     try:
+        # Obtener los datos actuales del tag
+        cursor.execute("SELECT Hora_entrada_bodega, Hora_salida_bodega FROM Datos WHERE Tag = %s", (tag_IN,))
+        result = cursor.fetchone()
+
+        if result:
+            # Revisar las condiciones y actualizar la columna INV
+            if result['Hora_entrada_bodega'] is not None and result['Hora_salida_bodega'] is None:
+                cursor.execute("UPDATE Datos SET INV = 'SI' WHERE Tag = %s", (tag_IN,))
+            else:
+                cursor.execute("UPDATE Datos SET INV = 'NO' WHERE Tag = %s", (tag_IN,))
+        else:
+            print("Tag no encontrado en la base de datos:", tag_IN)
+
+        # Confirmar los cambios en la base de datos
+        conexion.commit()
+
+     except Exception as e:
+        # En caso de error, imprimir el error y revertir los cambios
+        print("Error al actualizar la base de datos para el tag:", tag_IN, "; Error:", e)
+        conexion.rollback()
+     
     #################
     cursor.execute("""
     SELECT COUNT(*) FROM Datos
