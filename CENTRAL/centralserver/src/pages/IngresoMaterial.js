@@ -24,7 +24,7 @@ export default function Inventario() {
   
     // Envía cada fila de la matriz
     Promise.all(filasParaEnviar.map(fila => 
-      fetch('http://localhost:3000/posicion', {
+      fetch('http://localhost:5000/posicion', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
