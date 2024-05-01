@@ -1,5 +1,5 @@
-// App.js
 import React, { useEffect, useState } from 'react';
+import logo from "../Media/logo.png";
 
 function Inventario() {
   const [data, setData] = useState([]);
@@ -25,24 +25,26 @@ function Inventario() {
       font-family: 'ChauPhilomeneOne', sans-serif;
       padding: 10px 0;
     }
+
+    .header-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   `;
 
   return (
     <div>
       <style>{estilos}</style>
-      <div className="intro-container">
-        <div className="intro-box">
-          <img src="../Media/logo.png" alt="Logo" className="logo" />
-          <h1 className="title">Inventario</h1>
-        </div>
-      </div>
-
       <div className="container">
-        <div className="header">
-          <h1>Inventario</h1>
-        </div>
         <div className="brown-container">
           {/* Contenido adicional si es necesario */}
+        </div>
+        <div className="header">
+          <div className="header-container">
+            <img src={logo} alt="Logo" className="logo" />
+            <h1>Inventario</h1>
+          </div>
         </div>
         <table>
           <thead>
