@@ -20,28 +20,27 @@ def leer_datos():
             )
             cursor = conexion.cursor()
 
-            # Primera consulta
-            # consulta_sql = "SELECT `Col 1`, `Col 2`, `Col 3`, `Col 4`, `Col 5`, `Col 6`, `Col 7`, `Col 8`, `Col 9`, `Col 10` FROM M1 ORDER BY `Col 1`"
-            # cursor.execute(consulta_sql)
-            # resultados = cursor.fetchall()
-            # M1 = np.array(resultados)
-            M1 = np.random.randint(1, 7, size=(3, 10))
+            consulta_contar = "SELECT COUNT(*) FROM M1"
+            cursor.execute(consulta_contar)
+            count = cursor.fetchone()[0]
+            start_index = max(count - 3, 0) 
+            consulta = f"SELECT * FROM M1 LIMIT {start_index}, 3"
+            cursor.execute(consulta)
+            M1 = np.array(cursor.fetchall())
+            #M1 = np.random.randint(1, 7, size=(3, 10))
         
             # Segunda consulta
-            # consulta_sql = "SELECT Pedido FROM Solicitud"
-            # cursor.execute(consulta_sql)
-            # resultados = cursor.fetchall()
-            # ultimo_pedido = resultados[-1][0]
-            # pedido = ultimo_pedido.split(',')
-            # pedido = np.array(pedido)
-            # pedido = pedido.tolist()
-            pedido=[3,3,1]
+            consulta_sql = "SELECT Pedido FROM Solicitud"
+            cursor.execute(consulta_sql)
+            resultados = cursor.fetchall()
+            ultimo_pedido = resultados[-1][0]
+            pedido = ultimo_pedido.split(',')
+            pedido = np.array(pedido)
+            pedido = pedido.tolist()
+            #pedido=[3,3,1]
 
             cursor.close()
             conexion.close()
-
-            # Procesamiento de datos...
-            # Tu código de procesamiento aquí
 
             sleep(0.1)  # Pausa antes de la próxima lectura
 
@@ -111,4 +110,3 @@ def leer_datos():
 
 
 leer_datos()
-
