@@ -1,6 +1,5 @@
 // App.js
 import React, { useEffect, useState } from 'react';
-import './Inventario.css';
 
 function Inventario() {
   const [data, setData] = useState([]);
@@ -12,8 +11,25 @@ function Inventario() {
       .catch(error => console.error('Error:', error));
   }, []);
 
+  const estilos = `
+    .logo {
+      height: 50px;
+      width: auto;
+      margin-right: 20px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'ChauPhilomeneOne', sans-serif;
+      padding: 10px 0;
+    }
+  `;
+
   return (
     <div>
+      <style>{estilos}</style>
       <div className="intro-container">
         <div className="intro-box">
           <img src="../Media/logo.png" alt="Logo" className="logo" />
