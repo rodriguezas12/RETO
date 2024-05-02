@@ -1,70 +1,75 @@
-.login-box {
-    width: 300px;
-    padding: 40px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #f5f5dc; /* Fondo blanco hueso */
-    text-align: center;
-  }
-  
-  .login-box img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin: 0 auto;
-    display: block;
-  }
-  
-  .login-box h3 {
-    margin: 10px 0 30px;
-    padding-bottom: 20px;
-    position: relative;
-    color: #8b4513; /* Letras marrones */
-  }
-  
-  .login-box form {
-    position: relative;
-  }
-  
-  .login-box form input {
-    width: 100%;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    border: none;
-    border-bottom: 1px solid #8b4513; /* Color de la línea del input */
-    background: #ffdab9; /* Fondo naranja pastel */
-    outline: none;
-    height: 40px;
-    color: #8b4513; 
-    margin-top: 10px;/* Letras marrones */
-  }
-  
-  .login-box form button {
-    width: 100%;
-    background: #ff4500; /* Fondo naranja más fuerte */
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #ffffff; /* Letras blancas */
-  }
-  
-  .login-box button {
-    width: 100%;
-    background: #ff4500; /* Fondo naranja más fuerte */
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #ffffff;
-    margin-bottom: 10px; /* Letras blancas */
-  }
+.register-box {
+  width: 300px;
+  padding: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f5f5dc; /* Fondo blanco hueso */
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
+}
 
-  .error-message {
-    font-size: 10px;
-    color: red;
-  }
-  
-  
+.register-box img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 0 auto;
+  display: block;
+}
+
+.register-box h3 {
+  margin: 10px 0 30px;
+  padding-bottom: 20px;
+  position: relative;
+  color: #8b4513; /* Letras marrones */
+}
+
+.register-box form {
+  position: relative;
+  font-family: "nunito";
+  font-weight: 600;
+}
+
+.register-box form input {
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: none;
+  border-bottom: 1px solid #8b4513; /* Color de la línea del input */
+  background: #ffdab9; /* Fondo naranja pastel */
+  outline: none;
+  height: 40px;
+  color: #8b4513;
+  margin-top: 10px; /* Letras marrones */
+}
+
+.register-box form button {
+  width: 100%;
+  background: #ff4500; /* Fondo naranja más fuerte */
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #ffffff; /* Letras blancas */
+  border-radius: 20px;
+}
+
+.register-box button {
+  width: 100%;
+  background: #ff4500; /* Fondo naranja más fuerte */
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #ffffff;
+  margin-bottom: 10px; /* Letras blancas */
+  border-radius: 20px;
+}
+
+.error-message {
+  font-size: 10px;
+  color: red;
+}

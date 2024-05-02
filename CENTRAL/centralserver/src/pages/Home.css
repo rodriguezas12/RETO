@@ -1,105 +1,29 @@
 body {
-  width: 100%; /* El contenido ocupa todo el ancho disponible */
-  margin: 0; /* Elimina el margen predeterminado del cuerpo */
-  padding: 0; /* Elimina el relleno predeterminado del cuerpo */
-  box-sizing: border-box; /* El ancho y el alto incluyen el contenido, el relleno y el borde */
-  font-size: 16px; /* Tamaño de fuente base */
+  margin: 0;
+  padding: 0;
 }
 
-.login-box {
-  width: 100%; /* Ancho del 100% para que se ajuste al ancho de la pantalla */
-  max-width: 500px; /* Ancho máximo */
-  padding: 40px; /* Relleno */
-  background: #f3f303; /* Fondo blanco hueso */
-  text-align: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombras */
-  margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */
-}
-
-@media only screen and (max-width: 600px) {
-  .container {
-    padding: 0; /* Elimina el relleno en dispositivos móviles */
-    margin: 20px;
-  }
-
-  .login-box {
-    margin: 20px; /* Añade un margen en dispositivos móviles para separar del borde */
-  }
-}
-
-.login-box img {
-  width: 10vw;
-  height: 150px;
-  border-radius: 50%;
-  margin: 0 auto 20px; /* Margen inferior de 20px y centrado horizontal */
-  display: block;
-}
-
-.login-box h3 {
-  font-family: "ChauPhilomeneOne-Regular"; /* Utiliza la fuente regular */
-  margin: 10px 0 20px; /* Margen superior de 10px, inferior de 20px */
-  padding-bottom: 20px; /* Relleno inferior */
-  position: relative;
-  color: #8b4513; /* Letras marrones */
-}
-
-.login-box h4 {
-  font-family: 'Nunito', sans-serif; /* Utiliza la fuente Nunito */
-}
-
-.login-box form {
-  position: relative;
-}
-
-.login-box form input {
-  width: calc(
-    100% - 40px
-  ); /* Ancho del 100% menos 40px de relleno para tener en cuenta el padding */
-  margin: 0 auto 20px; /* Margen inferior de 20px y centrado horizontal */
-  border: none;
-  border-bottom: 1px solid #8b4513; /* Color de la línea del input */
-  background: #ffdab9; /* Fondo naranja pastel */
-  outline: none;
-  height: 40px;
-  color: #8b4513; /* Letras marrones */
-}
-
-.login-box form button {
-  width: calc(
-    100% - 40px
-  ); /* Ancho del 100% menos 40px de relleno para tener en cuenta el padding */
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 18px;
-  color: #ffffff; /* Letras blancas */
-}
-
-.login-box button {
-  font-family: 'Nunito', sans-serif; /* Utiliza la fuente Nunito */
-  width: calc(
-    100% - 40px
-  ); /* Ancho del 100% menos 40px de relleno para tener en cuenta el padding */
-  background: #ff4500; /* Fondo naranja más fuerte */
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 18px;
-  color: #ffffff; /* Letras blancas */
-  margin-bottom: 10px; /* Margen inferior de 20px */
-}
-.login-box {
+.home-box {
   width: 300px;
   padding: 40px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #f5f5dc; /* Fondo blanco hueso */
+  background: #f5f5dc;
   text-align: center;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
 }
 
-.login-box img {
+@media only screen and (max-width: 600px) {
+  .home-box {
+    margin: 20px;
+  }
+}
+
+.home-box img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -107,53 +31,51 @@ body {
   display: block;
 }
 
-.login-box h3 {
-  margin: 10px 0 30px;
+.home-box h3 {
+  font-family: "ChauPhilomeneOne-Regular";
+  margin: 10px 0 20px;
   padding-bottom: 20px;
   position: relative;
-  color: #8b4513; /* Letras marrones */
+  color: #8b4513;
 }
 
-.login-box form {
+.home-box form {
   position: relative;
+  font-family: "nunito";
 }
 
-.login-box form input {
+.home-box form input {
   width: 100%;
   margin-bottom: 20px;
   border-radius: 10px;
   border: none;
-  border-bottom: 1px solid #8b4513; /* Color de la línea del input */
-  background: #ffdab9; /* Fondo naranja pastel */
+  border-bottom: 1px solid #8b4513;
+  background: #ffdab9;
   outline: none;
   height: 40px;
-  color: #8b4513; 
-  margin-top: 10px;/* Letras marrones */
+  color: #8b4513;
+  margin-top: 10px;
 }
 
-.login-box form button {
+.home-box form button {
   width: 100%;
-  background: #ff4500; /* Fondo naranja más fuerte */
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 18px;
-  color: #ffffff; /* Letras blancas */
-}
-
-.login-box button {
-  width: 100%;
-  background: #ff4500; /* Fondo naranja más fuerte */
+  background: #ff4500;
   border: none;
   padding: 10px;
   cursor: pointer;
   font-size: 18px;
   color: #ffffff;
-  margin-bottom: 10px; /* Letras blancas */
+  border-radius: 20px;
 }
 
-.error-message {
-  font-size: 10px;
-  color: red;
+.home-box button {
+  width: calc(100% - 40px);
+  background: #ff4500;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #ffffff;
+  margin-bottom: 10px;
+  border-radius: 20px;
 }
-

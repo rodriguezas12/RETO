@@ -49,7 +49,7 @@ export default function Home() {
           rel="stylesheet"
         />
       </Helmet>
-        <div className="login-box">
+        <div className="home-box">
           <img src={logo} alt="Logo" />
           <h3>PORTAL DE GESTION INDUSTRIAL</h3>
       <form onSubmit={(e) => {
