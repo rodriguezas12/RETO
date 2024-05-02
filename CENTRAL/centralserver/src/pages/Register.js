@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import logo from "../Media/logo.png";
 import "./Register.css";
-
 export default function Register() {
   const [nombre, setNombre] = useState("");
   const [codigoEstudiantil, setCodigoEstudiantil] = useState("");
@@ -81,8 +81,15 @@ export default function Register() {
 
   return (
     <>
-      <h2>REGISTRATE</h2>
-      <div className="login-box">
+      <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          rel="stylesheet"
+        />
+      </Helmet>
+      <div className="register-box">
         <img src={logo} alt="Logo" />
         <form onSubmit={handleFormSubmit}>
           <label>NOMBRE:</label>
