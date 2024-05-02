@@ -33,7 +33,7 @@ app.post("/register", (req, res) => {
 
   // Verificar si el nombre completo o el código estudiantil ya existen en la base de datos
   db.query(
-    "SELECT * FROM register2 WHERE nombre_completo = ? OR codigo_estudiantil = ?",
+    "SELECT * FROM Usuarios WHERE Nombre = ? OR Codigo_Estudiantil = ?",
     [nombre, codigoEstudiantil],
     (err, results) => {
       if (err) {
@@ -49,7 +49,7 @@ app.post("/register", (req, res) => {
       } else {
         // Si el usuario no está registrado, proceder con el registro
         db.query(
-          "INSERT INTO register2 (nombre_completo, codigo_estudiantil, nrc) VALUES (?, ?, ?)",
+          "INSERT INTO Usuarios (Nombre, Codigo_Estudiantil, NRC) VALUES (?, ?, ?)",
           [nombre, codigoEstudiantil, nrc],
           (err, results) => {
             if (err) {
@@ -72,7 +72,7 @@ app.post("/verificarUsuario", (req, res) => {
   const { codigoEstudiantil } = req.body;
 
   db.query(
-    "SELECT * FROM register2 WHERE codigo_estudiantil = ?",
+    "SELECT * FROM Usuarios WHERE Codigo_Estudiantil = ?",
     [codigoEstudiantil],
     (err, results) => {
       if (err) {
@@ -91,10 +91,10 @@ app.post("/verificarUsuario", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  db.query("SELECT * FROM register2", (err, results) => {
+  db.query("SELECT * FROM Usuarios", (err, results) => {
     if (err) {
       console.error(
-        "Error al seleccionar registros de la tabla register2:",
+        "Error al seleccionar registros de la tabla Usuarios:",
         err
       );
       res.status(500).send("Error interno del servidor");
@@ -102,9 +102,9 @@ app.get("/", (req, res) => {
     }
 
     let table =
-      "<h1>Registros de la tabla register2</h1><table><tr><th>ID</th><th>Nombre completo</th><th>Código estudiantil</th></tr>";
+      "<h1>Registros de la tabla Usuarios</h1><table><tr><th>ID</th><th>Nombre completo</th><th>Código estudiantil</th></tr>";
     results.forEach((row) => {
-      table += `<tr><td>${row.id}</td><td>${row.nombre_completo}</td><td>${row.codigo_estudiantil}</td></tr>`;
+      table += `<tr><td>${row.id}</td><td>${row.Nombre}</td><td>${row.Codigo_Estudiantil}</td></tr>`;
     });
     table += "</table>";
 
@@ -222,6 +222,42 @@ app.get('/michi', (req, res) => {
     res.json(results);
   });
 });
+
+//Estaciones ^-^
+app.post("/leer_datos_estacion", (req, res) => {
+  // Obtener el número de estación de la solicitud POST
+  const { numeroEstacion } = req.body;
+
+  // Verificar si se proporcionó un número de estación válido
+  if (!numeroEstacion || isNaN(numeroEstacion) || numeroEstacion < 1 || numeroEstacion > 7) {
+    res.status(400).send("Número de estación inválido");
+    return;
+  }
+
+  // Construir el nombre de la tabla basado en el número de estación
+  const nombreTabla = `Estación_${numeroEstacion}`;
+
+  // Consultar todos los datos de la tabla correspondiente
+  db.query(
+    `SELECT * FROM ${nombreTabla}`,
+    (err, results) => {
+      if (err) {
+        console.error(`Error al leer los datos de ${nombreTabla}:`, err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      // Enviar los resultados de la consulta como respuesta
+      res.json(results);
+    }
+  );
+});
+
+
+
+
+
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
