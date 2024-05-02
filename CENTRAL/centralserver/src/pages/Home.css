@@ -1,13 +1,9 @@
 body {
-  margin: 10vh 10vw; /* Margen del 10% tanto en vertical como en horizontal */
-  padding: 0; /* Elimina el relleno predeterminado */
-}
-
-@font-face {
-  font-family: "ChauPhilomeneOne-Regular";
-  src: url("../Media/ChauPhilomeneOne-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+  width: 100%; /* El contenido ocupa todo el ancho disponible */
+  margin: 0; /* Elimina el margen predeterminado del cuerpo */
+  padding: 0; /* Elimina el relleno predeterminado del cuerpo */
+  box-sizing: border-box; /* El ancho y el alto incluyen el contenido, el relleno y el borde */
+  font-size: 16px; /* Tamaño de fuente base */
 }
 
 .login-box {
@@ -72,7 +68,6 @@ body {
   width: calc(
     100% - 40px
   ); /* Ancho del 100% menos 40px de relleno para tener en cuenta el padding */
-  background: #ff4500; /* Fondo naranja más fuerte */
   border: none;
   padding: 10px;
   cursor: pointer;

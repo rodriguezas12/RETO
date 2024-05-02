@@ -1,83 +1,64 @@
-/* Estilos para pantallas más pequeñas */
-@media only screen and (max-width: 600px) {
-    .login-box {
-      width: 80%; /* Porcentaje del ancho de la ventana */
-      padding: 5%; /* Porcentaje del ancho de la ventana */
-      border-radius: 20px; /* Borde redondeado */
-    }
-  }
-  
-  /* Estilos para pantallas medianas */
-  @media only screen and (min-width: 601px) and (max-width: 1024px) {
-    .login-box {
-      width: 60%; /* Porcentaje del ancho de la ventana */
-      padding: 4%; /* Porcentaje del ancho de la ventana */
-      border-radius: 20px; /* Borde redondeado */
-    }
-  }
-  
-  /* Estilos para pantallas más grandes */
-  @media only screen and (min-width: 1025px) {
-    .login-box {
-      width: 40%; /* Porcentaje del ancho de la ventana */
-      padding: 3%; /* Porcentaje del ancho de la ventana */
-      border-radius: 20px; /* Borde redondeado */
-    }
-  
-    .login-box img {
-      width: 30%; /* Ancho relativo al tamaño del contenedor */
-      max-width: 150px; /* Ancho máximo para evitar que la imagen se vuelva demasiado grande */
-      border-radius: 50%;
-      margin: 0 auto;
-      display: block;
-    }
-    
-    .login-box h3 {
-      font-family: "ChauPhilomeneOne-Regular", sans-serif; /* Utiliza la fuente regular */
-      margin: 2vw 0 5vw; /* Margen relativo al ancho de la ventana */
-      padding-bottom: 3vw; /* Padding relativo al ancho de la ventana */
-      position: relative;
-      color: #8b4513; /* Letras marrones */
-      border-radius: 20px; /* Borde redondeado */
-    }
-    
-    .login-box form {
-      position: relative;
-    }
-    
-    .login-box form input {
-      width: 100%;
-      margin-bottom: 5vw; /* Margen relativo al ancho de la ventana */
-      border: none;
-      border-bottom: 0.3vw solid #8b4513; /* Grosor de la línea relativo al ancho de la ventana */
-      background: #ffdab9; /* Fondo naranja pastel */
-      outline: none;
-      height: 6vw; /* Altura relativa al ancho de la ventana */
-      color: #8b4513; /* Letras marrones */
-      border-radius: 20px; /* Borde redondeado */
-    }
-    
-    .login-box form button {
-      width: 80%; /* Ancho relativo al tamaño de la pantalla */
-      background: #ff4500; /* Fondo naranja más fuerte */
-      border: none;
-      padding: 2vw; /* Padding relativo al ancho de la ventana */
-      cursor: pointer;
-      font-size: 4vw; /* Tamaño de fuente relativo al ancho de la ventana */
-      color: #ffffff; /* Letras blancas */
-      border-radius: 20px; /* Borde redondeado */
-    }
-    
-    .login-box button {
-      width: 80%; /* Ancho relativo al tamaño de la pantalla */
-      background: #ff4500; /* Fondo naranja más fuerte */
-      border: none;
-      padding: 2vw; /* Padding relativo al ancho de la ventana */
-      cursor: pointer;
-      font-size: 4vw; /* Tamaño de fuente relativo al ancho de la ventana */
-      color: #ffffff; /* Letras blancas */
-      margin-bottom: 3vw; /* Margen inferior relativo al ancho de la ventana */
-      border-radius: 20px; /* Borde redondeado */
-    }
-  }
-  
+
+.login-box {
+  width: 40%; /* Porcentaje del ancho de la ventana */
+  padding: 3%; /* Porcentaje del ancho de la ventana */
+  border-radius: 20px; /* Borde redondeado */
+}
+
+.login-box img {
+  width: 30%; /* Ancho relativo al tamaño del contenedor */
+  max-width: 150px; /* Ancho máximo para evitar que la imagen se vuelva demasiado grande */
+  border-radius: 50%;
+  margin: 0 auto;
+  display: block;
+}
+
+.login-box h3 {
+  font-family: "ChauPhilomeneOne-Regular", sans-serif; /* Utiliza la fuente regular */
+  margin: 2vw 0 5vw; /* Margen relativo al ancho de la ventana */
+  padding-bottom: 3vw; /* Padding relativo al ancho de la ventana */
+  position: relative;
+  color: #8b4513; /* Letras marrones */
+  border-radius: 20px; /* Borde redondeado */
+}
+
+.login-box form {
+  position: relative;
+}
+
+.login-box form input {
+  width: 100%;
+  margin-bottom: 5vw; /* Margen relativo al ancho de la ventana */
+  border: none;
+  border-bottom: 0.3vw solid #8b4513; /* Grosor de la línea relativo al ancho de la ventana */
+  background: #ffdab9; /* Fondo naranja pastel */
+  outline: none;
+  height: 6vw; /* Altura relativa al ancho de la ventana */
+  color: #8b4513; /* Letras marrones */
+  border-radius: 20px; /* Borde redondeado */
+}
+
+.login-box form button {
+  width: 80%; /* Ancho relativo al tamaño de la pantalla */
+  background: #ff4500; /* Fondo naranja más fuerte */
+  border: none;
+  padding: 2vw; /* Padding relativo al ancho de la ventana */
+  cursor: pointer;
+  font-size: 4vw; /* Tamaño de fuente relativo al ancho de la ventana */
+  color: #ffffff; /* Letras blancas */
+  border-radius: 20px; /* Borde redondeado */
+}
+
+.login-box button {
+  width: 80%; /* Ancho relativo al tamaño de la pantalla */
+  background: #ff4500; /* Fondo naranja más fuerte */
+  border: none;
+  padding: 2vw; /* Padding relativo al ancho de la ventana */
+  cursor: pointer;
+  font-size: 4vw; /* Tamaño de fuente relativo al ancho de la ventana */
+  color: #ffffff; /* Letras blancas */
+  margin-bottom: 3vw; /* Margen inferior relativo al ancho de la ventana */
+  border-radius: 20px; /* Borde redondeado */
+  font-weight: 700;
+}
+

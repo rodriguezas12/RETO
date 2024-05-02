@@ -49,7 +49,6 @@ export default function Home() {
           rel="stylesheet"
         />
       </Helmet>
-        <h2>Home Page</h2>
         <div className="login-box">
           <img src={logo} alt="Logo" />
           <h3>PORTAL DE GESTION INDUSTRIAL</h3>
