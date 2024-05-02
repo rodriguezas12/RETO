@@ -5,7 +5,7 @@ import kit3 from "../Media/kit 3.png";
 import kit4 from "../Media/kit 4.png";
 import kit5 from "../Media/kit 5.png";
 import kit6 from "../Media/kit 6.png";
-import logo from "../Media/logo.png";
+import Header from "../components/header";
 import "./Solicitud.css";
 
 export default function Picking() {
@@ -120,17 +120,8 @@ export default function Picking() {
   };
 
   return (
-    <>
-      <header className="header">
-        <button
-          className="back-button"
-          onClick={() => (window.location.href = "/Menu")}
-        >
-          Regresar al Menú
-        </button>
-        <img src={logo} alt="Logo" className="logo" />
-        <h1>SOLICITUD DE MATERIALES</h1>
-      </header>
+    <div style={{ marginTop: "15vh" }}>
+      <Header titulo= "SOLICITUD DE MATERIALES"/>
       <div className="container-items">
         {[kit1, kit2, kit3, kit4, kit5, kit6].map((image, index) => (
           <div key={index} className="Kit">
@@ -169,6 +160,6 @@ export default function Picking() {
           Limpiar carrito
         </button>
       </div>
-    </>
+    </div>
   );
 }

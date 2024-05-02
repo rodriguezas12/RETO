@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import logo from "../Media/logo.png";
 import "./Menu.css";
@@ -6,7 +7,14 @@ import "./Menu.css";
 const Home = () => {
   return (
     <>
-      <h2>Home Page</h2>
+      <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          rel="stylesheet"
+        />
+      </Helmet>
       <div className="login-box">
         <img src={logo} alt="Logo" />
         <h3>PORTAL DE GESTION INDUSTRIAL</h3>

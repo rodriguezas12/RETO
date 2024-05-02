@@ -1,58 +1,10 @@
 body {
-  margin: 10vh 10vw; /* Margen del 10% tanto en vertical como en horizontal */
-  padding: 0; /* Elimina el relleno predeterminado */
+  width: 100%; /* El contenido ocupa todo el ancho disponible */
+  margin: 0; /* Elimina el margen predeterminado del cuerpo */
+  padding: 0; /* Elimina el relleno predeterminado del cuerpo */
+  box-sizing: border-box; /* El ancho y el alto incluyen el contenido, el relleno y el borde */
+  font-size: 16px; /* Tamaño de fuente base */
 }
-
-@font-face {
-  font-family: "ChauPhilomeneOne-Regular";
-  src: url("../Media/ChauPhilomeneOne-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-
-.header-container {
-  background-color: #ffffff; /* Color de fondo blanco */
-  border-radius: 20px; /* Bordes redondeados */
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  padding: 10px; /* Espaciado interior */
-  margin: 10px; /* Margen inferior */
-  display: flex; /* Utiliza flexbox para alinear elementos */
-  justify-content: space-between; /* Alinea los elementos en los extremos */
-  align-items: center; /* Centra verticalmente los elementos */
-}
-
-.logo {
-    height: 80px;
-    width: auto;
-    margin-right: 20px;
-  }
-
-.back-button {
-  position: absolute; /* Posición absoluta respecto a su contenedor relativo */
-  left: 75px;
-  padding: 10px 20px; /* Espaciado interno para hacer el botón más grande */
-  background: #f76b1c; /* Color de fondo sólido, ajusta esto para que coincida con el degradado exacto si es necesario */
-  color: white; /* Color del texto */
-  border: none; /* Sin borde */
-  border-radius: 20px; /* Bordes redondeados */
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25); /* Sombra suave para el efecto 3D */
-  text-transform: uppercase; /* Texto en mayúsculas */
-  font-weight: bold; /* Texto en negrita */
-  cursor: pointer; /* Cursor en forma de mano */
-  transition: background-color 0.3s; /* Suave transición para el hover */
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "ChauPhilomeneOne", sans-serif;
-  padding: 10px 0;
-}
-.header h1 {
-  text-align: center;
-}
-
 
 .login-box {
   width: 100%; /* Ancho del 100% para que se ajuste al ancho de la pantalla */
@@ -116,7 +68,6 @@ body {
   width: calc(
     100% - 40px
   ); /* Ancho del 100% menos 40px de relleno para tener en cuenta el padding */
-  background: #ff4500; /* Fondo naranja más fuerte */
   border: none;
   padding: 10px;
   cursor: pointer;

@@ -1,56 +1,37 @@
+.container-ingreso {
+  width: 80%; /* Anchura del contenedor */
+  margin: 10% auto; /* Margen del 10% y centrado horizontal */
+  text-align: center; /* Centrar el texto dentro del contenedor */
+  background-color: white; /* Corrige la sintaxis */
+}
+
 table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  input[type="text"] {
-    width: 100%;
-    border: none;
-    background: transparent;
-    outline: none;
-    text-align: center;
-  }
-
-  .submit-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  /* Asegúrate de que el contenedor padre tenga una posición relativa */
-.header {
-  position: relative;
-  
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.back-button {
-  position: absolute; /* Posición absoluta respecto a su contenedor relativo */
-  left: 75px;
-  padding: 10px 20px; /* Espaciado interno para hacer el botón más grande */
-  background: #f76b1c; /* Color de fondo sólido, ajusta esto para que coincida con el degradado exacto si es necesario */
-  color: white; /* Color del texto */
-  border: none; /* Sin borde */
-  border-radius: 20px; /* Bordes redondeados */
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25); /* Sombra suave para el efecto 3D */
-  text-transform: uppercase; /* Texto en mayúsculas */
-  font-weight: bold; /* Texto en negrita */
-  cursor: pointer; /* Cursor en forma de mano */
-  transition: background-color 0.3s; /* Suave transición para el hover */
+td {
+  border: 1px solid #ddd;
+  padding: 2vw;
+  width: 10%; /* Ancho de cada celda, el 10% del ancho total de la tabla */
 }
 
-.back-button:hover {
-  background-color: #e9651d; /* Oscurecer el botón un poco cuando se pasa el ratón por encima */
+input[type="text"] {
+  width: 100%; /* Ancho completo de la celda */
+  border: none;
+  background: transparent;
+  outline: none;
+  text-align: center;
 }
-  
-  
+
+.submit-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}

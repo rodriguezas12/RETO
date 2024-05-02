@@ -1,51 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import logo from "../Media/logo.png";
+import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
+import Header from "../components/header";
+import "./Inventario.css";
 
 function Inventario() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/michi')
-      .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error('Error:', error));
+    fetch("http://localhost:5000/michi")
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((error) => console.error("Error:", error));
   }, []);
-
-  const estilos = `
-    .logo {
-      height: 50px;
-      width: auto;
-      margin-right: 20px;
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'ChauPhilomeneOne', sans-serif;
-      padding: 10px 0;
-    }
-
-    .header-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  `;
 
   return (
     <div>
-      <style>{estilos}</style>
-      <div className="container">
-        <div className="brown-container">
-          {/* Contenido adicional si es necesario */}
-        </div>
-        <div className="header">
-          <div className="header-container">
-            <img src={logo} alt="Logo" className="logo" />
-            <h1>Inventario</h1>
-          </div>
-        </div>
+      <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          rel="stylesheet"
+        />
+      </Helmet>
+      <Header titulo="INVENTARIO" />
+      <div className="container-inventario">
         <table>
           <thead>
             <tr>
