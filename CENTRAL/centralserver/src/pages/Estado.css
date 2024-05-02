@@ -1,0 +1,75 @@
+.container-conteo {
+  margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */
+  width: 90vw; /* Anchura del contenedor al 100% de la pantalla */
+  background-color: #FEFAF6; /* Color marrón con transparencia */
+  border-radius: 30px; /* Bordes redondos de 10px */
+  padding: 10px; /* Espaciado interno del contenedor */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+  
+  .contenedor-label1,
+  .contenedor-label2 {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    padding: 10px;
+    background-color: #ECD4B6; /* Color azul acero */
+    border-radius: 30px; /* Bordes redondos de 30px */
+    color: #fff; /* Color del texto blanco */
+  }
+  
+  .elemento-label,
+  .elemento-valor {
+    font-family: "Nunito", sans-serif; /* Fuente Nunito */
+    font-size: 26px;
+  }
+  
+  .elemento-label {
+    font-weight: bold;
+    color: #292929; /* Color del texto */
+    margin-right: 10px;
+  }
+  
+  .elemento-valor {
+    border-radius: 10px;
+    background-color: #be7530;
+    font-weight: 800;
+    color: #292929; /* Color del texto */
+    padding: 5px;
+  }
+  
+  .container-estado {
+    margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */
+    width: 90vw; /* Anchura del contenedor */
+    background-color: #FEFAF6; /* Color marrón con transparencia */
+    border-radius: 10px; /* Bordes redondos de 10px */
+    padding: 10px; /* Espaciado interno del contenedor */
+  }
+  
+  table {
+    width: 80vw; /* Ancho completo de la tabla */
+    height: 80%;
+    border-collapse: collapse; /* Combinar bordes de celdas */
+    border: 1px solid #be7530; /* Borde de la tabla */
+  }
+  
+  thead {
+    background-color: #be7530; /* Color de fondo del encabezado */
+    color: #fff; /* Color del texto blanco */
+  }
+  
+  th,
+  td {
+    border: 1px solid black; /* Borde de 1px sólido */
+    padding: 8px; /* Espaciado interno de celdas */
+    font-family: "Nunito", sans-serif; /* Fuente Nunito */
+    text-align: center;
+  }
+  
+  th {
+    text-align: center; /* Alinear texto del encabezado a la izquierda */
+    font-weight: bold; /* Fuente en negrita */
+  }
+  

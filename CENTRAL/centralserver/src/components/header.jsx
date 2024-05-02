@@ -12,7 +12,7 @@ const Header = ({ titulo }) => {
       justifyContent: "space-between", // Cambiado a "space-between" para distribuir los elementos
       padding: "10px",
       margin: "10px",
-      backgroundColor: "#F5F6F2",
+      backgroundColor: "#FEFAF6",
       borderRadius: "20px",
       boxShadow: "0 4px 4px rgba(0, 0, 0, 0.1)",
     },
