@@ -129,16 +129,33 @@ app.post("/solicitar", (req, res) => {
     }
 
     const insertQuery = "INSERT INTO Solicitud (Pedido) VALUES (?)";
+
+    // Primera inserción del pedido proporcionado
     db.query(insertQuery, [nuevoPedido], (err, results) => {
       if (err) {
         console.error("Error al insertar el registro:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
+
+      // Retraso de 10 segundos antes de realizar la segunda inserción
+      setTimeout(() => {
+        // Segunda inserción inmediata de un pedido vacío
+        db.query(insertQuery, [""], (err, results) => {
+          if (err) {
+            console.error("Error al insertar el registro vacío:", err);
+          } else {
+            console.log("Pedido vacío insertado correctamente después de 10 segundos");
+          }
+        });
+      }, 20000); //  20 segundos
+
+      // Enviar respuesta después de la primera inserción (considerando que el segundo insert no afecta al cliente)
       res.status(201).send("Registro insertado correctamente");
     });
   });
 });
+
 
 
 app.post("/posicion", (req, res) => {
