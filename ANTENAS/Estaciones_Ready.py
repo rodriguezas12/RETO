@@ -47,56 +47,56 @@ cursor = conexion.cursor()
 
 # Definir la consulta SQL para crear la tabla de la estación 1
 sql_create_table_estacion1 = """
-CREATE TABLE IF NOT EXISTS Estación_1 (Tag VARCHAR(25) NOT NULL,
-  Nombre VARCHAR(25) NOT NULL,
+CREATE TABLE IF NOT EXISTS Estación_1 (ID VARCHAR(25) NOT NULL,
+  Kit VARCHAR(25) NOT NULL,
   Hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida TIMESTAMP DEFAULT NULL
 ) COMMENT 'Base de datos de la estación 1'
 """
 
 sql_create_table_estacion2 = """
-CREATE TABLE IF NOT EXISTS Estación_2 (Tag VARCHAR(25) NOT NULL,
-  Nombre VARCHAR(25) NOT NULL,
+CREATE TABLE IF NOT EXISTS Estación_2 (ID VARCHAR(25) NOT NULL,
+  Kit VARCHAR(25) NOT NULL,
   Hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida TIMESTAMP DEFAULT NULL
 ) COMMENT 'Base de datos de la estación 2'
 """
 
 sql_create_table_estacion3 = """
-CREATE TABLE IF NOT EXISTS Estación_3 (Tag VARCHAR(25) NOT NULL,
-  Nombre VARCHAR(25) NOT NULL,
+CREATE TABLE IF NOT EXISTS Estación_3 (ID VARCHAR(25) NOT NULL,
+  Kit VARCHAR(25) NOT NULL,
   Hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida TIMESTAMP DEFAULT NULL
 ) COMMENT 'Base de datos de la estación 3'
 """
 
 sql_create_table_estacion4 = """
-CREATE TABLE IF NOT EXISTS Estación_4 (Tag VARCHAR(25) NOT NULL,
-  Nombre VARCHAR(25) NOT NULL,
+CREATE TABLE IF NOT EXISTS Estación_4 (ID VARCHAR(25) NOT NULL,
+  Kit VARCHAR(25) NOT NULL,
   Hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida TIMESTAMP DEFAULT NULL
 ) COMMENT 'Base de datos de la estación 4'
 """
 
 sql_create_table_estacion5 = """
-CREATE TABLE IF NOT EXISTS Estación_5 (Tag VARCHAR(25) NOT NULL,
-  Nombre VARCHAR(25) NOT NULL,
+CREATE TABLE IF NOT EXISTS Estación_5 (ID VARCHAR(25) NOT NULL,
+  Kit VARCHAR(25) NOT NULL,
   Hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida TIMESTAMP DEFAULT NULL
 ) COMMENT 'Base de datos de la estación 5'
 """
 
 sql_create_table_estacion6 = """
-CREATE TABLE IF NOT EXISTS Estación_6 (Tag VARCHAR(25) NOT NULL,
-  Nombre VARCHAR(25) NOT NULL,
+CREATE TABLE IF NOT EXISTS Estación_6 (ID VARCHAR(25) NOT NULL,
+  Kit VARCHAR(25) NOT NULL,
   Hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida TIMESTAMP DEFAULT NULL
 ) COMMENT 'Base de datos de la estación 6'
 """
 
 sql_create_table_estacion7 = """
-CREATE TABLE IF NOT EXISTS Estación_7 (Tag VARCHAR(25) NOT NULL,
-  Nombre VARCHAR(25) NOT NULL,
+CREATE TABLE IF NOT EXISTS Estación_7 (ID VARCHAR(25) NOT NULL,
+  Kit VARCHAR(25) NOT NULL,
   Hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida TIMESTAMP DEFAULT NULL
 ) COMMENT 'Base de datos de la estación 7'
@@ -173,7 +173,7 @@ while True:
                 # El tag no está presente en la tabla, entonces se inserta
                 try:
                     # Insertar el tag en la tabla de la Estación 1 con la hora de entrada
-                    cursor.execute("INSERT INTO Estación_1 (Tag, Nombre, Hora_entrada) VALUES (%s, %s, %s)", (tags, nombre_tag_1, obtener_hora_actual()))
+                    cursor.execute("INSERT INTO Estación_1 (ID, Kit, Hora_entrada) VALUES (%s, %s, %s)", (tags, nombre_tag_1, obtener_hora_actual()))
                     conexion.commit()
                     print(f"Tag '{tags}' insertado en la tabla de la Estación 1 con nombre '{nombre_tag_1}' y hora de entrada registrada.")
                 except mysql.connector.Error as err:
@@ -209,7 +209,7 @@ while True:
                 # El tag no está presente en la tabla, entonces se inserta
                 try:
                     # Insertar el tag en la tabla de la Estación 1 con la hora de entrada
-                    cursor.execute("INSERT INTO Estación_2 (Tag, Nombre, Hora_entrada) VALUES (%s, %s, %s)", (tags2, nombre_tag_2, obtener_hora_actual()))
+                    cursor.execute("INSERT INTO Estación_2 (ID, Kit, Hora_entrada) VALUES (%s, %s, %s)", (tags2, nombre_tag_2, obtener_hora_actual()))
                     conexion.commit()
                     print(f"Tag '{tags2}' insertado en la tabla de la Estación 2 con nombre '{nombre_tag_2}' y hora de entrada registrada.")
                 except mysql.connector.Error as err:
@@ -246,7 +246,7 @@ while True:
                 # El tag no está presente en la tabla, entonces se inserta
                 try:
                     # Insertar el tag en la tabla de la Estación 1 con la hora de entrada
-                    cursor.execute("INSERT INTO Estación_3 (Tag, Nombre, Hora_entrada) VALUES (%s, %s, %s)", (tags3, nombre_tag_3, obtener_hora_actual()))
+                    cursor.execute("INSERT INTO Estación_3 (ID, Kit, Hora_entrada) VALUES (%s, %s, %s)", (tags3, nombre_tag_3, obtener_hora_actual()))
                     conexion.commit()
                     print(f"Tag '{tags3}' insertado en la tabla de la Estación 3 con nombre '{nombre_tag_3}' y hora de entrada registrada.")
                 except mysql.connector.Error as err:
@@ -281,7 +281,7 @@ while True:
                 # El tag no está presente en la tabla, entonces se inserta
                 try:
                     # Insertar el tag en la tabla de la Estación 1 con la hora de entrada
-                    cursor.execute("INSERT INTO Estación_4 (Tag, Nombre, Hora_entrada) VALUES (%s, %s, %s)", (tags_4, nombre_tag_4_1, obtener_hora_actual()))
+                    cursor.execute("INSERT INTO Estación_4 (ID, Kit, Hora_entrada) VALUES (%s, %s, %s)", (tags_4, nombre_tag_4_1, obtener_hora_actual()))
                     conexion.commit()
                     print(f"Tag '{tags_4}' insertado en la tabla de la Estación 4 con nombre '{nombre_tag_4_1}' y hora de entrada registrada.")
                 except mysql.connector.Error as err:
@@ -314,7 +314,7 @@ while True:
                 # El tag no está presente en la tabla, entonces se inserta
                 try:
                     # Insertar el tag en la tabla de la Estación 1 con la hora de entrada
-                    cursor.execute("INSERT INTO Estación_5 (Tag, Nombre, Hora_entrada) VALUES (%s, %s, %s)", (tags_5, nombre_tag_5_1, obtener_hora_actual()))
+                    cursor.execute("INSERT INTO Estación_5 (ID, Kit, Hora_entrada) VALUES (%s, %s, %s)", (tags_5, nombre_tag_5_1, obtener_hora_actual()))
                     conexion.commit()
                     print(f"Tag '{tags_5}' insertado en la tabla de la Estación 5 con nombre '{nombre_tag_5_1}' y hora de entrada registrada.")
                 except mysql.connector.Error as err:
@@ -348,7 +348,7 @@ while True:
                 # El tag no está presente en la tabla, entonces se inserta
                 try:
                     # Insertar el tag en la tabla de la Estación 1 con la hora de entrada
-                    cursor.execute("INSERT INTO Estación_6 (Tag, Nombre, Hora_entrada) VALUES (%s, %s, %s)", (tags_6, nombre_tag_6_1, obtener_hora_actual()))
+                    cursor.execute("INSERT INTO Estación_6 (ID, Kit, Hora_entrada) VALUES (%s, %s, %s)", (tags_6, nombre_tag_6_1, obtener_hora_actual()))
                     conexion.commit()
                     print(f"Tag '{tags_6}' insertado en la tabla de la Estación 6 con nombre '{nombre_tag_6_1}' y hora de entrada registrada.")
                 except mysql.connector.Error as err:
@@ -382,49 +382,8 @@ while True:
                 # El tag no está presente en la tabla, entonces se inserta
                 try:
                     # Insertar el tag en la tabla de la Estación 1 con la hora de entrada
-                    cursor.execute("INSERT INTO Estación_7 (Tag, Nombre, Hora_entrada) VALUES (%s, %s, %s)", (tags_7, nombre_tag_7_1, obtener_hora_actual()))
+                    cursor.execute("INSERT INTO Estación_7 (ID, Kit, Hora_entrada) VALUES (%s, %s, %s)", (tags_7, nombre_tag_7_1, obtener_hora_actual()))
                     conexion.commit()
                     print(f"Tag '{tags_7}' insertado en la tabla de la Estación 7 con nombre '{nombre_tag_7_1}' y hora de entrada registrada.")
                 except mysql.connector.Error as err:
                     print("Error al insertar el tag en la tabla de la Estación 7:", err)
-
-
-    # Lector_2 = reader_2.detectTags(powerDBm=reader_2.power_table[35], freqMHz=reader_2.freq_table[0], mode=1002, session=2, population=1, duration=0.5, searchmode=2)
-    
-    # # Lista para almacenar los tags detectados en este ciclo
-    # tags_detectados_4 = [tag['EPC-96'].decode('utf-8') for tag in Lector_2 if tag['AntennaID'] == 4]
-
-    # # Verificar si los tags previamente registrados en la tabla de la Estación 1 ya no están siendo detectados
-    # cursor.execute("SELECT Tag FROM Estación_4")
-    # tags_registrados_4 = [registro[0] for registro in cursor.fetchall()]
-    
-    # for tag_registrado_4 in tags_registrados_4:
-    #     if tag_registrado_4 not in tags_detectados_4:
-    #         # El tag ya no está siendo detectado, por lo que se registra la hora de salida
-    #         try:
-    #             cursor.execute("UPDATE Estación_4 SET Hora_salida = %s WHERE Tag = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado_4))
-    #             conexion.commit()
-    #             print(f"Registrada la hora de salida para el tag '{tag_registrado_4}'.")
-    #         except mysql.connector.Error as err:
-    #             print("Error al actualizar la hora de salida en la tabla de la Estación 4:", err)
-    
-    # # Procesamiento de los tags detectados en este ciclo
-    # for tag_2 in Lector_2:
-    #     if tag_2['AntennaID'] == 1:
-    #         tags = tag_2['EPC-96'].decode('utf-8')
-    #         # Asignación de nombre
-    #         nombre_tag_2 = nombres_tags.get(tags, "No registrado")
-            
-    #         # Verificar si el tag ya está presente en la tabla de la Estación 1
-    #         cursor.execute("SELECT Tag FROM Estación_4 WHERE Tag = %s", (tags,))
-    #         resultado = cursor.fetchone()
-            
-    #         if resultado is None:
-    #             # El tag no está presente en la tabla, entonces se inserta
-    #             try:
-    #                 # Insertar el tag en la tabla de la Estación 1 con la hora de entrada
-    #                 cursor.execute("INSERT INTO Estación_4 (Tag, Nombre, Hora_entrada) VALUES (%s, %s, %s)", (tags, nombre_tag_2, obtener_hora_actual()))
-    #                 conexion.commit()
-    #                 print(f"Tag '{tags}' insertado en la tabla de la Estación 4 con nombre '{nombre_tag_2}' y hora de entrada registrada.")
-    #             except mysql.connector.Error as err:
-    #                 print("Error al insertar el tag en la tabla de la Estación 4:", err)    

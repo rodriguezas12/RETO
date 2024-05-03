@@ -238,19 +238,15 @@ app.get('/contabilidad-kits', (req, res) => {
 
 //Estaciones ^-^// Cambiar la ruta en el servidor para que espere el parámetro en la URL
 app.get("/estaciones/:numeroEstacion", (req, res) => {
-  // Obtener el número de estación de los parámetros de la URL
   const { numeroEstacion } = req.params;
 
-  // Verificar si se proporcionó un número de estación válido
   if (!numeroEstacion || isNaN(numeroEstacion) || numeroEstacion < 1 || numeroEstacion > 7) {
     res.status(400).send("Número de estación inválido");
     return;
   }
 
-  // Construir el nombre de la tabla basado en el número de estación
   const nombreTabla = `Estación_${numeroEstacion}`;
 
-  // Consultar todos los datos de la tabla correspondiente
   db.query(
     `SELECT * FROM ${nombreTabla}`,
     (err, results) => {
@@ -259,11 +255,14 @@ app.get("/estaciones/:numeroEstacion", (req, res) => {
         res.status(500).send("Error interno del servidor");
         return;
       }
-      // Enviar los resultados de la consulta como respuesta
       res.json(results);
     }
   );
 });
+
+
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

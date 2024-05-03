@@ -19,7 +19,6 @@ function Estado() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        // Calcula el total de kits armados y ensamblados
         let totalKits = 0;
         data.forEach((row) => {
           totalKits += row.Cantidad; // Suponiendo que la segunda columna sea la cantidad de kits
@@ -30,40 +29,29 @@ function Estado() {
         console.error("Error fetching data:", error);
       }
 
-      try {
-        // Verificar si selectedStation tiene un valor válido
-        if (!selectedStation) {
-          console.error("No se ha seleccionado ninguna estación.");
-          return;
-        }
-      
-        // Construir el nombre de la tabla basado en la estación seleccionada
-        const tableName = `Estacion_${selectedStation.split(" ")[1]}`;
+      if (selectedStation) {
+        // Sustituir espacio por '_' para coincidir con el nombre de la tabla
+        const stationNumber = selectedStation.split(" ")[1];
       
         // Realizar la consulta a la tabla correspondiente para la estación seleccionada
-        const response = await fetch(`http://localhost:5000/estaciones/${tableName}`);
-        if (!response.ok) {
-          throw new Error(`Network response for ${tableName} was not ok`);
+        try {
+          const response = await fetch(`http://localhost:5000/estaciones/${stationNumber}`);
+          if (!response.ok) {
+            throw new Error(`Network response for Estacion_${stationNumber} was not ok`);
+          }
+          const stationData = await response.json();
+          setData(stationData);
+        } catch (error) {
+          console.error(`Error fetching data for Estacion_${stationNumber}:`, error);
         }
-        const data = await response.json();
-      
-        // Establecer los datos obtenidos en el estado para mostrarlos en la tabla
-        setData(data);
-      } catch (error) {
-        console.error(`Error fetching data for ${selectedStation}:`, error);
       }
-  
-      
     };
-  
-    // Ejecutar fetchData inicialmente y luego cada 5 segundos (5000 milisegundos)
+
     fetchData();
-    const intervalId = setInterval(fetchData, 50000);
-  
-    // Limpiar el intervalo cuando el componente se desmonta
+    const intervalId = setInterval(fetchData, 5000);
+
     return () => clearInterval(intervalId);
   }, [selectedStation]);
-  
 
   return (
     <div>
@@ -86,8 +74,8 @@ function Estado() {
           <span className="elemento-valor">{ensamblados}</span>
         </div>
         <div className="contenedor-label1">
-        <span className="elemento-label">Seleccione la estación de interés:</span>
-        <select className="elemento-valor" value={selectedStation} onChange={(e) => setSelectedStation(e.target.value)}>
+          <span className="elemento-label">Seleccione la estación de interés:</span>
+          <select className="elemento-valor" value={selectedStation} onChange={(e) => setSelectedStation(e.target.value)}>
             <option value="">Seleccionar</option>
             {stations.map((station, index) => (
               <option key={index} value={station}>{station}</option>
@@ -110,9 +98,9 @@ function Estado() {
             {data.map((item, index) => (
               <tr key={index}>
                 <td>{item.ID}</td>
-                <td>{item.KIT}</td>
-                <td>{item.Hora_entrada_Estación}</td>
-                <td>{item.Tiempo}</td>
+                <td>{item.Kit}</td>
+                <td>{item.Hora_entrada}</td>
+                <td>{item.Tiempo_transcurrido}</td>
               </tr>
             ))}
           </tbody>
