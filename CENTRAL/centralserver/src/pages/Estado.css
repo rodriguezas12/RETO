@@ -9,11 +9,10 @@
   align-items: center;
 }
   
-  .contenedor-label1,
-  .contenedor-label2 {
+  .contenedor-label1 {
     display: flex;
     align-items: center;
-    margin: auto;
+    margin: 5px;
     padding: 10px;
     background-color: #ECD4B6; /* Color azul acero */
     border-radius: 30px; /* Bordes redondos de 30px */
@@ -23,7 +22,9 @@
   .elemento-label,
   .elemento-valor {
     font-family: "Nunito", sans-serif; /* Fuente Nunito */
-    font-size: 26px;
+    font-size: min(1.5vw, 24px);
+
+    
   }
   
   .elemento-label {
@@ -37,7 +38,7 @@
     background-color: #be7530;
     font-weight: 800;
     color: #292929; /* Color del texto */
-    padding: 5px;
+    padding: 8px;
   }
   
   .container-estado {
