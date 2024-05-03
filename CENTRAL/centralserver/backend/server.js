@@ -223,10 +223,23 @@ app.get('/michi', (req, res) => {
   });
 });
 
-//Estaciones ^-^
-app.post("/leer_datos_estacion", (req, res) => {
-  // Obtener el número de estación de la solicitud POST
-  const { numeroEstacion } = req.body;
+app.get('/contabilidad-kits', (req, res) => {
+  db.query('SELECT * FROM Contabilidad_Kits', (err, results) => {
+    if (err) {
+      console.error("Error al obtener los datos de Contabilidad_Kits:", err);
+      res.status(500).send("Error en el servidor");
+      return;
+    }
+
+    res.json(results);
+  });
+});
+
+
+//Estaciones ^-^// Cambiar la ruta en el servidor para que espere el parámetro en la URL
+app.get("/estaciones/:numeroEstacion", (req, res) => {
+  // Obtener el número de estación de los parámetros de la URL
+  const { numeroEstacion } = req.params;
 
   // Verificar si se proporcionó un número de estación válido
   if (!numeroEstacion || isNaN(numeroEstacion) || numeroEstacion < 1 || numeroEstacion > 7) {
@@ -251,13 +264,6 @@ app.post("/leer_datos_estacion", (req, res) => {
     }
   );
 });
-
-
-
-
-
-
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
