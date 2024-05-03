@@ -63,7 +63,7 @@ export default function Register() {
   };
 
   const validarNRC = () => {
-    if (nrc !== "12341") {
+    if (nrc !== "2168") {
       setErrorNRC(true);
     } else {
       setErrorNRC(false);
