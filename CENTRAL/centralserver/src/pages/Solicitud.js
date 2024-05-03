@@ -41,13 +41,13 @@ export default function Picking() {
         // Si hay disponibles, actualizar el pedido
         setPedido((prevPedido) => {
           const nuevoPedido = [...prevPedido, kitNumero];
-          alert(`Kit ${kitNumero} añadido al carrito.\nPedido actual: ${nuevoPedido.join(", ")}`);
+          //alert(`Kit ${kitNumero} añadido al carrito.\nPedido actual: ${nuevoPedido.join(", ")}`);
           return nuevoPedido;
         });
   
         return newCounts;
       } else {
-        alert(`No hay suficientes kits disponibles de Kit ${kitNumero}.`);
+        //alert(`No hay suficientes kits disponibles de Kit ${kitNumero}.`);
         return prevCounts; // Retornar los contadores antiguos si no hay disponibles
       }
     });
@@ -67,11 +67,7 @@ export default function Picking() {
         ...prevCounts,
         [nombreKit]: prevCounts[nombreKit] + 1,
       }));
-      alert(
-        `Kit ${kitNumero} eliminado del carrito.\nPedido actual: ${nuevoPedido.join(
-          ", "
-        )}`
-      );
+      //alert(`Kit ${kitNumero} eliminado del carrito.\nPedido actual: ${nuevoPedido.join(", ")}`);
     }
   };
 
@@ -128,46 +124,50 @@ export default function Picking() {
 
   return (
     <div style={{ marginTop: "15vh" }}>
-      <Header titulo= "SOLICITUD DE MATERIALES"/>
-      <div className="container-items">
-        {[kit1, kit2, kit3, kit4, kit5, kit6].map((image, index) => (
-          <div key={index} className="Kit">
-            <div className="info-product">
-              <div className="info-text">
-                <h2>Kit {index + 1}</h2>
-                <p>Disponibles: {kitCounts[`Kit ${index + 1}`] || 0}</p>
-              </div>
-              <div className="button-container">
-                <button className="button" onClick={() => añadirKit(index + 1)}>
-                  +
-                </button>
-                <button
-                  className="button"
-                  onClick={() => descontarKit(index + 1)}
-                >
-                  -
-                </button>
-              </div>
-            </div>
-            <figure>
-              <img
-                src={image}
-                alt={`Icono del Kit ${index + 1}`}
-                className="icono"
-              />
-            </figure>
+  <Header titulo="SOLICITUD DE MATERIALES" />
+  <div className="container-items">
+    {[kit1, kit2, kit3, kit4, kit5, kit6].map((image, index) => (
+      <div key={index} className="Kit">
+        <div className="info-product">
+          <div className="info-text">
+            <h2>Kit {index + 1}</h2>
+            <p>Disponibles: {kitCounts[`Kit ${index + 1}`] || 0}</p>
           </div>
-        ))}
+          <div className="button-container">
+            <button className="button" onClick={() => añadirKit(index + 1)}>
+              +
+            </button>
+            <button
+              className="button"
+              onClick={() => descontarKit(index + 1)}
+            >
+              -
+            </button>
+          </div>
+        </div>
+        <figure>
+          <img
+            src={image}
+            alt={`Icono del Kit ${index + 1}`}
+            className="icono"
+          />
+        </figure>
       </div>
-      <div className="button-panel">
-        <button className="action-button" onClick={solicitar}>
-          Solicitar
-        </button>
-        <button className="action-button" onClick={limpiarCarrito}>
-          Limpiar carrito
-        </button>
-      </div>
+    ))}
+  </div>
+  <div className="button-panel">
+    <div>
+      <span>Pedido actual: {pedido.map(num => `Kit ${num}`).join(", ")}</span>
     </div>
+    <button className="action-button" onClick={solicitar}>
+      Solicitar
+    </button>
+    <button className="action-button" onClick={limpiarCarrito}>
+      Limpiar carrito
+    </button>
+  </div>
+</div>
+
   );
 }
 
