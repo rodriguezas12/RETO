@@ -29,25 +29,32 @@ export default function Picking() {
 
   const añadirKit = (kitNumero) => {
     const nombreKit = `Kit ${kitNumero}`;
-    const cantidadDisponible = kitCounts[nombreKit];
-    const cantidadEnPedido = pedido.filter((item) => item === kitNumero).length;
-
-    if (cantidadEnPedido < cantidadDisponible) {
-      const nuevoPedido = [...pedido, kitNumero];
-      setPedido(nuevoPedido);
-      setKitCounts((prevCounts) => ({
-        ...prevCounts,
-        [nombreKit]: prevCounts[nombreKit] - 1,
-      }));
-      alert(
-        `Kit ${kitNumero} añadido al carrito.\nPedido actual: ${nuevoPedido.join(
-          ", "
-        )}`
-      );
-    } else {
-      alert(`No hay suficientes kits disponibles de Kit ${kitNumero}.`);
-    }
+  
+    // Actualizar primero los contadores antes de modificar el pedido
+    setKitCounts((prevCounts) => {
+      if (prevCounts[nombreKit] > 0) {
+        const newCounts = {
+          ...prevCounts,
+          [nombreKit]: prevCounts[nombreKit] - 1
+        };
+  
+        // Si hay disponibles, actualizar el pedido
+        setPedido((prevPedido) => {
+          const nuevoPedido = [...prevPedido, kitNumero];
+          alert(`Kit ${kitNumero} añadido al carrito.\nPedido actual: ${nuevoPedido.join(", ")}`);
+          return nuevoPedido;
+        });
+  
+        return newCounts;
+      } else {
+        alert(`No hay suficientes kits disponibles de Kit ${kitNumero}.`);
+        return prevCounts; // Retornar los contadores antiguos si no hay disponibles
+      }
+    });
   };
+  
+  
+  
 
   const descontarKit = (kitNumero) => {
     const index = pedido.indexOf(kitNumero);
@@ -163,3 +170,5 @@ export default function Picking() {
     </div>
   );
 }
+
+
