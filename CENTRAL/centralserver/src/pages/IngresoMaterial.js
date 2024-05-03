@@ -2,21 +2,16 @@ import React, { useState } from "react";
 import Header from "../components/header";
 
 export default function Inventario() {
-  // Inicializar el estado con un array de 3x10
-  const [celdas, setCeldas] = useState(
-    Array(3)
-      .fill(null)
-      .map(() => Array(10).fill(""))
-  );
+  const [celdas, setCeldas] = useState(Array(3).fill(null).map(() => Array(10).fill("")));
+  const [kitSeleccionado, setKitSeleccionado] = useState("");
 
-  // Manejador para actualizar el estado cuando el input cambia
-  const handleInputChange = (rowIndex, columnIndex, value) => {
+  const handleCellClick = (rowIndex, columnIndex) => {
+    if (!kitSeleccionado) return; // Evita marcar celdas si no se ha seleccionado un kit
     const updatedCeldas = [...celdas];
-    updatedCeldas[rowIndex][columnIndex] = value;
+    updatedCeldas[rowIndex][columnIndex] = kitSeleccionado;
     setCeldas(updatedCeldas);
   };
 
-  // Esqueleto de la función para manejar el envío de los datos
   const handleSubmit = () => {
     // Transforma el estado de las celdas en un formato adecuado para la base de datos
     const filasParaEnviar = celdas.map((row) => ({
@@ -62,36 +57,37 @@ export default function Inventario() {
       });
   };
 
+
   return (
     <>
       <Header titulo="INGRESO DE MATERIAL" />
+      <p className="instructions">
+        La siguiente tabla representa las bahías disponibles para establecer el orden del rack, por favor asignelo a su gusto.
+      </p>
+      <select value={kitSeleccionado} onChange={(e) => setKitSeleccionado(e.target.value)}>
+        <option value="">Seleccione un Kit</option>
+        <option value="1">Kit 1</option>
+        <option value="2">Kit 2</option>
+        <option value="3">Kit 3</option>
+        <option value="4">Kit 4</option>
+        <option value="5">Kit 5</option>
+        <option value="6">Kit 6</option>
+      </select>
       <div className="container-ingreso">
-        <h1>
-          En la siguiente tabla por favor asigne la posición de los kits que
-          quiere colocar en el rack
-        </h1>
         <table>
           <tbody>
             {celdas.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {row.map((cell, columnIndex) => (
-                  <td key={columnIndex}>
-                    <input
-                      type="text"
-                      value={cell}
-                      onChange={(e) =>
-                        handleInputChange(rowIndex, columnIndex, e.target.value)
-                      }
-                    />
+                  <td key={columnIndex} onClick={() => handleCellClick(rowIndex, columnIndex)}>
+                    {cell || "Vacío"}
                   </td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="submit-container">
-          <button onClick={handleSubmit}>Enviar</button>
-        </div>
+        <button onClick={handleSubmit}>Enviar</button>
       </div>
     </>
   );
