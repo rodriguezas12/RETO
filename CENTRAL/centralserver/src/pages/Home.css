@@ -58,6 +58,7 @@ body {
 }
 
 .home-box form button {
+  font-family: "nunito";
   width: 100%;
   background: #ff4500;
   border: none;
@@ -69,6 +70,7 @@ body {
 }
 
 .home-box button {
+  font-family: "nunito";
   width: calc(100% - 40px);
   background: #ff4500;
   border: none;
