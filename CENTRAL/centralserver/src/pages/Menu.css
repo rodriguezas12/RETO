@@ -22,10 +22,11 @@
 }
 
 .menu-box h3 {
-  margin: 10px 0 30px;
+  font-family: "ChauPhilomeneOne-Regular";
+  margin: 10px 0 20px;
   padding-bottom: 20px;
   position: relative;
-  color: #8b4513; /* Letras marrones */
+  color: #8b4513;
 }
 
 .menu-box form {
@@ -49,6 +50,7 @@
 
 .menu-box form button,
 .menu-box button {
+  font-family: "nunito";
   width: 100%;
   background: #ff4500; /* Fondo naranja más fuerte */
   border: none;
