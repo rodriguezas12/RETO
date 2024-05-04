@@ -50,7 +50,7 @@ sql_create_table_estacion1 = """
 CREATE TABLE IF NOT EXISTS Estación_1 (ID VARCHAR(25) NOT NULL,
   Kit VARCHAR(25) NOT NULL,
   Hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Hora_salida TIMESTAMP DEFAULT NULL
+  Hora_salida TIMESTAMP DEFAULT NULL,
 ) COMMENT 'Base de datos de la estación 1'
 """
 
@@ -145,7 +145,7 @@ while True:
     tags_detectados = [tag['EPC-96'].decode('utf-8') for tag in Lector_1 if tag['AntennaID'] == 1]
 
     # Verificar si los tags previamente registrados en la tabla de la Estación 1 ya no están siendo detectados
-    cursor.execute("SELECT Tag FROM Estación_1")
+    cursor.execute("SELECT ID FROM Estación_1")
     tags_registrados = [registro[0] for registro in cursor.fetchall()]
     
     for tag_registrado in tags_registrados:
@@ -166,7 +166,7 @@ while True:
             nombre_tag_1 = nombres_tags.get(tags, "No registrado")
             
             # Verificar si el tag ya está presente en la tabla de la Estación 1
-            cursor.execute("SELECT Tag FROM Estación_1 WHERE Tag = %s", (tags,))
+            cursor.execute("SELECT ID FROM Estación_1 WHERE ID = %s", (tags,))
             resultado = cursor.fetchone()
             
             if resultado is None:
@@ -183,14 +183,14 @@ while True:
     tags_detectados2 = [tag['EPC-96'].decode('utf-8') for tag in Lector_1 if tag['AntennaID'] == 2]
 
     # Verificar si los tags previamente registrados en la tabla de la Estación 1 ya no están siendo detectados
-    cursor.execute("SELECT Tag FROM Estación_1")
+    cursor.execute("SELECT ID FROM Estación_1")
     tags_registrados2 = [registro[0] for registro in cursor.fetchall()]
 
     for tag_registrado2 in tags_registrados2:
         if tag_registrado2 not in tags_detectados2:
             # El tag ya no está siendo detectado, por lo que se registra la hora de salida
             try:
-                cursor.execute("UPDATE Estación_2 SET Hora_salida = %s WHERE Tag = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado2))
+                cursor.execute("UPDATE Estación_2 SET Hora_salida = %s WHERE ID = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado2))
                 conexion.commit()
                 print(f"Registrada la hora de salida para el tag '{tag_registrado2}'.")
             except mysql.connector.Error as err:
@@ -202,7 +202,7 @@ while True:
             nombre_tag_2 = nombres_tags.get(tags2, "No registrado")
             
             # Verificar si el tag ya está presente en la tabla de la Estación 1
-            cursor.execute("SELECT Tag FROM Estación_2 WHERE Tag = %s", (tags2,))
+            cursor.execute("SELECT ID FROM Estación_2 WHERE ID = %s", (tags2,))
             resultado = cursor.fetchone()
             
             if resultado is None:
@@ -220,14 +220,14 @@ while True:
     tags_detectados3 = [tag['EPC-96'].decode('utf-8') for tag in Lector_1 if tag['AntennaID'] == 3]
 
     # Verificar si los tags previamente registrados en la tabla de la Estación 1 ya no están siendo detectados
-    cursor.execute("SELECT Tag FROM Estación_3")###tenia 1
+    cursor.execute("SELECT ID FROM Estación_3")###tenia 1
     tags_registrados3 = [registro[0] for registro in cursor.fetchall()]
 
     for tag_registrado3 in tags_registrados3:
         if tag_registrado3 not in tags_detectados3:
             # El tag ya no está siendo detectado, por lo que se registra la hora de salida
             try:
-                cursor.execute("UPDATE Estación_3 SET Hora_salida = %s WHERE Tag = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado3))
+                cursor.execute("UPDATE Estación_3 SET Hora_salida = %s WHERE ID = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado3))
                 conexion.commit()
                 print(f"Registrada la hora de salida para el tag '{tag_registrado3}'.")
             except mysql.connector.Error as err:
@@ -239,7 +239,7 @@ while True:
             nombre_tag_3 = nombres_tags.get(tags3, "No registrado")
             
             # Verificar si el tag ya está presente en la tabla de la Estación 1
-            cursor.execute("SELECT Tag FROM Estación_3 WHERE Tag = %s", (tags3,))
+            cursor.execute("SELECT ID FROM Estación_3 WHERE ID = %s", (tags3,))
             resultado = cursor.fetchone()
             
             if resultado is None:
@@ -255,14 +255,14 @@ while True:
     #Detectar tags con el lector RFID de la estación 4
     Lector_2 = reader_2.detectTags(powerDBm=reader_2.power_table[35], freqMHz=reader_2.freq_table[0], mode=1002, session=2, population=1, duration=0.5, searchmode=2)
     tags_detectados_4_1 = [tag['EPC-96'].decode('utf-8') for tag in Lector_2 if tag['AntennaID'] == 1]
-    cursor.execute("SELECT Tag FROM Estación_4")
+    cursor.execute("SELECT ID FROM Estación_4")
     tags_registrados_4_1 = [registro[0] for registro in cursor.fetchall()]
 
     for tag_registrado_4_1 in tags_registrados_4_1:
         if tag_registrado_4_1 not in tags_detectados_4_1:
             # El tag ya no está siendo detectado, por lo que se registra la hora de salida
             try:
-                cursor.execute("UPDATE Estación_4 SET Hora_salida = %s WHERE Tag = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado_4_1))
+                cursor.execute("UPDATE Estación_4 SET Hora_salida = %s WHERE ID = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado_4_1))
                 conexion.commit()
                 print(f"Registrada la hora de salida para el tag '{tag_registrado_4_1}'.")
             except mysql.connector.Error as err:
@@ -274,7 +274,7 @@ while True:
             nombre_tag_4_1 = nombres_tags.get(tags_4, "No registrado")
             
             # Verificar si el tag ya está presente en la tabla de la Estación 1
-            cursor.execute("SELECT Tag FROM Estación_4 WHERE Tag = %s", (tags_4,))
+            cursor.execute("SELECT ID FROM Estación_4 WHERE ID = %s", (tags_4,))
             resultado = cursor.fetchone()
             
             if resultado is None:
@@ -288,14 +288,14 @@ while True:
                     print("Error al insertar el tag en la tabla de la Estación 4:", err)    
 #####ESTACION 5
     tags_detectados_5_1 = [tag['EPC-96'].decode('utf-8') for tag in Lector_2 if tag['AntennaID'] == 9 ]
-    cursor.execute("SELECT Tag FROM Estación_5")
+    cursor.execute("SELECT ID FROM Estación_5")
     tags_registrados_5_1 = [registro[0] for registro in cursor.fetchall()]
 
     for tag_registrado_5_1 in tags_registrados_5_1:
         if tag_registrado_5_1 not in tags_detectados_5_1:
             # El tag ya no está siendo detectado, por lo que se registra la hora de salida
             try:
-                cursor.execute("UPDATE Estación_5 SET Hora_salida = %s WHERE Tag = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado_5_1))
+                cursor.execute("UPDATE Estación_5 SET Hora_salida = %s WHERE ID = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado_5_1))
                 conexion.commit()
                 print(f"Registrada la hora de salida para el tag '{tag_registrado_5_1}'.")
             except mysql.connector.Error as err:
@@ -307,7 +307,7 @@ while True:
             nombre_tag_5_1 = nombres_tags.get(tags_5, "No registrado")
             
             # Verificar si el tag ya está presente en la tabla de la Estación 1
-            cursor.execute("SELECT Tag FROM Estación_5 WHERE Tag = %s", (tags_5,))
+            cursor.execute("SELECT ID FROM Estación_5 WHERE ID = %s", (tags_5,))
             resultado = cursor.fetchone()
             
             if resultado is None:
@@ -322,14 +322,14 @@ while True:
 
 ##### ESTACION 6
     tags_detectados_6_1 = [tag['EPC-96'].decode('utf-8') for tag in Lector_2 if tag['AntennaID'] == 17]
-    cursor.execute("SELECT Tag FROM Estación_6")
+    cursor.execute("SELECT ID FROM Estación_6")
     tags_registrados_6_1 = [registro[0] for registro in cursor.fetchall()]
 
     for tag_registrado_6_1 in tags_registrados_6_1:
         if tag_registrado_6_1 not in tags_detectados_6_1:
             # El tag ya no está siendo detectado, por lo que se registra la hora de salida
             try:
-                cursor.execute("UPDATE Estación_6 SET Hora_salida = %s WHERE Tag = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado_6_1))
+                cursor.execute("UPDATE Estación_6 SET Hora_salida = %s WHERE ID = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado_6_1))
                 conexion.commit()
                 print(f"Registrada la hora de salida para el tag '{tag_registrado_6_1}'.")
             except mysql.connector.Error as err:
@@ -341,7 +341,7 @@ while True:
             nombre_tag_6_1 = nombres_tags.get(tags_6, "No registrado")
             
             # Verificar si el tag ya está presente en la tabla de la Estación 1
-            cursor.execute("SELECT Tag FROM Estación_6 WHERE Tag = %s", (tags_6,))
+            cursor.execute("SELECT ID FROM Estación_6 WHERE ID = %s", (tags_6,))
             resultado = cursor.fetchone()
             
             if resultado is None:
@@ -356,14 +356,14 @@ while True:
 
 ### ESTACION 7
     tags_detectados_7_1 = [tag['EPC-96'].decode('utf-8') for tag in Lector_2 if tag['AntennaID'] == 25]
-    cursor.execute("SELECT Tag FROM Estación_7")
+    cursor.execute("SELECT ID FROM Estación_7")
     tags_registrados_7_1 = [registro[0] for registro in cursor.fetchall()]
 
     for tag_registrado_7_1 in tags_registrados_7_1:
         if tag_registrado_7_1 not in tags_detectados_7_1:
             # El tag ya no está siendo detectado, por lo que se registra la hora de salida
             try:
-                cursor.execute("UPDATE Estación_7 SET Hora_salida = %s WHERE Tag = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado_7_1))
+                cursor.execute("UPDATE Estación_7 SET Hora_salida = %s WHERE ID = %s AND Hora_salida IS NULL", (obtener_hora_actual(), tag_registrado_7_1))
                 conexion.commit()
                 print(f"Registrada la hora de salida para el tag '{tag_registrado_7_1}'.")
             except mysql.connector.Error as err:
@@ -375,7 +375,7 @@ while True:
             nombre_tag_7_1 = nombres_tags.get(tags_7, "No registrado")
             
             # Verificar si el tag ya está presente en la tabla de la Estación 1
-            cursor.execute("SELECT Tag FROM Estación_7 WHERE Tag = %s", (tags_7,))
+            cursor.execute("SELECT ID FROM Estación_7 WHERE ID = %s", (tags_7,))
             resultado = cursor.fetchone()
             
             if resultado is None:
