@@ -92,6 +92,7 @@ function Estado() {
               <th>KIT</th>
               <th>Hora de entrada a la estación</th>
               <th>Tiempo Transcurrido</th>
+              <th>Hora de salida de la estación</th>
             </tr>
           </thead>
           <tbody>
@@ -101,6 +102,7 @@ function Estado() {
                 <td>{item.Kit}</td>
                 <td>{item.Hora_entrada}</td>
                 <td>{item.Tiempo_transcurrido}</td>
+                <td>{item.Hora_salida}</td>
               </tr>
             ))}
           </tbody>

@@ -50,7 +50,7 @@ sql_create_table_estacion1 = """
 CREATE TABLE IF NOT EXISTS Estación_1 (ID VARCHAR(25) NOT NULL,
   Kit VARCHAR(25) NOT NULL,
   Hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Hora_salida TIMESTAMP DEFAULT NULL
+  Hora_salida TIMESTAMP DEFAULT NULL,
 ) COMMENT 'Base de datos de la estación 1'
 """
 
