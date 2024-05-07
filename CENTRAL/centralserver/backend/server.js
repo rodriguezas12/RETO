@@ -213,7 +213,7 @@ app.get("/inventario_rack", (req, res) => {
   const query = `
       SELECT Nombre, COUNT(*) as Cantidad
       FROM Datos
-      WHERE Nombre LIKE 'Kit %'
+      WHERE Nombre LIKE 'Kit %' AND INV = 'SI'
       GROUP BY Nombre
     `;
 
@@ -226,6 +226,7 @@ app.get("/inventario_rack", (req, res) => {
     }
   });
 });
+
 
 // inventario llamado de tabla a sql
 app.get('/michi', (req, res) => {

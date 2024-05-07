@@ -16,36 +16,36 @@ def tiempo_suficiente_ultima_deteccion(tag_id, tiempo_actual):
 
 # Diccionario para asignar nombres a los tags
 nombres_tags = {
-    "ad89180010d68d8b39000080": "Kit 1",
-    "ad89180010d6958b3a000081": "Kit 1",
-    "ad89180010d6a98c39000083": "Kit 1",
-    "ad89180010d8e58d3a0000c6": "Kit 1",
-    "ad89180010d98188390000d7": "Kit 1",
-    "ad89180010d4b98d38000049": "Kit 2",
-    "ad89180010d67d8b3900007d": "Kit 2",
-    "ad89180010d6858a3900007f": "Kit 2",
-    "ad89180010d6878a3900007e": "Kit 2",
-    "ad89180010d7318b39000093": "Kit 2",
-    "ad89180010d6a1883a000082": "Kit 3",
-    "ad89180010d6c58c39000085": "Kit 3",
-    "ad89180010d6d38a35000088": "Kit 3",
-    "ad89180010d705873900008e": "Kit 3",
-    "ad89180010d97d903a0000d8": "Kit 3",
-    "ad89180010d6c3873c000086": "Kit 4",
-    "ad89180010d6cb8e38000087": "Kit 4",
-    "ad89180010d6fd8e3a00008d": "Kit 4",
-    "ad89180010d94d8f390000d1": "Kit 4",
-    "ad89180010dad5893b000000": "Kit 4",
-    "ad89180010d6dd8a36000089": "Kit 5",
-    "ad89180010d6e58c3600008a": "Kit 5",
-    "ad89180010d6f58f3600008b": "Kit 5",
-    "ad89180010d6ff8c3600008c": "Kit 5",
-    "ad89180010d9318f3a0000cf": "Kit 5",
-    "ad89180010d65b8d3800007a": "Kit 6",
-    "ad89180010d6638f3900007b": "Kit 6",
-    "ad89180010d66d8c3a00007c": "Kit 6",
-    "ad89180010d7398a39000094": "Kit 6",
-    "ad89180010dacd8c3a0000ff": "Kit 6"
+    "ad89180010d68d8b39000080": "Kit 1", #ID 1
+    "ad89180010d6958b3a000081": "Kit 1", #ID 2
+    "ad89180010d6a98c39000083": "Kit 1", #ID 3
+    "ad89180010d8e58d3a0000c6": "Kit 1", #ID 4
+    "ad89180010d98188390000d7": "Kit 1", #ID 5
+    "ad89180010d4b98d38000049": "Kit 2", #ID 1
+    "ad89180010d67d8b3900007d": "Kit 2", #ID 2
+    "ad89180010d6858a3900007f": "Kit 2", #ID 3
+    "ad89180010d6878a3900007e": "Kit 2", #ID 4
+    "ad89180010d7318b39000093": "Kit 2", #ID 5
+    "ad89180010d6a1883a000082": "Kit 3", #ID 1
+    "ad89180010d6c58c39000085": "Kit 3", #ID 2
+    "ad89180010d6d38a35000088": "Kit 3", #ID 3
+    "ad89180010d705873900008e": "Kit 3", #ID 4
+    "ad89180010d97d903a0000d8": "Kit 3", #ID 5
+    "ad89180010d6c3873c000086": "Kit 4", #ID 1
+    "ad89180010d6cb8e38000087": "Kit 4", #ID 2
+    "ad89180010d6fd8e3a00008d": "Kit 4", #ID 3
+    "ad89180010d94d8f390000d1": "Kit 4", #ID 4
+    "ad89180010dad5893b000000": "Kit 4", #ID 5
+    "ad89180010d6dd8a36000089": "Kit 5", #ID 1
+    "ad89180010d6e58c3600008a": "Kit 5", #ID 2
+    "ad89180010d6f58f3600008b": "Kit 5", #ID 3
+    "ad89180010d6ff8c3600008c": "Kit 5", #ID 4
+    "ad89180010d9318f3a0000cf": "Kit 5", #ID 5
+    "ad89180010d65b8d3800007a": "Kit 6", #ID 1
+    "ad89180010d6638f3900007b": "Kit 6", #ID 2
+    "ad89180010d66d8c3a00007c": "Kit 6", #ID 3
+    "ad89180010d7398a39000094": "Kit 6", #ID 4
+    "ad89180010dacd8c3a0000ff": "Kit 6" #ID 5
 }
 
 tags_detectados_IN = []
@@ -61,13 +61,13 @@ cursor = conexion.cursor()
 
 # Definir la consulta SQL para crear la tabla de datos si no existe
 sql_create_table_datos = """
-CREATE TABLE IF NOT EXISTS Datos (
+CREATE TABLE IF NOT EXISTS Datos (ID INT, 
   Tag VARCHAR(25) NOT NULL,
   Nombre TEXT NOT NULL,
   Cantidad INT NOT NULL, 
   Hora_entrada_lab TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida_lab TIMESTAMP DEFAULT NULL,
-  INV ENUM('si', 'no') NOT NULL DEFAULT 'no', -- Nueva columna 'inv' con valores 'si' o 'no'
+  INV ENUM('SI', 'NO') NOT NULL DEFAULT 'NO', -- Nueva columna 'inv' con valores 'si' o 'no'
   PRIMARY KEY (Tag)
   
 ) COMMENT 'Base de datos de los tags'
@@ -136,8 +136,8 @@ except mysql.connector.Error as err:
 ###############
 #LECTORES RFID#
 ############### 
-reader_IN = R420('192.168.0.42')
-#reader_OUT = R420('192.168.0.42')
+reader_IN = R420('192.168.0.44')
+reader_OUT = R420('192.168.0.42')
 reader_RACK = R420('192.168.0.20')
 
 # Definir una función para obtener la hora actual formateada
@@ -165,7 +165,7 @@ while True:
             cursor.execute("""
             UPDATE Datos 
             SET Nombre = %s, 
-                Cantidad = Cantidad + 1, 
+                Cantidad = Cantidad, 
                 Hora_entrada_lab = %s, 
                 Hora_salida_lab = NULL, 
                 Hora_entrada_bodega = NULL 
@@ -175,43 +175,45 @@ while True:
             # Si la hora de salida es NULL, es un error lógico, pues no debería detectarse entrada sin salida.
             print(f"Error: Tag '{tag_id_IN}' detectado en entrada sin registro de salida.")
      else:
+        # Obtener el ID correspondiente al kit
+        id_kit = (list(nombres_tags.keys())).index(tag_id_IN) % 5 + 1
         # Insertar la tag como nueva entrada si no existe previamente en la base de datos
-        cursor.execute("INSERT INTO Datos (Tag, Nombre, Cantidad, Hora_entrada_lab) VALUES (%s, %s, 1, %s)", (tag_id_IN, nombre_IN, hora_actual))
+        cursor.execute("INSERT INTO Datos (ID, Tag, Nombre, Cantidad, Hora_entrada_lab) VALUES (%s, %s, %s, 1, %s)", (id_kit, tag_id_IN, nombre_IN, hora_actual))
         print(f"Nueva tag '{tag_id_IN}' registrada en entrada.")
     
     conexion.commit()
 
     # Detectar tags con el lector RFID de salida
-    # tags_OUT = reader_OUT.detectTags(powerDBm=reader_OUT.power_table[35], freqMHz=reader_OUT.freq_table[0], mode=1001, session=2, population=1, duration=durationn, searchmode=2)
-    # for tag_OUT in tags_OUT:
-    #     tag_id_OUT = tag_OUT['EPC-96'].decode('utf-8')
-    #     print("Tag detectado en entrada:", tag_id_OUT)
-    #     # Verificar si el tag ya ha sido detectado antes
-    #     if tag_id_OUT not in tags_detectados_OUT:
-    #         tags_detectados_OUT.append(tag_id_OUT)
-    #         # Definir el nombre basado en el diccionario
-    #         nombre_OUT = nombres_tags.get(tag_id_OUT, "No registrado")
-    #         # Definir los valores para la inserción en la tabla de datos
-    #         valores_datos_OUT = (tag_id_OUT, nombre_OUT, 1)
-    #         try:
-    #             # Verificar si el tag ya está en la base de datos
-    #             cursor.execute("SELECT * FROM Datos WHERE Tag = %s", (tag_id_OUT,))
-    #             if cursor.fetchone():  # El tag ya existe, actualizar el nombre
-    #                 cursor.execute("UPDATE Datos SET Nombre = %s WHERE Tag = %s", (nombre_OUT, tag_id_OUT))
-    #             else:  # El tag no existe, insertarlo
-    #                 cursor.execute("INSERT INTO Datos (Tag, Nombre, Cantidad, Hora_salida_lab) VALUES (%s, %s, %s)", valores_datos_OUT)
-    #             # Actualizar la contabilidad de kits
-    #             cursor.execute("UPDATE Contabilidad_Kits SET Cantidad = Cantidad - 1 WHERE Kit = %s", (nombre_OUT,))
-    #             # Confirmar los cambios en la base de datos
-    #             conexion.commit()
-    #             print(f"Tag '{tag_id_OUT}' insertado/actualizado en la base de datos con nombre '{nombre_OUT}' (entrada).")
-    #         except mysql.connector.Error as err:
-    #             if err.errno == 1062:  # Error de clave duplicada
-    #                 print(f"El tag '{tag_id_OUT}' ya existe en la base de datos.")
-    #                 # Aquí puedes decidir qué hacer en caso de un tag duplicado,
-    #                 # como actualizar el registro existente o ignorarlo.
-    #             else:
-    #                 print("Error al insertar/actualizar el tag (entrada):", err)  
+    tags_OUT = reader_OUT.detectTags(powerDBm=reader_OUT.power_table[35], freqMHz=reader_OUT.freq_table[0], mode=1001, session=2, population=1, duration=durationn, searchmode=2)
+    for tag_OUT in tags_OUT:
+        tag_id_OUT = tag_OUT['EPC-96'].decode('utf-8')
+        print("Tag detectado en entrada:", tag_id_OUT)
+        # Verificar si el tag ya ha sido detectado antes
+        if tag_id_OUT not in tags_detectados_OUT:
+            tags_detectados_OUT.append(tag_id_OUT)
+            # Definir el nombre basado en el diccionario
+            nombre_OUT = nombres_tags.get(tag_id_OUT, "No registrado")
+            # Definir los valores para la inserción en la tabla de datos
+            valores_datos_OUT = (tag_id_OUT, nombre_OUT, 1)
+            try:
+                # Verificar si el tag ya está en la base de datos
+                cursor.execute("SELECT * FROM Datos WHERE Tag = %s", (tag_id_OUT,))
+                if cursor.fetchone():  # El tag ya existe, actualizar el nombre
+                    cursor.execute("UPDATE Datos SET Nombre = %s WHERE Tag = %s", (nombre_OUT, tag_id_OUT))
+                else:  # El tag no existe, insertarlo
+                    cursor.execute("INSERT INTO Datos (Tag, Nombre, Cantidad, Hora_salida_lab) VALUES (%s, %s, %s)", valores_datos_OUT)
+                # Actualizar la contabilidad de kits
+                cursor.execute("UPDATE Contabilidad_Kits SET Cantidad = Cantidad - 1 WHERE Kit = %s", (nombre_OUT,))
+                # Confirmar los cambios en la base de datos
+                conexion.commit()
+                print(f"Tag '{tag_id_OUT}' insertado/actualizado en la base de datos con nombre '{nombre_OUT}' (entrada).")
+            except mysql.connector.Error as err:
+                if err.errno == 1062:  # Error de clave duplicada
+                    print(f"El tag '{tag_id_OUT}' ya existe en la base de datos.")
+                    # Aquí puedes decidir qué hacer en caso de un tag duplicado,
+                    # como actualizar el registro existente o ignorarlo.
+                else:
+                    print("Error al insertar/actualizar el tag (entrada):", err)  
             
     tags_RACK = reader_RACK.detectTags(powerDBm=reader_RACK.power_table[35], freqMHz=reader_RACK.freq_table[0], mode=1001, session=2, population=1, duration=durationn, searchmode=2)
     for tag_RACK in tags_RACK:
@@ -236,33 +238,19 @@ while True:
         else:
             print(f"Tag '{tag_id_RACK}' detectado nuevamente demasiado pronto; no se actualiza la salida.")
         conexion.commit()
+       
+
         
 
 
-    # for tag_OUT in tags_OUT:
-    #     tag_id_OUT = tag_OUT['EPC-96'].decode('utf-8')
-    #     if tag_id_OUT in tags_detectados_OUT:
-    #         cursor.execute("UPDATE Datos SET Hora_salida_lab = %s WHERE Tag = %s", (obtener_hora_actual(), tag_id_OUT))
-    #         conexion.commit()
+    for tag_OUT in tags_OUT:
+        tag_id_OUT = tag_OUT['EPC-96'].decode('utf-8')
+        if tag_id_OUT in tags_detectados_OUT:
+            cursor.execute("UPDATE Datos SET Hora_salida_lab = %s WHERE Tag = %s", (obtener_hora_actual(), tag_id_OUT))
+            conexion.commit()
     
-    for tag_RACK in tags_RACK:
-     try:
-        # Verificar si el tag del rack está presente en la lista de tags de rack
-        if tag_RACK in tags_RACK:
-            inv_status = 'SI'
-        else:
-            inv_status = 'NO'
 
-        # Actualizar la columna INV en la base de datos
-        cursor.execute("UPDATE Datos SET INV = %s WHERE Tag = %s", (inv_status, tag_RACK))
-
-        # Confirmar los cambios en la base de datos
-        conexion.commit()
-
-     except Exception as e:
-        # En caso de error, imprimir el error y revertir los cambios
-        print("Error al actualizar la base de datos para el tag:", tag_RACK, "; Error:", e)
-        conexion.rollback()
+     
         
     #################
     cursor.execute("""
@@ -308,4 +296,45 @@ while True:
     print(f"Cantidad de 'Kit 6' disponible en bodega: {cantidad_kit6_disponible}")
 
 
+
+    ############
+    # Verifica cuántos registros cumplirían con la condición antes de la actualización a 'SI'
+    cursor.execute("""
+        SELECT COUNT(*) FROM Datos
+        WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+    """)
+    count = cursor.fetchone()[0]
+    print(f"Registros a actualizar a 'SI': {count}")
+
+    # Si count es mayor que 0, realiza la actualización a 'SI'
+    if count > 0:
+        cursor.execute("""
+            UPDATE Datos
+            SET INV = 'SI'
+            WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+        """)
+        conexion.commit()
+        print("INV actualizado a 'SI' para registros en bodega.")
+    else:
+        print("No hay registros para actualizar a 'SI'.")
+
+    # Ahora verifica cuántos registros deberían ser actualizados a 'NO'
+    cursor.execute("""
+        SELECT COUNT(*) FROM Datos
+        WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NOT NULL
+    """)
+    count_no = cursor.fetchone()[0]
+    print(f"Registros a actualizar a 'NO': {count_no}")
+
+    # Si count_no es mayor que 0, realiza la actualización a 'NO'
+    if count_no > 0:
+        cursor.execute("""
+            UPDATE Datos
+            SET INV = 'NO'
+            WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NOT NULL
+        """)
+        conexion.commit()
+        print("INV actualizado a 'NO' para registros con salida de bodega.")
+    else:
+        print("No hay registros para actualizar a 'NO'.")
 
