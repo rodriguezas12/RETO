@@ -1,76 +1,82 @@
 .container-conteo {
   margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */
   width: 90vw; /* Anchura del contenedor al 100% de la pantalla */
-  background-color: #FEFAF6; /* Color marrón con transparencia */
+  background-color: #fefaf6; /* Color marrón con transparencia */
   border-radius: 30px; /* Bordes redondos de 10px */
   padding: 10px; /* Espaciado interno del contenedor */
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
-  
-  .contenedor-label1 {
-    display: flex;
-    align-items: center;
-    margin: 5px;
-    padding: 10px;
-    background-color: #ECD4B6; /* Color azul acero */
-    border-radius: 30px; /* Bordes redondos de 30px */
-    color: #fff; /* Color del texto blanco */
-  }
-  
-  .elemento-label,
-  .elemento-valor {
-    font-family: "Nunito", sans-serif; /* Fuente Nunito */
-    font-size: min(1.5vw, 24px);
 
-    
-  }
-  
-  .elemento-label {
-    font-weight: bold;
-    color: #292929; /* Color del texto */
-    margin-right: 10px;
-  }
-  
-  .elemento-valor {
-    border-radius: 10px;
-    background-color: #be7530;
-    font-weight: 800;
-    color: #292929; /* Color del texto */
-    padding: 8px;
-  }
-  
-  .container-estado {
-    margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */
-    width: 90vw; /* Anchura del contenedor */
-    background-color: #FEFAF6; /* Color marrón con transparencia */
-    border-radius: 10px; /* Bordes redondos de 10px */
-    padding: 10px; /* Espaciado interno del contenedor */
-  }
-  
-  table {
-    width: 80vw; /* Ancho completo de la tabla */
-    height: 80%;
-    border-collapse: collapse; /* Combinar bordes de celdas */
-    border: 1px solid #be7530; /* Borde de la tabla */
-  }
-  
-  thead {
-    background-color: #be7530; /* Color de fondo del encabezado */
-    color: #fff; /* Color del texto blanco */
-  }
-  
-  th,
-  td {
-    border: 1px solid black; /* Borde de 1px sólido */
-    padding: 8px; /* Espaciado interno de celdas */
-    font-family: "Nunito", sans-serif; /* Fuente Nunito */
-    text-align: center;
-  }
-  
-  th {
-    text-align: center; /* Alinear texto del encabezado a la izquierda */
-    font-weight: bold; /* Fuente en negrita */
-  }
-  
+.contenedor-label1 {
+  display: flex;
+  align-items: center;
+  margin: 5px;
+  padding: 10px;
+  background-color: #ecd4b6; /* Color azul acero */
+  border-radius: 30px; /* Bordes redondos de 30px */
+  color: #fff; /* Color del texto blanco */
+}
+
+.elemento-label,
+.elemento-valor {
+  font-family: "Nunito", sans-serif; /* Fuente Nunito */
+  font-size: min(1.5vw, 24px);
+  font-weight: bold;
+  color: #292929; /* Color del texto */
+  margin-right: 10px;
+}
+
+.subtitle {
+  font-family: "Nunito", sans-serif; /* Fuente Nunito */
+  font-size: min(3.5vw, 40px);
+  font-weight: bold;
+  color: #292929; /* Color del texto */
+  margin-right: 10px;
+  font-weight: 900;
+  display: inline-block; /* Alinear el texto en línea */
+  margin: 0 auto; /* Centrar texto horizontalmente */
+}
+
+.elemento-valor {
+  border-radius: 10px;
+  background-color: #be7530;
+  font-weight: 800;
+  color: #292929; /* Color del texto */
+  padding: 8px;
+}
+
+.container-estado {
+  margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */
+  width: 90vw; /* Anchura del contenedor */
+  background-color: #FEFAF6; /* Color marrón con transparencia */
+  border-radius: 10px; /* Bordes redondos de 10px */
+  padding: 10px; /* Espaciado interno del contenedor */
+  text-align: center; /* Centrar texto horizontalmente */
+}
+
+table {
+  width: 80vw; /* Ancho completo de la tabla */
+  height: 80%;
+  border-collapse: collapse; /* Combinar bordes de celdas */
+  border-radius: 10px; /* Bordes redondos para toda la tabla */
+  overflow: hidden; /* Ocultar el contenido que se desborda de la tabla */
+}
+
+thead {
+  background-color: #be7530; /* Color de fondo del encabezado */
+  color: #fff; /* Color del texto blanco */
+}
+
+td.estado, th.estado {
+  border: 1px solid red; /* Borde de 1px sólido en rojo */
+  padding: 8px; /* Espaciado interno de celdas */
+  font-family: "Nunito", sans-serif; /* Fuente Nunito */
+  text-align: center;
+  margin: 3px;
+}
+
+th.estado {
+  font-weight: bold; /* Fuente en negrita para los encabezados */
+}
