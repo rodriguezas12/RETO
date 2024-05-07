@@ -1,3 +1,7 @@
+body {
+  overflow-y: auto; /* Esto mostrará una barra de desplazamiento vertical solo cuando el contenido exceda el tamaño del contenedor */
+}
+
 .container-items {
   display: flex;
   flex-wrap: wrap;
@@ -12,12 +16,12 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  flex: 1 1 45%;
+  flex: 1 1 30%;
   margin-bottom: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 10px;
   border-radius: 20px;
-  background-color: #d89758;
+  background-color: #f4a454;
   flex-direction: row;
 }
 
@@ -42,6 +46,7 @@
   width: 100%;
   margin: 0;
   font-size: 16px;
+  font-family: "Nunito", sans-serif; /* Fuente Nunito */
 }
 
 .button-container {
