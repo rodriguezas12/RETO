@@ -165,7 +165,7 @@ while True:
             cursor.execute("""
             UPDATE Datos 
             SET Nombre = %s, 
-                Cantidad = Cantidad + 1, 
+                Cantidad = Cantidad, 
                 Hora_entrada_lab = %s, 
                 Hora_salida_lab = NULL, 
                 Hora_entrada_bodega = NULL 
