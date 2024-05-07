@@ -254,7 +254,7 @@ app.get('/contabilidad-kits', (req, res) => {
 
 
 
-// Estaciones ^-^// Cambiar la ruta en el servidor para que espere el parámetro en la URL
+//Estaciones ^-^// Cambiar la ruta en el servidor para que espere el parámetro en la URL
 app.get("/estaciones/:numeroEstacion", (req, res) => {
   const { numeroEstacion } = req.params;
 
@@ -266,7 +266,7 @@ app.get("/estaciones/:numeroEstacion", (req, res) => {
   const nombreTabla = `Estación_${numeroEstacion}`;
 
   db.query(
-    `SELECT ID, Kit, DATE_FORMAT(Hora_entrada, '%Y-%m-%d %H:%i:%s') AS Hora_entrada, DATE_FORMAT(Hora_salida, '%Y-%m-%d %H:%i:%s') AS Hora_salida, DATE_FORMAT(Hora_transcurrida, '%Y-%m-%d %H:%i:%s') AS Hora_transcurrida FROM ${nombreTabla}`,
+    `SELECT * FROM ${nombreTabla}`,
     (err, results) => {
       if (err) {
         console.error(`Error al leer los datos de ${nombreTabla}:`, err);
