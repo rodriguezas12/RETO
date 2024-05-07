@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  overflow: hidden; /* Deshabilita el scroll */
 }
 
 .home-box {
@@ -13,7 +14,7 @@ body {
   background: #f5f5dc;
   text-align: center;
   border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   margin: 20px auto;
 }
 
@@ -37,6 +38,13 @@ body {
   padding-bottom: 20px;
   position: relative;
   color: #8b4513;
+}
+.home-box h4 {
+  font-family: "nunito";
+  margin: 10px 0 20px;
+  padding-bottom: 20px;
+  position: relative;
+  color: #312c28;
 }
 
 .home-box form {
@@ -80,4 +88,14 @@ body {
   color: #ffffff;
   margin-bottom: 10px;
   border-radius: 20px;
+}
+.container-uninorte {
+  position: absolute;
+  bottom: 0;
+  right: 2vw;
+}
+
+.container-uninorte img {
+  width: 200px;
+  image-rendering: 0 0 10px rgba(0, 0, 0, 0.5); /* Agrega una sombra */
 }

@@ -6,7 +6,7 @@ const Header = ({ titulo }) => {
   const styles = {
     headerContainer: {
       position: "relative",
-      width: "100%", // Cambiado a 100% para ocupar todo el ancho
+      width: "90vw", // Cambiado a 100% para ocupar todo el ancho
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between", // Cambiado a "space-between" para distribuir los elementos
@@ -29,11 +29,11 @@ const Header = ({ titulo }) => {
     backButton: {
       fontFamily: "Nunito",
       padding: "10px",
-      backgroundColor: "#f76b1c",
+      backgroundColor: "#EB7D3D",
       color: "white",
       border: "none",
       borderRadius: "20px",
-      boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.25)",
+      boxShadow: "0 4px 5px 0 rgba(0, 0, 0, 0.25)",
       fontWeight: "bold",
       cursor: "pointer",
       transition: "background-color 0.3s",

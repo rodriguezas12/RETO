@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import kit1 from "../Media/kit 1.png";
 import kit2 from "../Media/kit 2.png";
 import kit3 from "../Media/kit 3.png";
@@ -29,22 +30,22 @@ export default function Picking() {
 
   const añadirKit = (kitNumero) => {
     const nombreKit = `Kit ${kitNumero}`;
-  
+
     // Actualizar primero los contadores antes de modificar el pedido
     setKitCounts((prevCounts) => {
       if (prevCounts[nombreKit] > 0) {
         const newCounts = {
           ...prevCounts,
-          [nombreKit]: prevCounts[nombreKit] - 1
+          [nombreKit]: prevCounts[nombreKit] - 1,
         };
-  
+
         // Si hay disponibles, actualizar el pedido
         setPedido((prevPedido) => {
           const nuevoPedido = [...prevPedido, kitNumero];
           //alert(`Kit ${kitNumero} añadido al carrito.\nPedido actual: ${nuevoPedido.join(", ")}`);
           return nuevoPedido;
         });
-  
+
         return newCounts;
       } else {
         //alert(`No hay suficientes kits disponibles de Kit ${kitNumero}.`);
@@ -52,9 +53,6 @@ export default function Picking() {
       }
     });
   };
-  
-  
-  
 
   const descontarKit = (kitNumero) => {
     const index = pedido.indexOf(kitNumero);
@@ -124,51 +122,58 @@ export default function Picking() {
 
   return (
     <div style={{ marginTop: "15vh" }}>
-  <Header titulo="SOLICITUD DE MATERIALES" />
-  <div className="container-items">
-    {[kit1, kit2, kit3, kit4, kit5, kit6].map((image, index) => (
-      <div key={index} className="Kit">
-        <div className="info-product">
-          <div className="info-text">
-            <h2>Kit {index + 1}</h2>
-            <p>Disponibles: {kitCounts[`Kit ${index + 1}`] || 0}</p>
+      <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          rel="stylesheet"
+        />
+      </Helmet>
+      <Header titulo="SOLICITUD DE MATERIALES" />
+      <div className="container-items">
+        {[kit1, kit2, kit3, kit4, kit5, kit6].map((image, index) => (
+          <div key={index} className="Kit">
+            <div className="info-product">
+              <div className="info-text">
+                <h2>Kit {index + 1}</h2>
+                <p>Disponibles: {kitCounts[`Kit ${index + 1}`] || 0}</p>
+              </div>
+              <div className="button-container">
+                <button className="button" onClick={() => añadirKit(index + 1)}>
+                  +
+                </button>
+                <button
+                  className="button"
+                  onClick={() => descontarKit(index + 1)}
+                >
+                  -
+                </button>
+              </div>
+            </div>
+            <figure>
+              <img
+                src={image}
+                alt={`Icono del Kit ${index + 1}`}
+                className="icono"
+              />
+            </figure>
           </div>
-          <div className="button-container">
-            <button className="button" onClick={() => añadirKit(index + 1)}>
-              +
-            </button>
-            <button
-              className="button"
-              onClick={() => descontarKit(index + 1)}
-            >
-              -
-            </button>
-          </div>
-        </div>
-        <figure>
-          <img
-            src={image}
-            alt={`Icono del Kit ${index + 1}`}
-            className="icono"
-          />
-        </figure>
+        ))}
       </div>
-    ))}
-  </div>
-  <div className="button-panel">
-    <div>
-      <span>Pedido actual: {pedido.map(num => `Kit ${num}`).join(", ")}</span>
+      <div className="button-panel">
+        <div>
+          <span>
+            Pedido actual: {pedido.map((num) => `Kit ${num}`).join(", ")}
+          </span>
+        </div>
+        <button className="action-button" onClick={solicitar}>
+          Solicitar
+        </button>
+        <button className="action-button" onClick={limpiarCarrito}>
+          Limpiar carrito
+        </button>
+      </div>
     </div>
-    <button className="action-button" onClick={solicitar}>
-      Solicitar
-    </button>
-    <button className="action-button" onClick={limpiarCarrito}>
-      Limpiar carrito
-    </button>
-  </div>
-</div>
-
   );
 }
-
-

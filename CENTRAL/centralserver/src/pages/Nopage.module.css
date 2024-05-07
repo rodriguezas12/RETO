@@ -55,6 +55,7 @@ body {
 .container p {
   font-size: 14px; /* Tamaño de letra para el subtexto */
   text-align: left; /* Alinea el texto a la izquierda */
+  font-family: "Nunito", sans-serif; /* Fuente Nunito */
 }
 
 .image-container {
