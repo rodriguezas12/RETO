@@ -401,7 +401,7 @@ while True:
             # Verificar si el tag ya está presente en la tabla de la Estación 1
             cursor.execute("SELECT Tag FROM Estación_7 WHERE Tag = %s", (tags_7,))
             resultado = cursor.fetchone()
-            
+            #ya
             if resultado is None:
                 # El tag no está presente en la tabla, entonces se inserta
                 try:
