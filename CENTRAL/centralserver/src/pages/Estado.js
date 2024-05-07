@@ -52,12 +52,17 @@ function Estado() {
             );
           }
           const stationData = await response.json();
-          setData(
-            stationData.map((item) => ({
-              ...item,
-              TiempoTranscurrido: calculateElapsedTime(item.fechaIngreso),
-            }))
-          );
+          // Formatear la fecha de ingreso antes de calcular el tiempo transcurrido
+          const formattedStationData = stationData.map((item) => ({
+            ...item,
+            fechaIngreso: formatDateTime(item.Hora_entrada),
+            TiempoTranscurrido: calculateElapsedTime(item.Hora_entrada),
+          }));
+
+          // Agregar registros de consola para verificar el formato de las fechas después del formateo
+          console.log("Datos con formato de fecha:", formattedStationData);
+
+          setData(formattedStationData);
         } catch (error) {
           console.error(
             `Error fetching data for Estacion_${stationNumber}:`,
@@ -68,31 +73,27 @@ function Estado() {
     };
 
     fetchData();
-    const intervalId = setInterval(fetchData, 5000);
+    const intervalId = setInterval(fetchData, 1000);
+
+    function formatDateTime(dateTimeString) {
+      const dateObj = new Date(dateTimeString);
+      const formattedDate = dateObj.toLocaleString(); // Convierte el objeto Date a una cadena en formato legible
+      return formattedDate;
+    }
+
+    const calculateElapsedTime = (startTime) => {
+      const startDate = new Date(startTime).getTime(); // Convertir la fecha de inicio a milisegundos
+      const currentDate = new Date().getTime(); // Obtener la fecha actual en milisegundos
+
+      const elapsedTime = currentDate - startDate; // Calcular el tiempo transcurrido en milisegundos
+      const elapsedMinutes = Math.floor(elapsedTime / (1000 * 60)); // Convertir milisegundos a minutos
+      const elapsedSeconds = Math.floor((elapsedTime % (1000 * 60)) / 1000); // Calcular los segundos restantes
+
+      return `${elapsedMinutes} minutos ${elapsedSeconds} segundos`; // Devolver el tiempo transcurrido en minutos y segundos
+    };
 
     return () => clearInterval(intervalId);
   }, [selectedStation]);
-
-  const calculateElapsedTime = (startTime) => {
-    const startDate = new Date(startTime);
-    const currentDate = new Date();
-
-    const elapsedTime = currentDate - startDate;
-    const elapsedSeconds = Math.floor(elapsedTime / 1000);
-    const elapsedMinutes = Math.floor(elapsedSeconds / 60);
-    const elapsedHours = Math.floor(elapsedMinutes / 60);
-    const elapsedDays = Math.floor(elapsedHours / 24);
-    console.log(startTime);
-    if (elapsedDays > 0) {
-      return `${elapsedDays} días`;
-    } else if (elapsedHours > 0) {
-      return `${elapsedHours} horas`;
-    } else if (elapsedMinutes > 0) {
-      return `${elapsedMinutes} minutos`;
-    } else {
-      return `${elapsedSeconds} segundos`;
-    }
-  };
 
   return (
     <div>
@@ -147,8 +148,10 @@ function Estado() {
               <tr key={index}>
                 <td className="estado">{item.ID}</td>
                 <td className="estado">{item.Kit}</td>
-                <td className="estado">{item.Hora_entrada}</td>
-                <td className="estado">{item.Tiempo_transcurrido}</td>
+                <td className="estado">{item.fechaIngreso}</td>{" "}
+                {/* Utiliza item.fechaIngreso */}
+                <td className="estado">{item.TiempoTranscurrido}</td>{" "}
+                {/* Verifica que TiempoTranscurrido tenga datos */}
               </tr>
             ))}
           </tbody>

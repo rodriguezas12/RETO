@@ -59,7 +59,8 @@
 table {
   width: 80vw; /* Ancho completo de la tabla */
   height: 80%;
-  border-collapse: collapse; /* Combinar bordes de celdas */
+  border-collapse: separate; /* Separar los bordes de las celdas */
+  border-spacing: 2px; /* Espacio de 2px entre las columnas */
   border-radius: 10px; /* Bordes redondos para toda la tabla */
   overflow: hidden; /* Ocultar el contenido que se desborda de la tabla */
 }
@@ -70,11 +71,10 @@ thead {
 }
 
 td.estado, th.estado {
-  border: 1px solid red; /* Borde de 1px sólido en rojo */
+  border: 1px;
   padding: 8px; /* Espaciado interno de celdas */
   font-family: "Nunito", sans-serif; /* Fuente Nunito */
   text-align: center;
-  margin: 3px;
 }
 
 th.estado {
