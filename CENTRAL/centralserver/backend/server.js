@@ -229,8 +229,7 @@ app.get("/inventario_rack", (req, res) => {
 
 // inventario llamado de tabla a sql
 app.get('/michi', (req, res) => {
-
-  db.query('SELECT * FROM RETORFID.Datos', (err, results) => {
+  db.query('SELECT Tag, Nombre, Cantidad, DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab, DATE_FORMAT(Hora_salida_lab, "%Y-%m-%d %H:%i:%s") AS Hora_salida_lab, DATE_FORMAT(Hora_entrada_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_bodega, DATE_FORMAT(Hora_salida_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_salida_bodega FROM RETORFID.Datos', (err, results) => {
     if (err) {
       console.error("Error al obtener los datos:", err);
       res.status(500).send("Error en el servidor");
@@ -239,6 +238,7 @@ app.get('/michi', (req, res) => {
     res.json(results);
   });
 });
+
 
 app.get('/contabilidad-kits', (req, res) => {
   db.query('SELECT * FROM Contabilidad_Kits', (err, results) => {
@@ -253,7 +253,8 @@ app.get('/contabilidad-kits', (req, res) => {
 });
 
 
-//Estaciones ^-^// Cambiar la ruta en el servidor para que espere el parámetro en la URL
+
+// Estaciones ^-^// Cambiar la ruta en el servidor para que espere el parámetro en la URL
 app.get("/estaciones/:numeroEstacion", (req, res) => {
   const { numeroEstacion } = req.params;
 
@@ -265,7 +266,7 @@ app.get("/estaciones/:numeroEstacion", (req, res) => {
   const nombreTabla = `Estación_${numeroEstacion}`;
 
   db.query(
-    `SELECT * FROM ${nombreTabla}`,
+    `SELECT ID, Kit, DATE_FORMAT(Hora_entrada, '%Y-%m-%d %H:%i:%s') AS Hora_entrada, DATE_FORMAT(Hora_salida, '%Y-%m-%d %H:%i:%s') AS Hora_salida, DATE_FORMAT(Hora_transcurrida, '%Y-%m-%d %H:%i:%s') AS Hora_transcurrida FROM ${nombreTabla}`,
     (err, results) => {
       if (err) {
         console.error(`Error al leer los datos de ${nombreTabla}:`, err);
@@ -276,6 +277,7 @@ app.get("/estaciones/:numeroEstacion", (req, res) => {
     }
   );
 });
+
 
 
 
