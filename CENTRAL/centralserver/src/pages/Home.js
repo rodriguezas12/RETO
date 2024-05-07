@@ -1,18 +1,13 @@
-// Home.js
-
 import axios from "axios";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import logo from "../Media/logo.png";
 import "./Home.css";
-// Importa useNavigate en lugar de useHistory
-import { useNavigate } from "react-router-dom";
+ 
 
-export default function Home({ setAuthenticated }) {
+export default function Home() {
   const [usuario, setUsuario] = useState("");
   const [mensaje, setMensaje] = useState("");
-  // Utiliza useNavigate en lugar de useHistory
-  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setUsuario(e.target.value);
@@ -34,10 +29,9 @@ export default function Home({ setAuthenticated }) {
 
       setMensaje(response.data.mensaje);
 
+      // Si el usuario es encontrado en la base de datos, redirige a la página de inicio de sesión
       if (response.data.mensaje === "Usuario encontrado") {
-        setAuthenticated(true);
-        // Utiliza navigate en lugar de history.push
-        navigate("/menu"); // Navega a la página de menú después de la autenticación
+        window.location.href = "http://localhost:3000/Menu";
       }
     } catch (error) {
       console.error("Error al verificar el usuario:", error);
@@ -49,40 +43,37 @@ export default function Home({ setAuthenticated }) {
     <>
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin
-        />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
           href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
           rel="stylesheet"
         />
       </Helmet>
-      <div className="home-box">
-        <img src={logo} alt="Logo" />
-        <h3>PORTAL DE GESTION INDUSTRIAL</h3>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            verificarUsuario();
-          }}
-        >
-          <h4>INGRESE SU CODIGO ESTUDIANTIL:</h4>
-          <input
-            type="text"
-            placeholder="Usuario"
-            value={usuario}
-            onChange={handleInputChange}
-            autoFocus
-          />
-          <button type="submit">Iniciar Sesión</button>
-          {mensaje && <p>{mensaje}</p>}
-        </form>
-        <a href="/register">
-          <button type="button">Registrarse</button>
-        </a>
-      </div>
+        <div className="home-box">
+          <img src={logo} alt="Logo" />
+          <h3>PORTAL DE GESTION INDUSTRIAL</h3>
+      <form onSubmit={(e) => {
+        e.preventDefault(); // Previene la recarga de la página
+        verificarUsuario();
+      }}>
+      <h4>INGRESE SU CODIGO ESTUDIANTIL:</h4>
+      <input
+        type="text"
+        placeholder="Usuario"
+        value={usuario}
+        onChange={handleInputChange}
+        autoFocus // opcional: pone el foco en el input al cargar el componente
+      />
+      <button type="submit">
+        Iniciar Sesión
+      </button>
+      {mensaje && <p>{mensaje}</p>}
+    </form>
+          {/* Enlace al componente Register */}
+          <a href="/register">
+            <button type="button">Registrarse</button>
+          </a>
+        </div>
     </>
   );
 }
