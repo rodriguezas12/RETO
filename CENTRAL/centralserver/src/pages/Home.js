@@ -1,9 +1,10 @@
 // Home.js
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import logo from "../Media/logo.png";
+import uninorte from "../Media/uninorte.png";
 import "./Home.css";
 
 export default function Home({ setIsAuthenticated }) {
@@ -14,7 +15,7 @@ export default function Home({ setIsAuthenticated }) {
   useEffect(() => {
     // Redirige a home.js al cargar la página
     navigate("/");
-  }, []); // Este efecto se ejecutará solo una vez al cargar la página
+  }, [navigate]); // Este efecto se ejecutará solo una vez al cargar la página
 
   const handleInputChange = (e) => {
     setUsuario(e.target.value);
@@ -51,7 +52,12 @@ export default function Home({ setIsAuthenticated }) {
   return (
     <>
       <Helmet>
-        {/* Tus enlaces de estilos y fuentes */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          rel="stylesheet"
+        />
       </Helmet>
       <div className="home-box">
         <img src={logo} alt="Logo" />
@@ -77,7 +83,9 @@ export default function Home({ setIsAuthenticated }) {
           <button type="button">Registrarse</button>
         </a>
       </div>
+      <div className="container-uninorte">
+        <img src={uninorte} alt="Uninorte" />
+      </div>
     </>
   );
 }
-
