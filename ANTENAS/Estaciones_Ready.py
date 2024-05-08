@@ -111,6 +111,13 @@ Tag VARCHAR(25) NOT NULL,
 ) COMMENT 'Base de datos de la estación 7'
 """
 
+sql_create_table_fecha = """
+CREATE TABLE IF NOT EXISTS fechas (ID VARCHAR(45) NOT NULL,
+Hora_salida TIMESTAMP DEFAULT NULL,
+Estación VARCHAR(25) NOT NULL 
+) COMMENT 'Base de datos de fechas'
+"""
+
 # Ejecutar la consulta SQL para crear la tabla de datos
 cursor.execute(sql_create_table_estacion1)
 conexion.commit()
@@ -133,6 +140,9 @@ conexion.commit()
 cursor.execute(sql_create_table_estacion7)
 conexion.commit()
 
+
+cursor.execute(sql_create_table_fecha)
+conexion.commit()
 
 
 # Conectar al lector RFID de la estación 1 a la 3
