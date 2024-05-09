@@ -32,7 +32,6 @@ function Inventario() {
               <th>Bahia</th>
               <th>Cantidad</th>
               <th>Hora de entrada al laboratorio</th>
-              <th>Hora de salida del laboratorio</th>
               <th>Hora de entrada a bodega</th>
               <th>Hora de salida de bodega</th>
             </tr>
@@ -45,7 +44,6 @@ function Inventario() {
                 <td>{item.Bahia}</td>
                 <td>{item.Cantidad}</td>
                 <td>{item.Hora_entrada_lab}</td>
-                <td>{item.Hora_salida_lab}</td>
                 <td>{item.Hora_entrada_bodega}</td>
                 <td>{item.Hora_salida_bodega}</td>
               </tr>
