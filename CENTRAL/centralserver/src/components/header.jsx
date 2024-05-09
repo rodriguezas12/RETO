@@ -33,13 +33,18 @@ const Header = ({ titulo }) => {
       color: "white",
       border: "none",
       borderRadius: "20px",
-      boxShadow: "0 4px 5px 0 rgba(0, 0, 0, 0.25)",
+      boxShadow: "0 6px 6px 0 rgba(0, 0, 0, 0.5)", // Sombras más pronunciadas en estado de hover
       fontWeight: "bold",
       cursor: "pointer",
-      transition: "background-color 0.3s",
+      transition: "background-color 0.3s, box-shadow 0.3s", // Transiciones suaves para el color de fondo y la sombra
       fontSize: "2.5vh", // Tamaño relativo al alto de la ventana
       maxWidth: "200px",
       marginBottom: "10px",
+      // Efecto hover
+      "&:hover": {
+        backgroundColor: "#000000", // Cambia el color de fondo al pasar el cursor
+        boxShadow: "0 6px 12px 0 rgba(0, 0, 0, 0.5)", // Sombras más pronunciadas en estado de hover
+      },
     },
     logo: {
       width: "auto", // Cambiado a "auto" para mantener la proporción de la imagen
@@ -57,11 +62,7 @@ const Header = ({ titulo }) => {
           rel="stylesheet"
         />
       </Helmet>
-      <img
-        src={logo}
-        alt="logo"
-        style={styles.logo}
-      />
+      <img src={logo} alt="logo" style={styles.logo} />
       <h1 style={styles.headerText}>{titulo}</h1>
       <button
         className="back-button"

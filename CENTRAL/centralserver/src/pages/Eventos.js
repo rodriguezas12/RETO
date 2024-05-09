@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import Header from "../components/header";
-import "./Estado.css";
+import "./Eventos.css";
 
-function Estado() {
+function Eventos() {
   const [data, setData] = useState([]);
   const [kit_armado, setKitArmado] = useState(0);
+  const [ensamblados, setEnsablados] = useState(0);
   const [selectedStation, setSelectedStation] = useState("");
   // Simulación de datos de estaciones
   const stations = [
@@ -31,6 +32,7 @@ function Estado() {
           totalKits += row.Cantidad; // Suponiendo que la segunda columna sea la cantidad de kits
         });
         setKitArmado(totalKits);
+        setEnsablados(Math.floor(totalKits / 2)); // Cada 2 kits armados aumenta 1 ensamblado
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -103,13 +105,16 @@ function Estado() {
           rel="stylesheet"
         />
       </Helmet>
-      <Header titulo="ESTADO DE PRODUCCIÓN" />
+      <Header titulo="CONSULTA DE EVENTOS" />
       <div className="container-conteo">
         <div className="contenedor-label1">
           <span className="elemento-label">Kits Armados:</span>
           <span className="elemento-valor">{kit_armado}</span>
         </div>
-        <button className="bottom-estado">INICIAR CONTEO</button>
+        <div className="contenedor-label1">
+          <span className="elemento-label">Productos Ensamblados:</span>
+          <span className="elemento-valor">{ensamblados}</span>
+        </div>
         <div className="contenedor-label1">
           <span className="elemento-label">
             Seleccione la estación de interés:
@@ -152,8 +157,33 @@ function Estado() {
           </tbody>
         </table>
       </div>
+      <div className="container-estado">
+        <span className="subtitle">REGISTRO DE KITS ARMADOS EN ESTACIÓN:</span>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>KIT</th>
+              <th>Hora de entrada a la estación</th>
+              <th>Tiempo Transcurrido</th>
+              <th>Hora de salida de la estación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index}>
+                <td>{item.ID}</td>
+                <td>{item.Kit}</td>
+                <td>{item.Hora_entrada}</td>
+                <td>{item.Tiempo_transcurrido}</td>
+                <td>{item.Hora_salida}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
-export default Estado;
+export default Eventos;
