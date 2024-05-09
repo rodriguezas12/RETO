@@ -230,7 +230,7 @@ app.get("/inventario_rack", (req, res) => {
 
 // inventario llamado de tabla a sql
 app.get('/michi', (req, res) => {
-  db.query('SELECT ID, Nombre, Bahia, Cantidad, DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab,  DATE_FORMAT(Hora_entrada_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_bodega, DATE_FORMAT(Hora_salida_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_salida_bodega FROM RETORFID.Datos WHERE INV = "si"', (err, results) => {
+  db.query('SELECT ID, Nombre, Bahia, DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab,  DATE_FORMAT(Hora_entrada_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_bodega, DATE_FORMAT(Hora_salida_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_salida_bodega FROM RETORFID.Datos WHERE INV = "si"', (err, results) => {
     if (err) {
       console.error("Error al obtener los datos:", err);
       res.status(500).send("Error en el servidor");
