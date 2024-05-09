@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Estado from "./pages/Estado";
+import Eventos from "./pages/Eventos";
 import Home from "./pages/Home";
 import IngresoMaterial from "./pages/IngresoMaterial";
 import Inventario from "./pages/Inventario";
@@ -19,26 +20,67 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home setIsAuthenticated={setIsAuthenticated} />} />
+        <Route
+          path="/"
+          element={<Home setIsAuthenticated={setIsAuthenticated} />}
+        />
         <Route path="/register" element={<Register />} />
         <Route
           path="/menu"
-          element={<PrivateRoute element={<Menu />} isAuthenticated={isAuthenticated} />}
+          element={
+            <PrivateRoute
+              element={<Menu />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
         />
         <Route
           path="/solicitud"
-          element={<PrivateRoute element={<Solicitud />} isAuthenticated={isAuthenticated} />}
+          element={
+            <PrivateRoute
+              element={<Solicitud />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
         />
         <Route
           path="/inventario"
-          element={<PrivateRoute element={<Inventario />} isAuthenticated={isAuthenticated} />}
+          element={
+            <PrivateRoute
+              element={<Inventario />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
         />
         <Route
           path="/ingresomaterial"
-          element={<PrivateRoute element={<IngresoMaterial />} isAuthenticated={isAuthenticated} />}
+          element={
+            <PrivateRoute
+              element={<IngresoMaterial />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
         />
-        <Route path="/estado" element={<PrivateRoute element={<Estado />} isAuthenticated={isAuthenticated} />} />
+        <Route
+          path="/estado"
+          element={
+            <PrivateRoute
+              element={<Estado />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
         <Route path="*" element={<Nopage />} />
+        <Route
+          path="/estado"
+          element={
+            <PrivateRoute
+              element={<Estado />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route path="/eventos" element={<Eventos/>} />
       </Routes>
     </BrowserRouter>
   );

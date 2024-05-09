@@ -121,7 +121,7 @@ export default function Picking() {
   };
 
   return (
-    <div style={{ marginTop: "15vh" }}>
+    <div style={{ overflowY: "auto" }}>
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

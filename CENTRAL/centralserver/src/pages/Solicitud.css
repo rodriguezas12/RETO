@@ -1,7 +1,3 @@
-body {
-  overflow-y: auto; /* Esto mostrará una barra de desplazamiento vertical solo cuando el contenido exceda el tamaño del contenedor */
-}
-
 .container-items {
   display: flex;
   flex-wrap: wrap;

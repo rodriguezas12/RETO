@@ -24,7 +24,10 @@ const Home = () => {
             <button>Solicitud Pick to Light</button>
           </Link>
           <Link to="/estado">
-            <button>Estado de procesos</button>
+            <button>Estado De Producción</button>
+          </Link>
+          <Link to="/eventos">
+            <button>Consulta de Eventos</button>
           </Link>
           <Link to="/inventario">
             <button>Inventario</button>
