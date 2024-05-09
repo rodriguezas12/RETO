@@ -29,6 +29,7 @@ function Inventario() {
             <tr>
               <th>ID</th>
               <th>Nombre</th>
+              <th>Bahia</th>
               <th>Cantidad</th>
               <th>Hora de entrada al laboratorio</th>
               <th>Hora de salida del laboratorio</th>
@@ -41,6 +42,7 @@ function Inventario() {
               <tr key={index}>
                 <td>{item.ID}</td>
                 <td>{item.Nombre}</td>
+                <td>{item.Bahia}</td>
                 <td>{item.Cantidad}</td>
                 <td>{item.Hora_entrada_lab}</td>
                 <td>{item.Hora_salida_lab}</td>
