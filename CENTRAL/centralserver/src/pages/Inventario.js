@@ -5,7 +5,6 @@ import "./Inventario.css";
 
 function Inventario() {
   const [data, setData] = useState([]);
-
   useEffect(() => {
     fetch("http://localhost:5000/michi")
       .then((response) => response.json())
@@ -28,9 +27,10 @@ function Inventario() {
         <table>
           <thead>
             <tr>
-              <th>Tag</th>
+              <th>ID</th>
               <th>Nombre</th>
-              <th>INV</th>
+              <th>Bahia</th>
+              <th>Cantidad</th>
               <th>Hora de entrada al laboratorio</th>
               <th>Hora de salida del laboratorio</th>
               <th>Hora de entrada a bodega</th>
@@ -40,8 +40,9 @@ function Inventario() {
           <tbody>
             {data.map((item, index) => (
               <tr key={index}>
-                <td>{item.Tag}</td>
+                <td>{item.ID}</td>
                 <td>{item.Nombre}</td>
+                <td>{item.Bahia}</td>
                 <td>{item.Cantidad}</td>
                 <td>{item.Hora_entrada_lab}</td>
                 <td>{item.Hora_salida_lab}</td>
