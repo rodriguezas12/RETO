@@ -160,31 +160,32 @@ app.post("/solicitar", (req, res) => {
 
 app.post("/posicion", (req, res) => {
   const {
-    "Col 1": col1,
-    "Col 2": col2,
-    "Col 3": col3,
-    "Col 4": col4,
-    "Col 5": col5,
-    "Col 6": col6,
-    "Col 7": col7,
-    "Col 8": col8,
-    "Col 9": col9,
-    "Col 10": col10,
+    "Col1": col1,
+    "Col2": col2,
+    "Col3": col3,
+    "Col4": col4,
+    "Col5": col5,
+    "Col6": col6,
+    "Col7": col7,
+    "Col8": col8,
+    "Col9": col9,
+    "Col10": col10,
   } = req.body;
 
   // Crear la tabla si no existe
   const createTableQuery = `
     CREATE TABLE IF NOT EXISTS M1 (
-      \`Col 1\` VARCHAR(255),
-      \`Col 2\` VARCHAR(255),
-      \`Col 3\` VARCHAR(255),
-      \`Col 4\` VARCHAR(255),
-      \`Col 5\` VARCHAR(255),
-      \`Col 6\` VARCHAR(255),
-      \`Col 7\` VARCHAR(255),
-      \`Col 8\` VARCHAR(255),
-      \`Col 9\` VARCHAR(255),
-      \`Col 10\` VARCHAR(255)
+      \`ID\` INT AUTO_INCREMENT PRIMARY KEY,
+      \`Col1\` VARCHAR(255),
+      \`Col2\` VARCHAR(255),
+      \`Col3\` VARCHAR(255),
+      \`Col4\` VARCHAR(255),
+      \`Col5\` VARCHAR(255),
+      \`Col6\` VARCHAR(255),
+      \`Col7\` VARCHAR(255),
+      \`Col8\` VARCHAR(255),
+      \`Col9\` VARCHAR(255),
+      \`Col10\` VARCHAR(255)
     );
   `;
 
@@ -196,7 +197,7 @@ app.post("/posicion", (req, res) => {
     }
 
     // Insertar datos en la tabla una vez creada
-    const insertQuery = "INSERT INTO M1 (`Col 1`, `Col 2`, `Col 3`, `Col 4`, `Col 5`, `Col 6`, `Col 7`, `Col 8`, `Col 9`, `Col 10`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    const insertQuery = "INSERT INTO M1 (`Col1`, `Col2`, `Col3`, `Col4`, `Col5`, `Col6`, `Col7`, `Col8`, `Col9`, `Col10`) VALUES (?,?,?,?,?,?,?,?,?,?)";
     db.query(insertQuery, [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10], (err, results) => {
       if (err) {
         console.error("Error al insertar el registro:", err);
@@ -277,6 +278,28 @@ app.get("/estaciones/:numeroEstacion", (req, res) => {
       res.json(results);
     }
   );
+});
+
+
+app.get('/said', (req, res) => {
+  // Consulta para obtener las últimas 3 filas ordenadas por una columna específica
+  db.query(`
+  SELECT * FROM (
+    SELECT *,
+    ROW_NUMBER() OVER (ORDER BY ID DESC) AS rn
+    FROM M1
+  ) AS numberedRows
+  WHERE rn <= 3
+  ORDER BY rn DESC;  
+  
+  `, (err, results) => {
+    if (err) {
+      console.error("Error al obtener los datos de M1:", err);
+      res.status(500).send("Error en el servidor");
+      return;
+    }
+    res.json(results);
+  });
 });
 
 

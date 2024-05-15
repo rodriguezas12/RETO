@@ -1,68 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 
 export default function Inventario() {
   const [celdas, setCeldas] = useState(Array(3).fill(null).map(() => Array(10).fill("")));
   const [kitSeleccionado, setKitSeleccionado] = useState("");
+  const [data, setData] = useState([]); // Estado para guardar los datos de la segunda tabla
+
+  // Función para cargar los datos desde el servidor
+  const loadData = () => {
+    fetch("http://localhost:5000/said")
+      .then(response => response.json())
+      .then(data => setData(data))
+      .catch(error => console.error("Error al cargar los datos:", error));
+  };
+
+  useEffect(() => {
+    loadData(); // Carga inicial de datos
+    const interval = setInterval(loadData, 2000); // Configura el intervalo para actualizar los datos cada 2 segundos
+
+    return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonte
+  }, []);
 
   const handleCellClick = (rowIndex, columnIndex) => {
-    if (!kitSeleccionado) return; // Evita marcar celdas si no se ha seleccionado un kit
+    if (!kitSeleccionado) return;
     const updatedCeldas = [...celdas];
     updatedCeldas[rowIndex][columnIndex] = kitSeleccionado;
     setCeldas(updatedCeldas);
   };
 
-  const handleSubmit = () => {
-    // Transforma el estado de las celdas en un formato adecuado para la base de datos
+  const handleSubmit = async () => {
     const filasParaEnviar = celdas.map((row) => ({
-      "Col 1": row[0],
-      "Col 2": row[1],
-      "Col 3": row[2],
-      "Col 4": row[3],
-      "Col 5": row[4],
-      "Col 6": row[5],
-      "Col 7": row[6],
-      "Col 8": row[7],
-      "Col 9": row[8],
-      "Col 10": row[9],
+      "Col1": row[0],
+      "Col2": row[1],
+      "Col3": row[2],
+      "Col4": row[3],
+      "Col5": row[4],
+      "Col6": row[5],
+      "Col7": row[6],
+      "Col8": row[7],
+      "Col9": row[8],
+      "Col10": row[9],
     }));
 
-    // Envía cada fila de la matriz
-    Promise.all(
-      filasParaEnviar.map((fila) =>
-        fetch("http://localhost:5000/posicion", {
+    try {
+      for (const fila of filasParaEnviar) {
+        const response = await fetch("http://localhost:5000/posicion", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(fila),
-        })
-      )
-    )
-      .then((responses) => Promise.all(responses.map((res) => res.text())))
-      .then((messages) => {
-        console.log(
-          "Todas las solicitudes fueron realizadas con éxito:",
-          messages
-        );
-        // Limpiar el estado de las celdas una vez que se hayan enviado todos los datos
-        setCeldas(
-          Array(3)
-            .fill(null)
-            .map(() => Array(10).fill(""))
-        );
-      })
-      .catch((error) => {
-        console.error("Error al realizar la solicitud:", error);
-      });
+        });
+        const message = await response.text();
+        console.log("Respuesta de inserción:", message);
+      }
+      console.log("Todas las solicitudes fueron realizadas con éxito");
+      setCeldas(Array(3).fill(null).map(() => Array(10).fill("")));
+    } catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
   };
-
 
   return (
     <>
       <Header titulo="INGRESO DE MATERIAL" />
+      <div className="container-inventario">
+        <table>
+          <thead>
+            <tr>
+              {Array(10).fill(null).map((_, index) => (
+                <th key={index}>Bahía {index * 3 + 1}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, rowIndex) => (
+              <tr key={rowIndex}>
+                {Array(10).fill(null).map((_, columnIndex) => (
+                  <td key={columnIndex}>
+                    Bahía {columnIndex * 3 + rowIndex + 1}: {item[`Col${columnIndex + 1}`] ? `Kit ${item[`Col${columnIndex + 1}`]}` : "Vacío"}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <p className="instructions">
-        La siguiente tabla representa las bahías disponibles para establecer el orden del rack, por favor asignelo a su gusto.
+        La siguiente tabla representa las bahías disponibles para establecer el nuevo orden del rack, por favor asignelo a su gusto.
       </p>
       <select value={kitSeleccionado} onChange={(e) => setKitSeleccionado(e.target.value)}>
         <option value="">Seleccione un Kit</option>
