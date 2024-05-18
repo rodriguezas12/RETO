@@ -147,7 +147,7 @@ conexion.commit()
 
 # Conectar al lector RFID de la estación 1 a la 3
 reader_1 = R420('192.168.0.20')
-reader_2 = R420('192.168.0.13')
+reader_2 = R420('192.168.0.21')
 
 antena_1 = []
 
