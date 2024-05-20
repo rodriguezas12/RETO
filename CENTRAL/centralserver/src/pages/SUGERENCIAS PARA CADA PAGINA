@@ -1,10 +1,1 @@
-INVENTARIO:(ESTA TABLA SOLO ES PARA MOSTRAR LO QUE SE ENCUENTRA EN EL RACK)
-No mostrar el tag en la tabla, seria bueno asignarle una ID a cada contenedor perteneciente al mismo kit, pueden ser numeros del 1 al 5. el tag realmente no dice nada al usuario.
-Cambiar INV, con cantidad. INV solo deberia mostra un verdadero o falso, que es si se encuentra o no en el almacen, esta variable cambia su estado cuando pasa por ingreso de materiales y cuando sale por solicitud de material.
-No tiene sentido mostrar la columna hora de salida de la bodega, pues cuando sale cambia la varianle INV, y ya no se muestra en esa tabla. 
-Deberiamos crear otra pagina, o un boton que despliegue toda la tabla datos. pues a quien interese revisar esa tabla, siempre se puede acceder desde tu pagina Iventario. 
-Crear una función que le de un mejor formato a las fechas y horas.
-
-INGRESO DE MATERIAL:(Aqui el usuario solo asigna la bahia en la que quiere colocar un tipo de kit, no necesariamente llena todo el rack en un solo ingreso de material)
-Suguiero cambiar la interfaz a una lista, donde escriba el numero de la bahia que quiere para cada kit, pues cuando coloca los kits en la antena, solo se le permite asignarles la bahia a los kits que lleva, desconozco si se almacenan los 30 kits de un solo. 
-
+SIN SUGERENCIAS :)
