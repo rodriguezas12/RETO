@@ -29,10 +29,8 @@ function Inventario() {
             <tr>
               <th>ID</th>
               <th>Nombre</th>
-              <th>Bahia</th>
               <th>Hora de entrada al laboratorio</th>
               <th>Hora de entrada a bodega</th>
-              <th>Hora de salida de bodega</th>
             </tr>
           </thead>
           <tbody>
@@ -40,10 +38,8 @@ function Inventario() {
               <tr key={index}>
                 <td>{item.ID}</td>
                 <td>{item.Nombre}</td>
-                <td>{item.Bahia}</td>
                 <td>{item.Hora_entrada_lab}</td>
                 <td>{item.Hora_entrada_bodega}</td>
-                <td>{item.Hora_salida_bodega}</td>
               </tr>
             ))}
           </tbody>
