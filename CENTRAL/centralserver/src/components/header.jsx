@@ -52,6 +52,10 @@ const Header = ({ titulo }) => {
     },
   };
 
+  const handleBackButtonClick = () => {
+    window.history.back(); // Utiliza window.history.back() para retroceder en el historial del navegador
+  };
+
   return (
     <div style={styles.headerContainer}>
       <Helmet>
@@ -66,7 +70,7 @@ const Header = ({ titulo }) => {
       <h1 style={styles.headerText}>{titulo}</h1>
       <button
         className="back-button"
-        onClick={() => (window.location.href = "/Menu")}
+        onClick={handleBackButtonClick}
         style={styles.backButton}
       >
         Regresar al Menú
