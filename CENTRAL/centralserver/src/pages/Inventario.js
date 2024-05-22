@@ -17,7 +17,6 @@ function Inventario() {
         })
         .then((data) => {
           setData(data);
-          console.log("Actualización exitosa");
         })
         .catch((error) => console.error("Error:", error));
     };
