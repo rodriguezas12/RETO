@@ -1,37 +1,107 @@
+/* Estilo del contenedor de inventario */
 .container-inventario {
-  margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */
-  width: 90%; /* Anchura del contenedor */
-  background-color: #f5f6f2; /* Color marrón con transparencia */
-  border-radius: 10px; /* Bordes redondos de 10px */
-  padding: 10px; /* Espaciado interno del contenedor */
-}
-table {
-  width: 100%; /* Ancho completo de la tabla */
-  border-collapse: collapse; /* Combinar bordes de celdas */
-  border: 1px solid #be7530; /* Borde de la tabla */
+  margin: 20px auto;
+  /* Margen superior e inferior de 20px y centrado horizontal */
+  width: 90%;
+  /* Anchura del contenedor */
+  background-color: #f5f6f2;
+  /* Color de fondo */
+  border-radius: 10px;
+  /* Bordes redondos de 10px */
+  padding: 10px;
+  /* Espaciado interno del contenedor */
 }
 
+/* Estilo de la tabla */
+table {
+  width: 100%;
+  /* Ancho completo de la tabla */
+  border-collapse: collapse;
+  /* Combinar bordes de celdas */
+  border: 1px solid #be7530;
+  /* Borde de la tabla */
+}
+
+/* Estilo del encabezado de la tabla */
 thead {
-  background-color: #be7530; /* Color de fondo del encabezado */
+  background-color: #be7530;
+  /* Color de fondo del encabezado */
+}
+
+th,
+td {
+  border: 1px solid black;
+  /* Borde de 1px sólido */
+  padding: 8px;
+  /* Espaciado interno de celdas */
+  font-family: "Nunito", sans-serif;
+  /* Fuente Nunito */
 }
 
 th {
-  border: 1px solid black; /* Borde de 1px sólido */
-  padding: 8px; /* Espaciado interno de celdas */
-  font-family: "Nunito", sans-serif; /* Fuente Nunito */
-  color: #ffffff; /* Color del texto */
-  text-align: left; /* Alinear texto del encabezado a la izquierda */
-  font-weight: bold; /* Fuente en negrita */
+  color: #ffffff;
+  /* Color del texto */
+  text-align: left;
+  /* Alinear texto del encabezado a la izquierda */
+  font-weight: bold;
+  /* Fuente en negrita */
 }
 
 td {
-  border: 1px solid black; /* Borde de 1px sólido */
-  padding: 8px; /* Espaciado interno de celdas */
-  font-family: "Nunito", sans-serif; /* Fuente Nunito */
-  color: #000000; /* Color del texto */
+  color: #000000;
+  /* Color del texto */
 }
 
-th {
-  text-align: left; /* Alinear texto del encabezado a la izquierda */
-  font-weight: bold; /* Fuente en negrita */
+/* Media query para pantallas de hasta 600px de ancho (teléfonos en modo vertical) */
+@media only screen and (max-width: 600px) {
+  .container-inventario {
+    width: 100%;
+    /* Ancho completo para pantallas pequeñas */
+    padding: 5px;
+    /* Reducir el padding */
+  }
+
+  th,
+  td {
+    padding: 5px;
+    /* Reducir el espaciado interno de celdas */
+    font-size: 14px;
+    /* Ajustar el tamaño de la fuente */
+  }
+}
+
+/* Media query para pantallas de hasta 768px de ancho (tabletas en modo vertical y teléfonos en modo horizontal) */
+@media only screen and (max-width: 768px) {
+  .container-inventario {
+    width: 95%;
+    /* Ancho casi completo */
+    padding: 8px;
+    /* Ajustar el padding */
+  }
+
+  th,
+  td {
+    padding: 6px;
+    /* Ajustar el espaciado interno de celdas */
+    font-size: 15px;
+    /* Ajustar el tamaño de la fuente */
+  }
+}
+
+/* Media query para pantallas de hasta 1024px de ancho (tabletas en modo horizontal) */
+@media only screen and (max-width: 1024px) {
+  .container-inventario {
+    width: 90%;
+    /* Ancho casi completo */
+    padding: 10px;
+    /* Ajustar el padding */
+  }
+
+  th,
+  td {
+    padding: 7px;
+    /* Ajustar el espaciado interno de celdas */
+    font-size: 16px;
+    /* Ajustar el tamaño de la fuente */
+  }
 }
