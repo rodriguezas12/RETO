@@ -4,9 +4,8 @@ import Header from "../components/header";
 export default function Inventario() {
   const [celdas, setCeldas] = useState(Array(3).fill(null).map(() => Array(10).fill("")));
   const [kitSeleccionado, setKitSeleccionado] = useState("");
-  const [data, setData] = useState([]); // Estado para guardar los datos de la segunda tabla
+  const [data, setData] = useState([]);
 
-  // Función para cargar los datos desde el servidor
   const loadData = () => {
     fetch("http://localhost:5000/said")
       .then(response => response.json())
@@ -15,10 +14,10 @@ export default function Inventario() {
   };
 
   useEffect(() => {
-    loadData(); // Carga inicial de datos
-    const interval = setInterval(loadData, 2000); // Configura el intervalo para actualizar los datos cada 2 segundos
+    loadData();
+    const interval = setInterval(loadData, 2000);
 
-    return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonte
+    return () => clearInterval(interval);
   }, []);
 
   const handleCellClick = (rowIndex, columnIndex) => {
