@@ -8,7 +8,12 @@ function Eventos() {
   const [kit_armado, setKitArmado] = useState(0);
   const [ensamblados, setEnsablados] = useState(0);
   const [selectedStation, setSelectedStation] = useState("");
-  // Simulación de datos de estaciones
+  const [checkboxes, setCheckboxes] = useState({
+    solicitudes: false,
+    ingresoMaterial: false,
+    kitsArmados: false,
+  });
+
   const stations = [
     "Estación 1",
     "Estación 2",
@@ -29,19 +34,17 @@ function Eventos() {
         const data = await response.json();
         let totalKits = 0;
         data.forEach((row) => {
-          totalKits += row.Cantidad; // Suponiendo que la segunda columna sea la cantidad de kits
+          totalKits += row.Cantidad;
         });
         setKitArmado(totalKits);
-        setEnsablados(Math.floor(totalKits / 2)); // Cada 2 kits armados aumenta 1 ensamblado
+        setEnsablados(Math.floor(totalKits / 2));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
 
       if (selectedStation) {
-        // Sustituir espacio por '_' para coincidir con el nombre de la tabla
         const stationNumber = selectedStation.split(" ")[1];
 
-        // Realizar la consulta a la tabla correspondiente para la estación seleccionada
         try {
           const response = await fetch(
             `http://localhost:5000/estaciones/${stationNumber}`
@@ -52,14 +55,12 @@ function Eventos() {
             );
           }
           const stationData = await response.json();
-          // Formatear la fecha de ingreso antes de calcular el tiempo transcurrido
           const formattedStationData = stationData.map((item) => ({
             ...item,
             fechaIngreso: formatDateTime(item.Hora_entrada),
             TiempoTranscurrido: calculateElapsedTime(item.Hora_entrada),
           }));
 
-          // Agregar registros de consola para verificar el formato de las fechas después del formateo
           console.log("Datos con formato de fecha:", formattedStationData);
 
           setData(formattedStationData);
@@ -77,23 +78,31 @@ function Eventos() {
 
     function formatDateTime(dateTimeString) {
       const dateObj = new Date(dateTimeString);
-      const formattedDate = dateObj.toLocaleString(); // Convierte el objeto Date a una cadena en formato legible
+      const formattedDate = dateObj.toLocaleString();
       return formattedDate;
     }
 
     const calculateElapsedTime = (startTime) => {
-      const startDate = new Date(startTime).getTime(); // Convertir la fecha de inicio a milisegundos
-      const currentDate = new Date().getTime(); // Obtener la fecha actual en milisegundos
+      const startDate = new Date(startTime).getTime();
+      const currentDate = new Date().getTime();
 
-      const elapsedTime = currentDate - startDate; // Calcular el tiempo transcurrido en milisegundos
-      const elapsedMinutes = Math.floor(elapsedTime / (1000 * 60)); // Convertir milisegundos a minutos
-      const elapsedSeconds = Math.floor((elapsedTime % (1000 * 60)) / 1000); // Calcular los segundos restantes
+      const elapsedTime = currentDate - startDate;
+      const elapsedMinutes = Math.floor(elapsedTime / (1000 * 60));
+      const elapsedSeconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
 
-      return `${elapsedMinutes} minutos ${elapsedSeconds} segundos`; // Devolver el tiempo transcurrido en minutos y segundos
+      return `${elapsedMinutes} minutos ${elapsedSeconds} segundos`;
     };
 
     return () => clearInterval(intervalId);
   }, [selectedStation]);
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setCheckboxes((prevCheckboxes) => ({
+      ...prevCheckboxes,
+      [name]: checked,
+    }));
+  };
 
   return (
     <div>
@@ -106,6 +115,49 @@ function Eventos() {
         />
       </Helmet>
       <Header titulo="CONSULTA DE EVENTOS" />
+      <div className="container-titulo">
+      <h2 className="titulo-evento">Seleccione evento de interés</h2>
+      </div>
+
+      <div className="container-conteo">
+        
+        <div className="contenedor-label1">
+          
+        <label>
+          <input
+            type="checkbox"
+            name="solicitudes"
+            checked={checkboxes.solicitudes}
+            onChange={handleCheckboxChange}
+          />
+          Solicitudes
+        </label>
+        </div>
+        
+        <div className="contenedor-label1">
+        <label>
+          <input
+            type="checkbox"
+            name="ingresoMaterial"
+            checked={checkboxes.ingresoMaterial}
+            onChange={handleCheckboxChange}
+          />
+          Ingreso Material
+        </label>
+        </div>
+
+        <div className="contenedor-label1">
+        <label>
+          <input
+            type="checkbox"
+            name="kitsArmados"
+            checked={checkboxes.kitsArmados}
+            onChange={handleCheckboxChange}
+          />
+          Kits Armados
+        </label>
+        </div>
+      </div>
       <div className="container-conteo">
         <div className="contenedor-label1">
           <span className="elemento-label">Kits Armados:</span>
@@ -148,10 +200,8 @@ function Eventos() {
               <tr key={index}>
                 <td className="estado">{item.ID}</td>
                 <td className="estado">{item.Kit}</td>
-                <td className="estado">{item.fechaIngreso}</td>{" "}
-                {/* Utiliza item.fechaIngreso */}
-                <td className="estado">{item.TiempoTranscurrido}</td>{" "}
-                {/* Verifica que TiempoTranscurrido tenga datos */}
+                <td className="estado">{item.fechaIngreso}</td>
+                <td className="estado">{item.TiempoTranscurrido}</td>
               </tr>
             ))}
           </tbody>
