@@ -263,7 +263,7 @@ while True:
             # Asignación de nombre
             nombre_tag_3 = nombres_tags.get(tags3, "No registrado")
             
-            # Verificar si el tag ya está presente en la tabla de la Estación 1
+            # Verificar si el tag ya está presente en la tabla de la Estación 3
             cursor.execute("SELECT Tag FROM Estación_3 WHERE Tag = %s", (tags3,))
             resultado = cursor.fetchone()
             
