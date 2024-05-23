@@ -5,18 +5,37 @@ import "./Inventario.css";
 
 function Inventario() {
   const [data, setData] = useState([]);
+
   useEffect(() => {
-    fetch("http://localhost:5000/michi")
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((error) => console.error("Error:", error));
+    const fetchData = () => {
+      fetch("http://localhost:5000/michi")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("No se pudo obtener la respuesta del servidor");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setData(data);
+        })
+        .catch((error) => console.error("Error:", error));
+    };
+
+    // Realizar la primera llamada para obtener los datos iniciales
+    fetchData();
+
+    // Establecer un intervalo para realizar la consulta cada segundo
+    const intervalId = setInterval(fetchData, 1000);
+
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
     <div>
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
         <link
           href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
           rel="stylesheet"

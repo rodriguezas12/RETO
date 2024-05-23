@@ -14,18 +14,34 @@ export default function Picking() {
   const [kitCounts, setKitCounts] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:5000/inventario_rack")
-      .then((response) => response.json())
-      .then((data) => {
-        const counts = {};
-        data.forEach((item) => {
-          counts[item.Nombre] = item.Cantidad;
-        });
-        setKitCounts(counts);
-      })
-      .catch((error) =>
-        console.error("Error al cargar los datos del inventario:", error)
-      );
+    const fetchData = () => {
+      fetch("http://localhost:5000/inventario_rack")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("No se pudo obtener la respuesta del servidor");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const counts = {};
+          data.forEach((item) => {
+            counts[item.Nombre] = item.Cantidad;
+          });
+          setKitCounts(counts);
+        })
+        .catch((error) =>
+          console.error("Error al cargar los datos del inventario:", error)
+        );
+    };
+
+    // Realizar la primera llamada para obtener los datos iniciales
+    fetchData();
+
+    // Establecer un intervalo para realizar la consulta cada segundo
+    const intervalId = setInterval(fetchData, 1000);
+
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(intervalId);
   }, []);
 
   const añadirKit = (kitNumero) => {
@@ -42,13 +58,11 @@ export default function Picking() {
         // Si hay disponibles, actualizar el pedido
         setPedido((prevPedido) => {
           const nuevoPedido = [...prevPedido, kitNumero];
-          //alert(`Kit ${kitNumero} añadido al carrito.\nPedido actual: ${nuevoPedido.join(", ")}`);
           return nuevoPedido;
         });
 
         return newCounts;
       } else {
-        //alert(`No hay suficientes kits disponibles de Kit ${kitNumero}.`);
         return prevCounts; // Retornar los contadores antiguos si no hay disponibles
       }
     });
@@ -65,7 +79,6 @@ export default function Picking() {
         ...prevCounts,
         [nombreKit]: prevCounts[nombreKit] + 1,
       }));
-      //alert(`Kit ${kitNumero} eliminado del carrito.\nPedido actual: ${nuevoPedido.join(", ")}`);
     }
   };
 
@@ -79,7 +92,6 @@ export default function Picking() {
         });
         setKitCounts(counts);
         setPedido([]);
-        alert("Carrito limpiado");
       })
       .catch((error) =>
         console.error("Error al cargar los datos del inventario:", error)
