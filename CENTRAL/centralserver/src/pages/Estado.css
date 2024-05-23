@@ -8,15 +8,22 @@
   justify-content: space-around;
   align-items: center;
 }
+.titulo-evento {
+  text-align: center;
+}
+
 
 .contenedor-label1 {
   display: flex;
   align-items: center;
   margin: 5px;
+  font-family: "Nunito", sans-serif; /* Fuente Nunito */
+  font-size: min(1.5vw, 24px);
+  font-weight: bold;  
   padding: 10px;
   background-color: #ecd4b6; /* Color azul acero */
   border-radius: 30px; /* Bordes redondos de 30px */
-  color: #fff; /* Color del texto blanco */
+  color: #292929; /* Color del texto blanco */
 }
 
 .elemento-label,
@@ -54,6 +61,19 @@
   font-weight: 900;
   display: inline-block; /* Alinear el texto en línea */
   margin: 0 auto; /* Centrar texto horizontalmente */
+}
+
+.container-titulo{
+  margin: 2px auto; /* Margen superior e inferior de 20px y centrado horizontal */
+  width: 90vw; /* Anchura del contenedor */
+  height: 40px;
+  font-family: "Nunito", sans-serif; /* Fuente Nunito */
+  background-color: #ffffff;
+  font-size: min(1.5vw, 24px);
+  font-weight: bold;  
+  border-radius: 20px; /* Bordes redondos de 10px */
+
+  text-align: center; /* Centrar texto horizontalmente */
 }
 
 .elemento-valor {
