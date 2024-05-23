@@ -1,3 +1,4 @@
+/* Estilos base */
 .menu-box {
   width: 300px;
   padding: 40px;
@@ -5,7 +6,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #f5f5dc; /* Fondo blanco hueso */
+  background: #f5f5dc;
+  /* Fondo blanco hueso */
   text-align: center;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -40,29 +42,121 @@
   margin-bottom: 20px;
   border-radius: 10px;
   border: none;
-  border-bottom: 1px solid #8b4513; /* Color de la línea del input */
-  background: #ffdab9; /* Fondo naranja pastel */
+  border-bottom: 1px solid #8b4513;
+  /* Color de la línea del input */
+  background: #ffdab9;
+  /* Fondo naranja pastel */
   outline: none;
   height: 40px;
   color: #8b4513;
-  margin-top: 10px; /* Letras marrones */
+  margin-top: 10px;
+  /* Letras marrones */
 }
 
 .menu-box form button,
 .menu-box button {
   font-family: "nunito";
   width: 100%;
-  background: #ff4500; /* Fondo naranja más fuerte */
+  background: #ff4500;
+  /* Fondo naranja más fuerte */
   border: none;
   padding: 10px;
   cursor: pointer;
   font-size: 18px;
-  color: #ffffff; /* Letras blancas */
+  color: #ffffff;
+  /* Letras blancas */
   border-radius: 20px;
-  margin-bottom: 10px; /* Margen inferior de 10px */
+  margin-bottom: 10px;
+  /* Margen inferior de 10px */
 }
 
 .error-message {
   font-size: 10px;
   color: red;
+}
+
+/* Media Queries */
+
+/* Estilos para pantallas de hasta 600px */
+@media only screen and (max-width: 600px) {
+  .menu-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .menu-box img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .menu-box h3 {
+    font-size: 16px;
+  }
+
+  .menu-box form input {
+    height: 30px;
+    font-size: 14px;
+  }
+
+  .menu-box form button,
+  .menu-box button {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+/* Estilos para pantallas de hasta 768px */
+@media only screen and (max-width: 768px) {
+  .menu-box {
+    width: 80%;
+    padding: 30px;
+  }
+
+  .menu-box img {
+    width: 140px;
+    height: 140px;
+  }
+
+  .menu-box h3 {
+    font-size: 18px;
+  }
+
+  .menu-box form input {
+    height: 35px;
+    font-size: 16px;
+  }
+
+  .menu-box form button,
+  .menu-box button {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+/* Estilos para pantallas de hasta 1024px */
+@media only screen and (max-width: 1024px) {
+  .menu-box {
+    width: 70%;
+    padding: 35px;
+  }
+
+  .menu-box img {
+    width: 160px;
+    height: 160px;
+  }
+
+  .menu-box h3 {
+    font-size: 20px;
+  }
+
+  .menu-box form input {
+    height: 38px;
+    font-size: 18px;
+  }
+
+  .menu-box form button,
+  .menu-box button {
+    font-size: 18px;
+    padding: 12px;
+  }
 }
