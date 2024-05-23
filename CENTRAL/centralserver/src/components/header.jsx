@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet";
 import logo from "../Media/logo.png"; // Importa la imagen
 
@@ -51,12 +51,12 @@ const Header = ({ titulo }) => {
     },
   });
 
-  const handleResize = () => {
+  const handleResize = useCallback(() => {
     const newStyles = {
       ...styles,
       headerText: {
         ...styles.headerText,
-        fontSize: window.innerWidth <= 600 ? "2.5vh" :
+        fontSize: window.innerWidth <= 600 ? "2vh" :
           window.innerWidth <= 768 ? "3vh" :
             window.innerWidth <= 1024 ? "3.5vh" : "4vh",
       },
@@ -65,23 +65,29 @@ const Header = ({ titulo }) => {
         fontSize: window.innerWidth <= 600 ? "2vh" :
           window.innerWidth <= 768 ? "2.3vh" :
             window.innerWidth <= 1024 ? "2.5vh" : "2.5vh",
+        padding: window.innerWidth <= 600 ? "8px" :
+          window.innerWidth <= 768 ? "9px" :
+            window.innerWidth <= 1024 ? "10px" : "10px",
+        maxWidth: window.innerWidth <= 600 ? "150px" :
+          window.innerWidth <= 768 ? "170px" :
+            window.innerWidth <= 1024 ? "190px" : "200px",
       },
       logo: {
         ...styles.logo,
         height: window.innerWidth <= 600 ? "50px" :
           window.innerWidth <= 768 ? "60px" :
             window.innerWidth <= 1024 ? "70px" : "80px",
-      }
+      },
     };
 
     setStyles(newStyles);
-  };
+  }, [styles]);
 
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [handleResize]);
 
   const handleBackButtonClick = () => {
     window.history.back();
