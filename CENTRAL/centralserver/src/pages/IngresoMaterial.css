@@ -8,50 +8,51 @@
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+  /* Fija el ancho de las columnas */
 }
 
+th,
 td {
   border: 1px solid #ddd;
   padding: 10px;
-}
-
-input[type="text"] {
-  width: 100%;
-  border: none;
-  background: transparent;
-  outline: none;
   text-align: center;
 }
 
-.submit-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+th {
+  background-color: #f2f2f2;
+  /* Color de fondo para las cabeceras */
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-@media only screen and (max-width: 1024px) {
-  .container-ingreso {
-    width: 80%;
-    margin: 5% auto;
-  }
-}
-
-@media only screen and (max-width: 780px) {
-  .container-ingreso {
-    width: 90%;
-    margin: 10% auto;
-  }
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+  /* Color de fondo para filas pares */
 }
 
 @media only screen and (max-width: 600px) {
   .container-ingreso {
     width: 95%;
-    margin: 15% auto;
+    margin: 10% auto;
+  }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 780px) {
+  .container-ingreso {
+    width: 80%;
+    margin: 7% auto;
+  }
+}
+
+@media only screen and (min-width: 781px) and (max-width: 1024px) {
+  .container-ingreso {
+    width: 70%;
+    margin: 5% auto;
+  }
+}
+
+@media only screen and (min-width: 1025px) {
+  .container-ingreso {
+    width: 60%;
+    margin: 3% auto;
   }
 }
