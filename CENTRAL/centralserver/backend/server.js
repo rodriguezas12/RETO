@@ -369,6 +369,18 @@ app.post("/nombrekit/:tag", (req, res) => {
 // ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
 
 
+// Aqui se solicita la tabla Contenido para la pagina contenido
+app.get('/contenido', (req, res) => {
+  db.query('SELECT Kits, Contenido FROM RETORFID.Contenido', (err, results) => {
+    if (err) {
+      console.error("Error al obtener los datos:", err);
+      res.status(500).send("Error en el servidor");
+      return;
+    }
+    res.json(results);
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

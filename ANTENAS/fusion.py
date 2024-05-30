@@ -1,21 +1,32 @@
 import subprocess
 import os
 
+# Función para buscar archivos en el directorio actual y sus subdirectorios
+def buscar_archivo(nombre_archivo):
+    for root, dirs, files in os.walk('.'):
+        if nombre_archivo in files:
+            return os.path.join(root, nombre_archivo)
+    return None
+
 # Función para ejecutar un script de Python en un subproceso
 def ejecutar_script(script_path):
     return subprocess.Popen(['python', script_path])
 
 if __name__ == '__main__':
-    # Rutas completas a los scripts
-    ruta_script1 = r'C:\\Users\\miche\\Documents\\Estudio\\Noveno semestre\\Comunicaciones\\Michelle\\ANTENAS\\Portales_Ready.py'
-    ruta_script2 = r'C:\\Users\\miche\\Documents\\Estudio\\Noveno semestre\\Comunicaciones\\Michelle\\ANTENAS\\Estaciones_Redundancia.py'
+    # Nombres de los scripts a buscar
+    nombre_script1 = 'Portales_Ready.py'
+    nombre_script2 = 'Estaciones_Redundancia.py'
 
-    # Verificar si las rutas existen
-    if not os.path.isfile(ruta_script1):
-        print(f"No se encontró el archivo: {ruta_script1}")
+    # Buscar los scripts
+    ruta_script1 = buscar_archivo(nombre_script1)
+    ruta_script2 = buscar_archivo(nombre_script2)
+
+    # Verificar si los scripts fueron encontrados
+    if ruta_script1 is None:
+        print(f"No se encontró el archivo: {nombre_script1}")
         exit(1)
-    if not os.path.isfile(ruta_script2):
-        print(f"No se encontró el archivo: {ruta_script2}")
+    if ruta_script2 is None:
+        print(f"No se encontró el archivo: {nombre_script2}")
         exit(1)
 
     # Ejecutar los scripts
