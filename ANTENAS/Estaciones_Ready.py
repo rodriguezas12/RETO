@@ -48,7 +48,7 @@ cursor = conexion.cursor()
 # Definir la consulta SQL para crear la tabla de la estación 1
 sql_create_table_estacion1 = """
 CREATE TABLE IF NOT EXISTS Estación_1 (
-  ID INT AUTO_INCREMENT PRIMARY KEY,
+  ID INT PRIMARY KEY,
   Tag VARCHAR(25) NOT NULL,
   Kit VARCHAR(25) NOT NULL,
   Hora_entrada TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
