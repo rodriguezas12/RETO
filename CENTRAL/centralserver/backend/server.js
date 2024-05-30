@@ -302,7 +302,71 @@ app.get('/said', (req, res) => {
   });
 });
 
+// ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+app.get("/tag", (req, res) => {
+  db.query(
+    "SELECT Tag FROM Estación_1",
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener los tags:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      if (results.length > 0) {
+        const tags = results.map((result) => result.Tag); // Extraemos solo los tags de los resultados
+        res.json(tags);
+      } else {
+        res.status(404).send("No se encontraron tags");
+      }
+    }
+  );
+});
 
+
+// Obtener el nombre del kit de un tag específico
+app.get("/nombrekit/:tag", (req, res) => {
+  const { tag } = req.params;
+
+  db.query(
+    "SELECT Kit FROM Estación_1 WHERE Tag = ?",
+    [tag],
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener el nombre del kit:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      if (results.length > 0) {
+        res.json(results[0].nombre); // Devolvemos el nombre del kit si existe
+      } else {
+        res.json(""); // Devolvemos un nombre vacío si no existe
+      }
+    }
+  );
+});
+
+// Actualizar el nombre del kit de un tag específico
+app.post("/nombrekit/:tag", (req, res) => {
+  const { tag } = req.params;
+  const { nombreKit } = req.body;
+
+  db.query(
+    "UPDATE Datos SET Nombre = ? WHERE Tag = ?",
+    [nombreKit, tag],
+    (err, results) => {
+      if (err) {
+        console.error("Error al actualizar el nombre del kit:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      console.log(`Nombre de kit actualizado para el tag ${tag}`);
+      res.status(200).send(`Nombre de kit actualizado para el tag ${tag}`);
+    }
+  );
+});
+
+
+// ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
 
 
 const PORT = process.env.PORT || 5000;
