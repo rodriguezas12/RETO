@@ -10,6 +10,7 @@
   /* Bordes redondos de 10px */
   padding: 10px;
   /* Espaciado interno del contenedor */
+  overflow: auto;
 }
 
 /* Estilo de la tabla */

@@ -370,17 +370,46 @@ app.post("/nombrekit/:tag", (req, res) => {
 
 
 // Aqui se solicita la tabla Contenido para la pagina contenido
+
+app.post('/contenido/:kits', (req, res) => {
+  const { kits } = req.params;
+  const { Contenido } = req.body;
+
+  const query = 'UPDATE RETORFID.Contenido SET Contenido = ? WHERE Kits = ?';
+  db.query(query, [Contenido, kits], (err, result) => {
+    if (err) {
+      console.error('Error al actualizar los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    res.send({ Kits: kits, Contenido });
+  });
+});
+
+app.post('/contenido', (req, res) => {
+  const { Kits, Contenido } = req.body;
+
+  const query = 'INSERT INTO RETORFID.Contenido (Kits, Contenido) VALUES (?, ?)';
+  db.query(query, [Kits, Contenido], (err, result) => {
+    if (err) {
+      console.error('Error al insertar los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    res.send({ Kits, Contenido });
+  });
+});
+
 app.get('/contenido', (req, res) => {
   db.query('SELECT Kits, Contenido FROM RETORFID.Contenido', (err, results) => {
     if (err) {
-      console.error("Error al obtener los datos:", err);
-      res.status(500).send("Error en el servidor");
+      console.error('Error al obtener los datos:', err);
+      res.status(500).send('Error en el servidor');
       return;
     }
     res.json(results);
   });
 });
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
