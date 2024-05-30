@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import logo from "../Media/logo.png";
 import "./Menu.css";
 
-
 const Home = () => {
   return (
     <>
@@ -34,6 +33,9 @@ const Home = () => {
           </Link>
           <Link to="/ingresomaterial">
             <button>Ingreso de Material</button>
+          </Link>
+          <Link to="/asignacion">
+            <button>Asignación de Kits</button>
           </Link>
           <Link to="/">
             <button>Regresar</button>
