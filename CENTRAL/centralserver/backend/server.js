@@ -303,6 +303,7 @@ app.get('/said', (req, res) => {
 });
 
 // ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+// Obtener tags de la estación 1
 app.get("/tag", (req, res) => {
   db.query(
     "SELECT Tag FROM Estación_1",
@@ -322,7 +323,6 @@ app.get("/tag", (req, res) => {
   );
 });
 
-
 // Obtener el nombre del kit de un tag específico
 app.get("/nombrekit/:tag", (req, res) => {
   const { tag } = req.params;
@@ -337,7 +337,7 @@ app.get("/nombrekit/:tag", (req, res) => {
         return;
       }
       if (results.length > 0) {
-        res.json(results[0].nombre); // Devolvemos el nombre del kit si existe
+        res.json(results[0].Kit); // Devolvemos el nombre del kit si existe
       } else {
         res.json(""); // Devolvemos un nombre vacío si no existe
       }
@@ -345,28 +345,97 @@ app.get("/nombrekit/:tag", (req, res) => {
   );
 });
 
+
 // Actualizar el nombre del kit de un tag específico
 app.post("/nombrekit/:tag", (req, res) => {
   const { tag } = req.params;
   const { nombreKit } = req.body;
 
+  // Update Estación_1
   db.query(
-    "UPDATE Datos SET Nombre = ? WHERE Tag = ?",
+    "UPDATE Estación_1 SET Kit = ? WHERE Tag = ?",
     [nombreKit, tag],
     (err, results) => {
       if (err) {
-        console.error("Error al actualizar el nombre del kit:", err);
+        console.error("Error al actualizar el nombre del kit en Estación_1:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
-      console.log(`Nombre de kit actualizado para el tag ${tag}`);
-      res.status(200).send(`Nombre de kit actualizado para el tag ${tag}`);
+      console.log(`Nombre de kit actualizado para el tag ${tag} en Estación_1`);
+      // Update Datos
+      db.query(
+        "UPDATE Datos SET Nombre = ? WHERE Tag = ?",
+        [nombreKit, tag],
+        (err, results) => {
+          if (err) {
+            console.error("Error al actualizar el nombre del kit en Datos:", err);
+            res.status(500).send("Error interno del servidor");
+            return;
+          }
+          console.log(`Nombre de kit actualizado para el tag ${tag} en Datos`);
+          // Send response after both updates are complete
+          res.status(200).send(`Nombre de kit actualizado para el tag ${tag}`);
+        }
+      );
     }
   );
 });
 
+// Obtener el ID del kit de un tag específico
+app.get("/idkit/:tag", (req, res) => {
+  const { tag } = req.params;
 
-// ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+  db.query(
+    "SELECT ID FROM Estación_1 WHERE Tag = ?",
+    [tag],
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener el ID del kit:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      if (results.length > 0) {
+        res.json(results[0].ID_Kit); // Devolvemos el ID del kit si existe
+      } else {
+        res.json(""); // Devolvemos un ID vacío si no existe
+      }
+    }
+  );
+});
+
+// Actualizar el ID del kit de un tag específico
+app.post("/idkit/:tag", (req, res) => {
+  const { tag } = req.params;
+  const { idKit } = req.body;
+
+  db.query(
+    "UPDATE Estación_1 SET ID = ? WHERE Tag = ?",
+    [idKit, tag],
+    (err, results) => {
+      if (err) {
+        console.error("Error al actualizar el ID del kit en Estación_1:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      console.log(`ID de kit actualizado para el tag ${tag} en Estación_1`);
+      // Update Datos
+      db.query(
+        "UPDATE Datos SET ID = ? WHERE Tag = ?",
+        [idKit, tag],
+        (err, results) => {
+          if (err) {
+            console.error("Error al actualizar el ID del kit en Datos:", err);
+            res.status(500).send("Error interno del servidor");
+            return;
+          }
+          console.log(`ID de kit actualizado para el tag ${tag} en Datos`);
+          // Send response after both updates are complete
+          res.status(200).send(`ID de kit actualizado para el tag ${tag}`);
+        }
+      );
+    }
+  );
+});
 
 
 const PORT = process.env.PORT || 5000;

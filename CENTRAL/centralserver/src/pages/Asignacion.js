@@ -7,6 +7,7 @@ import axios from "axios";
 const Asignacion = () => {
   const [tags, setTags] = useState([]); // Estado para almacenar los tags
   const [nombresKits, setNombresKits] = useState({}); // Estado para almacenar los nombres de los kits
+  const [idsKits, setIdsKits] = useState({}); // Estado para almacenar los IDs de los kits
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -16,11 +17,15 @@ const Asignacion = () => {
         if (response.data.length > 0) {
           setTags(response.data); // Almacenamos todos los tags en el estado
           const initialNombresKits = {};
+          const initialIdsKits = {};
           for (const tag of response.data) {
             const nombreKitResponse = await axios.get(`http://localhost:5000/nombrekit/${tag}`);
             initialNombresKits[tag] = nombreKitResponse.data || ""; // Si no hay nombre, se deja vacío
+            const idKitResponse = await axios.get(`http://localhost:5000/idkit/${tag}`);
+            initialIdsKits[tag] = idKitResponse.data || ""; // Si no hay ID, se deja vacío
           }
           setNombresKits(initialNombresKits); // Inicializamos los nombres de los kits
+          setIdsKits(initialIdsKits); // Inicializamos los IDs de los kits
         } else {
           setTags(["No hay tags disponibles"]); // En caso de no haber tags disponibles
         }
@@ -32,7 +37,7 @@ const Asignacion = () => {
 
     fetchTags();
 
-    const interval = setInterval(fetchTags, 20000); // Actualizamos cada 5 segundos
+    const interval = setInterval(fetchTags, 5000); // Actualizamos cada 5 segundos
 
     return () => clearInterval(interval); // Limpiamos el intervalo al desmontar el componente
   }, []); // La dependencia vacía asegura que este efecto se ejecute solo una vez al cargar el componente
@@ -41,14 +46,33 @@ const Asignacion = () => {
     setNombresKits({ ...nombresKits, [tag]: event.target.value }); // Actualizamos el estado del nombre del kit
   };
 
+  const handleIdKitChange = (event, tag) => {
+    setIdsKits({ ...idsKits, [tag]: event.target.value }); // Actualizamos el estado del ID del kit
+  };
+
   const handleGuardarNombreKit = async (tag) => {
     try {
       await axios.post(`http://localhost:5000/nombrekit/${tag}`, {
         nombreKit: nombresKits[tag],
       });
       console.log(`Nombre de kit para el tag ${tag} guardado correctamente`);
+      const nombreKitResponse = await axios.get(`http://localhost:5000/nombrekit/${tag}`);
+      setNombresKits({ ...nombresKits, [tag]: nombreKitResponse.data });
     } catch (error) {
       console.error(`Error al guardar el nombre del kit para el tag ${tag}:`, error);
+    }
+  };
+
+  const handleGuardarIdKit = async (tag) => {
+    try {
+      await axios.post(`http://localhost:5000/idkit/${tag}`, {
+        idKit: idsKits[tag],
+      });
+      console.log(`ID de kit para el tag ${tag} guardado correctamente`);
+      const idKitResponse = await axios.get(`http://localhost:5000/idkit/${tag}`);
+      setIdsKits({ ...idsKits, [tag]: idKitResponse.data });
+    } catch (error) {
+      console.error(`Error al guardar el ID del kit para el tag ${tag}:`, error);
     }
   };
 
@@ -92,6 +116,26 @@ const Asignacion = () => {
                   placeholder="Escribir nombre de kit"
                 />
                 <button onClick={() => handleGuardarNombreKit(tag)}>Guardar</button>
+              </div>
+            ))
+          ) : (
+            <span>{tags[0]}</span>
+          )}
+        </div>
+
+        {/* Sección para ID del Kit */}
+        <div className="column">
+          <div style={{ textAlign: "center", marginBottom: "10px" }}>ID DEL KIT</div>
+          {tags.length > 0 ? (
+            tags.map((tag, index) => (
+              <div key={index}>
+                <input
+                  type="text"
+                  value={idsKits[tag]}
+                  onChange={(event) => handleIdKitChange(event, tag)}
+                  placeholder="Escribir ID del kit"
+                />
+                <button onClick={() => handleGuardarIdKit(tag)}>Guardar</button>
               </div>
             ))
           ) : (
