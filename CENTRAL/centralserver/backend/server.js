@@ -16,6 +16,8 @@ const db = mysql.createConnection({
   database: "RETORFID",
 });
 
+
+
 db.connect((err) => {
   if (err) {
     console.error("Error de conexión a la base de datos:", err);
@@ -367,6 +369,23 @@ app.post("/nombrekit/:tag", (req, res) => {
 
 
 // ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+// crear tabla de contenido
+
+// Crear la tabla 'Contenido' si no existe
+const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS Contenido (
+      Kits VARCHAR(45),
+      Contenido VARCHAR(255)
+    );
+  `;
+
+db.query(createTableQuery, (err, result) => {
+  if (err) {
+    console.error('Error al crear la tabla Contenido:', err);
+    return;
+  }
+  console.log('Tabla Contenido creada o ya existe');
+});
 
 
 // Aqui se solicita la tabla Contenido para la pagina contenido

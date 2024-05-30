@@ -49,7 +49,7 @@ function Contenido() {
         setEditIndex(null);
 
         fetch(`http://localhost:5000/contenido/${data[index].Kits}`, {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -72,7 +72,8 @@ function Contenido() {
     };
 
     const handleAddRow = () => {
-        const newRow = { Kits: data.length + 1, Contenido: '' };
+        const newKitNumber = data.length + 1;
+        const newRow = { Kits: `Kit${newKitNumber}`, Contenido: '' };
         setData([...data, newRow]);
 
         fetch("http://localhost:5000/contenido", {
@@ -89,9 +90,7 @@ function Contenido() {
                 return response.json();
             })
             .then((newItem) => {
-                setData((prevData) => prevData.map((item) =>
-                    item.Kits === newItem.Kits ? newItem : item
-                ));
+                setData((prevData) => [...prevData, newItem]);
             })
             .catch((error) => console.error('Error:', error));
     };
@@ -121,7 +120,7 @@ function Contenido() {
                         <tbody>
                             {data.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{index + 1}</td>
+                                    <td>{item.Kits}</td>
                                     <td>
                                         {editIndex === index ? (
                                             <input
