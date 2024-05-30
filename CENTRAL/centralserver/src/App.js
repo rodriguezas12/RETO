@@ -9,6 +9,7 @@ import Menu from "./pages/Menu";
 import Nopage from "./pages/Nopage";
 import Register from "./pages/Register";
 import Solicitud from "./pages/Solicitud";
+import Asignacion from "./pages/Asignacion";
 
 function PrivateRoute({ element, isAuthenticated }) {
   return isAuthenticated ? element : <Navigate to="/" replace />;
@@ -71,16 +72,8 @@ function App() {
           }
         />
         <Route path="*" element={<Nopage />} />
-        <Route
-          path="/estado"
-          element={
-            <PrivateRoute
-              element={<Estado />}
-              isAuthenticated={isAuthenticated}
-            />
-          }
-        />
-        <Route path="/eventos" element={<Eventos/>} />
+        <Route path="/eventos" element={<Eventos />} />
+        <Route path="/asignacion" element={<Asignacion />} />
       </Routes>
     </BrowserRouter>
   );
