@@ -63,6 +63,7 @@ cursor = conexion.cursor()
 sql_create_table_datos = """
 CREATE TABLE IF NOT EXISTS Datos (ID INT, 
   Tag VARCHAR(25) NOT NULL,
+  Bahia INT NOT NULL,
   Nombre TEXT NOT NULL,
   Cantidad INT NOT NULL, 
   Hora_entrada_lab TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -151,7 +152,7 @@ while True:
     tags_IN = reader_IN.detectTags(powerDBm=reader_IN.power_table[35], freqMHz=reader_IN.freq_table[0], mode=1001, session=2, population=1, duration=durationn, searchmode=2)
     for tag_IN in tags_IN:
      tag_id_IN = tag_IN['EPC-96'].decode('utf-8')
-     nombre_IN = nombres_tags.get(tag_id_IN, "No registrado")
+     nombre_IN = [""]
      hora_actual = obtener_hora_actual()
      cursor.execute("SELECT * FROM Datos WHERE Tag = %s", (tag_id_IN,))
      resultado = cursor.fetchone()
@@ -175,6 +176,7 @@ while True:
         # Obtener el ID correspondiente al kit
         id_kit = (list(nombres_tags.keys())).index(tag_id_IN) % 5 + 1
         # Insertar la tag como nueva entrada si no existe previamente en la base de datos
+        cursor.execute("INSERT INTO Datos (ID, Tag, Nombre, Cantidad, Hora_entrada_lab) VALUES (%s, %s, %s, 1, %s)", (id_kit, tag_id_IN, nombre_IN, hora_actual))
         cursor.execute("INSERT INTO Datos (ID, Tag, Nombre, Cantidad, Hora_entrada_lab) VALUES (%s, %s, %s, 1, %s)", (id_kit, tag_id_IN, nombre_IN, hora_actual))
         print(f"Nueva tag '{tag_id_IN}' registrada en entrada.")
     
