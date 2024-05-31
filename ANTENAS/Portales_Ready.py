@@ -192,14 +192,14 @@ while True:
             # Definir el nombre basado en el diccionario
             nombre_OUT = nombres_tags.get(tag_id_OUT, "No registrado")
             # Definir los valores para la inserción en la tabla de datos
-            valores_datos_OUT = (tag_id_OUT, nombre_OUT, 1)
+            valores_datos_OUT = (tag_id_OUT, 1)
             try:
                 # Verificar si el tag ya está en la base de datos
                 cursor.execute("SELECT * FROM Datos WHERE Tag = %s", (tag_id_OUT,))
                 if cursor.fetchone():  # El tag ya existe, actualizar el nombre
-                    cursor.execute("UPDATE Datos SET Nombre = %s WHERE Tag = %s", (nombre_OUT, tag_id_OUT))
-                else:  # El tag no existe, insertarlo
-                    cursor.execute("INSERT INTO Datos (Tag, Nombre, Cantidad, Hora_salida_lab) VALUES (%s, %s, %s)", valores_datos_OUT)
+                    cursor.execute("UPDATE Datos SET Nombre = %s WHERE Tag = %s", ("", tag_id_OUT))
+                else:  # El tag no existe, insertarlo CAMBIOOOOOOOOOOOOO
+                    cursor.execute("INSERT INTO Datos (Tag, Cantidad, Hora_salida_lab) VALUES (%s, %s)", valores_datos_OUT)
                 # Actualizar la contabilidad de kits
                 cursor.execute("UPDATE Contabilidad_Kits SET Cantidad = Cantidad - 1 WHERE Kit = %s", (nombre_OUT,))
                 # Confirmar los cambios en la base de datos
