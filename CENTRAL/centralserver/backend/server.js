@@ -117,9 +117,10 @@ app.get("/", (req, res) => {
 app.post("/solicitar", (req, res) => {
   const { nuevoPedido } = req.body;
 
+  // Crear la tabla Solicitud si no existe
   const createTableQuery = `
     CREATE TABLE IF NOT EXISTS Solicitud (
-      Pedido VARCHAR(45)
+      Pedido VARCHAR(1000)
     );
   `;
 
@@ -147,7 +148,9 @@ app.post("/solicitar", (req, res) => {
           if (err) {
             console.error("Error al insertar el registro vacío:", err);
           } else {
-            console.log("Pedido vacío insertado correctamente después de 10 segundos");
+            console.log(
+              "Pedido vacío insertado correctamente después de 10 segundos"
+            );
           }
         });
       }, 20000); //  20 segundos
@@ -515,6 +518,48 @@ app.get('/contenido', (req, res) => {
     res.json(results);
   });
 });
+
+
+app.get("/contenido_said", (req, res) => {
+  db.query("SELECT * FROM Contenido", (err, results) => {
+    if (err) {
+      console.error("Error al obtener los datos de Contenido:", err);
+      res.status(500).send("Error en el servidor");
+      return;
+    }
+    res.json(results);
+  });
+});
+
+
+// Ruta para obtener la cantidad disponible de cada tipo de kit
+app.get("/disponibilidad-kits", (req, res) => {
+  const query = `
+    SELECT Nombre, COUNT(*) as Disponibles
+    FROM Datos
+    WHERE INV = 'SI'
+    GROUP BY Nombre
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error al obtener la disponibilidad de kits:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+
+    const disponibles = results.reduce((acc, row) => {
+      acc[row.Nombre] = row.Disponibles;
+      return acc;
+    }, {});
+
+    res.json(disponibles);
+  });
+});
+
+
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

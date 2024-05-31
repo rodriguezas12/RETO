@@ -1,112 +1,43 @@
+/* Solicitud.css */
+
 .container-items {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.Kit {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex: 1 1 30%;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  border-radius: 20px;
-  background-color: #f4a454;
-  flex-direction: row;
-}
-
-.icono {
-  width: 100px;
-  height: auto;
-  margin-right: 20px;
-}
-
-.info-product {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 0 20px;
-  gap: 5px;
-}
-
-.info-text {
-  text-align: left;
-  width: 100%;
-  margin: 0;
-  font-size: 16px;
-  font-family: "Nunito", sans-serif; /* Fuente Nunito */
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.button {
-  background-color: white;
-  color: black;
-  border: 2px solid black;
-  width: 35px;
-  height: 35px;
-  font-size: 20px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  margin: 5px;
-}
-
-.button:focus {
-  outline: none;
-}
-
-.button:active {
-  background-color: #eaeaea;
-}
-
-.button:hover {
-  background-color: #f8f8f8;
-}
-
-.button-panel {
-  display: flex;
-  justify-content: center;
+  justify-content: space-between; /* Ajustamos el espacio entre columnas */
   gap: 20px;
   padding: 20px;
 }
 
-.action-button {
-  background-color: #f8f8f8;
-  color: #333;
-  border: none;
-  padding: 10px 20px;
-  font-size: 18px;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+.kit-container {
+  background-color: #f0f0f0; /* Color de fondo */
+  padding: 15px;
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  width: calc(30% - 20px); /* Ancho del 30% con espacio entre recuadros */
+  margin-bottom: 20px; /* Espacio entre recuadros */
 }
 
-.action-button:hover {
-  background-color: #e2e2e2;
+.kit-container h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
 }
 
-.action-button:active {
-  background-color: #d1d1d1;
+.kit-container p {
+  margin-bottom: 5px;
 }
 
-.back-button:hover {
-  background-color: #e9651d; /* Oscurecer el botón un poco cuando se pasa el ratón por encima */
+.kit-container-white {
+  background-color: white;
+}
+
+@media (max-width: 1024px) {
+  .kit-container {
+    width: calc(33.33% - 20px); /* Ancho del 33.33% en pantallas medianas */
+  }
+}
+
+@media (max-width: 768px) {
+  .kit-container {
+    width: calc(50% - 20px); /* Ancho del 50% en pantallas más pequeñas */
+  }
 }
