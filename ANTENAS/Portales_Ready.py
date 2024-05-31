@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS Datos (ID INT,
   Tag VARCHAR(25) NOT NULL,
   Nombre TEXT NOT NULL,
   Cantidad INT NOT NULL, 
+  Bahia INT NOT NULL,
   Hora_entrada_lab TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida_lab TIMESTAMP DEFAULT NULL,
   INV ENUM('SI', 'NO') NOT NULL DEFAULT 'NO', -- Nueva columna 'inv' con valores 'si' o 'no'
