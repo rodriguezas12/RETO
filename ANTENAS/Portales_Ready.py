@@ -63,6 +63,7 @@ cursor = conexion.cursor()
 sql_create_table_datos = """
 CREATE TABLE IF NOT EXISTS Datos (ID INT, 
   Tag VARCHAR(25) NOT NULL,
+  Bahia INT NOT NULL,
   Nombre TEXT NOT NULL,
   Cantidad INT NOT NULL, 
   Hora_entrada_lab TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
