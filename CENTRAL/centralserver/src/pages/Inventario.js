@@ -65,6 +65,7 @@ function Inventario() {
                 <td>{item.Tag}</td>
                 <td>{item.Nombre}</td>
                 <td>{item.Cantidad}</td>
+                <td>{item.Bahia}</td>
                 <td>{item.Hora_entrada_lab}</td>
                 <td>{item.Hora_salida_lab}</td>
                 <td>{item.INV}</td>
