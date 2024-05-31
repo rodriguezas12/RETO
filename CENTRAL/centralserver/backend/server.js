@@ -120,7 +120,7 @@ app.post("/solicitar", (req, res) => {
   // Crear la tabla Solicitud si no existe
   const createTableQuery = `
     CREATE TABLE IF NOT EXISTS Solicitud (
-      Pedido VARCHAR(45)
+      Pedido VARCHAR(1000)
     );
   `;
 

@@ -59,15 +59,21 @@ export default function Picking() {
   };
 
   const enviarPedido = () => {
-    const pedido = Object.keys(carrito)
-      .map((kit) => `${kit}`)
-      .join(", ");
+    const pedido = Object.keys(carrito).reduce((acc, kitName) => {
+      const kitNumber = parseInt(kitName.replace("Kit ", ""));
+      const count = carrito[kitName];
+      for (let i = 0; i < count; i++) {
+        acc.push(kitNumber);
+      }
+      return acc;
+    }, []);
+    
     fetch("http://localhost:5000/solicitar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ nuevoPedido: pedido }),
+      body: JSON.stringify({ nuevoPedido: pedido.join(",") }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -103,7 +109,7 @@ export default function Picking() {
             }`}
           >
             <h3>{kit.Kits}</h3>
-            <p>{`Este kit contiene las siguientes piezas: ${kit.Contenido}`}</p>
+            <p>{`Contenido: ${kit.Contenido}`}</p>
             <p>{`Disponibles: ${disponibles[kit.Kits] || 0}`}</p>
             <div>
               <button onClick={() => addToCart(kit.Kits)}>+</button>
