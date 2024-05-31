@@ -23,7 +23,7 @@ function Contenido() {
         };
 
         fetchData();
-        const intervalId = setInterval(fetchData, 500000);
+        const intervalId = setInterval(fetchData, 1000);
 
         return () => clearInterval(intervalId);
     }, []);
@@ -73,7 +73,7 @@ function Contenido() {
 
     const handleAddRow = () => {
         const newKitNumber = data.length + 1;
-        const newRow = { Kits: `Kit${newKitNumber}`, Contenido: '' };
+        const newRow = { Kits: `Kit  ${newKitNumber}`, Contenido: '' };
         setData([...data, newRow]);
 
         fetch("http://localhost:5000/contenido", {
