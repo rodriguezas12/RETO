@@ -65,7 +65,6 @@ CREATE TABLE IF NOT EXISTS Datos (ID INT,
   Tag VARCHAR(25) NOT NULL,
   Nombre TEXT NOT NULL,
   Cantidad INT NOT NULL, 
-  Bahia INT NOT NULL,
   Hora_entrada_lab TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida_lab TIMESTAMP DEFAULT NULL,
   INV ENUM('SI', 'NO') NOT NULL DEFAULT 'NO', -- Nueva columna 'inv' con valores 'si' o 'no'
@@ -176,7 +175,7 @@ while True:
         # Obtener el ID correspondiente al kit
         id_kit = (list(nombres_tags.keys())).index(tag_id_IN) % 5 + 1
         # Insertar la tag como nueva entrada si no existe previamente en la base de datos
-        cursor.execute("INSERT INTO Datos (Tag, Nombre, Cantidad, Hora_entrada_lab) VALUES (%s, %s, %s, 1, %s)", (id_kit, tag_id_IN, nombre_IN, hora_actual))
+        cursor.execute("INSERT INTO Datos (ID, Tag, Nombre, Cantidad, Hora_entrada_lab) VALUES (%s, %s, %s, 1, %s)", (id_kit, tag_id_IN, nombre_IN, hora_actual))
         print(f"Nueva tag '{tag_id_IN}' registrada en entrada.")
     
     conexion.commit()
@@ -335,4 +334,3 @@ while True:
         print("INV actualizado a 'NO' para registros con salida de bodega.")
     else:
         print("No hay registros para actualizar a 'NO'.")
-
