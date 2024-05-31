@@ -6,6 +6,31 @@ import kit3 from "../Media/kit 3.png";
 import kit4 from "../Media/kit 4.png";
 import kit5 from "../Media/kit 5.png";
 import kit6 from "../Media/kit 6.png";
+import kit7 from "../Media/kit 6.png";
+import kit8 from "../Media/kit 6.png";
+import kit9 from "../Media/kit 6.png";
+import kit10 from "../Media/kit 6.png";
+import kit11 from "../Media/kit 6.png";
+import kit12 from "../Media/kit 6.png";
+import kit13 from "../Media/kit 6.png";
+import kit14 from "../Media/kit 6.png";
+import kit15 from "../Media/kit 6.png";
+import kit16 from "../Media/kit 6.png";
+import kit17 from "../Media/kit 6.png";
+import kit18 from "../Media/kit 6.png";
+import kit19 from "../Media/kit 6.png";
+import kit20 from "../Media/kit 6.png";
+import kit21 from "../Media/kit 6.png";
+import kit22 from "../Media/kit 6.png";
+import kit23 from "../Media/kit 6.png";
+import kit24 from "../Media/kit 6.png";
+import kit25 from "../Media/kit 6.png";
+import kit26 from "../Media/kit 6.png";
+import kit27 from "../Media/kit 6.png";
+import kit28 from "../Media/kit 6.png";
+import kit29 from "../Media/kit 6.png";
+import kit30 from "../Media/kit 6.png";
+// Import all kit images as needed
 import Header from "../components/header";
 import "./Solicitud.css";
 
@@ -14,18 +39,34 @@ export default function Picking() {
   const [kitCounts, setKitCounts] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:5000/inventario_rack")
-      .then((response) => response.json())
-      .then((data) => {
-        const counts = {};
-        data.forEach((item) => {
-          counts[item.Nombre] = item.Cantidad;
-        });
-        setKitCounts(counts);
-      })
-      .catch((error) =>
-        console.error("Error al cargar los datos del inventario:", error)
-      );
+    const fetchData = () => {
+      fetch("http://localhost:5000/inventario_rack")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("No se pudo obtener la respuesta del servidor");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const counts = {};
+          data.forEach((item) => {
+            counts[item.Nombre] = item.Cantidad;
+          });
+          setKitCounts(counts);
+        })
+        .catch((error) =>
+          console.error("Error al cargar los datos del inventario:", error)
+        );
+    };
+
+    // Realizar la primera llamada para obtener los datos iniciales
+    fetchData();
+
+    // Establecer un intervalo para realizar la consulta cada segundo
+    const intervalId = setInterval(fetchData, 1000);
+
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(intervalId);
   }, []);
 
   const añadirKit = (kitNumero) => {
@@ -42,13 +83,11 @@ export default function Picking() {
         // Si hay disponibles, actualizar el pedido
         setPedido((prevPedido) => {
           const nuevoPedido = [...prevPedido, kitNumero];
-          //alert(`Kit ${kitNumero} añadido al carrito.\nPedido actual: ${nuevoPedido.join(", ")}`);
           return nuevoPedido;
         });
 
         return newCounts;
       } else {
-        //alert(`No hay suficientes kits disponibles de Kit ${kitNumero}.`);
         return prevCounts; // Retornar los contadores antiguos si no hay disponibles
       }
     });
@@ -65,7 +104,6 @@ export default function Picking() {
         ...prevCounts,
         [nombreKit]: prevCounts[nombreKit] + 1,
       }));
-      //alert(`Kit ${kitNumero} eliminado del carrito.\nPedido actual: ${nuevoPedido.join(", ")}`);
     }
   };
 
@@ -79,7 +117,6 @@ export default function Picking() {
         });
         setKitCounts(counts);
         setPedido([]);
-        alert("Carrito limpiado");
       })
       .catch((error) =>
         console.error("Error al cargar los datos del inventario:", error)
@@ -120,6 +157,19 @@ export default function Picking() {
       });
   };
 
+  const kitDescriptions = [
+    "Este kit contiene: pieza 1x2, pieza 2x2.", "Este kit contiene: pieza", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", 
+    "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", 
+    "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas",
+     "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas", "Este kit contiene: tornillos, puertas y ventanas"
+    
+  ]; // Descripciones de todos los kits
+
+  const kitImages = [
+    kit1, kit2, kit3, kit4, kit5, kit6, kit7, kit8, kit9, kit10, kit11, kit12, kit13, kit14, kit15, kit16, kit17, kit18, kit19, kit20, kit21, kit22, kit23, kit24, kit25, kit26, kit27, kit28, kit29, kit30
+    // Imágenes de los kits
+  ];
+
   return (
     <div style={{ overflowY: "auto" }}>
       <Helmet>
@@ -132,11 +182,12 @@ export default function Picking() {
       </Helmet>
       <Header titulo="SOLICITUD DE MATERIALES" />
       <div className="container-items">
-        {[kit1, kit2, kit3, kit4, kit5, kit6].map((image, index) => (
+        {kitImages.map((image, index) => (
           <div key={index} className="Kit">
             <div className="info-product">
               <div className="info-text">
                 <h2>Kit {index + 1}</h2>
+                <p>{kitDescriptions[index]}</p>
                 <p>Disponibles: {kitCounts[`Kit ${index + 1}`] || 0}</p>
               </div>
               <div className="button-container">

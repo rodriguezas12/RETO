@@ -1,99 +1,275 @@
+/* Estilos regulares */
+/* Estilos básicos para el Header */
+
+
 .container-conteo {
-  margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */
-  width: 90vw; /* Anchura del contenedor al 100% de la pantalla */
-  background-color: #fefaf6; /* Color marrón con transparencia */
-  border-radius: 30px; /* Bordes redondos de 10px */
-  padding: 10px; /* Espaciado interno del contenedor */
+  margin: 20px auto;
+  width: 90vw;
+  background-color: #fefaf6;
+  border-radius: 30px;
+  padding: 10px;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  flex-wrap: wrap;
 }
+
+.titulo-evento {
+  text-align: center;
+}
+
 
 .contenedor-label1 {
   display: flex;
   align-items: center;
   margin: 5px;
+  font-family: "Nunito", sans-serif;
+  /* Fuente Nunito */
+  font-size: min(1.5vw, 24px);
+  font-weight: bold;
   padding: 10px;
-  background-color: #ecd4b6; /* Color azul acero */
-  border-radius: 30px; /* Bordes redondos de 30px */
-  color: #fff; /* Color del texto blanco */
+  background-color: #ecd4b6;
+  /* Color azul acero */
+  border-radius: 30px;
+  /* Bordes redondos de 30px */
+  color: #fff;
+  /* Color del texto blanco */
 }
 
 .elemento-label,
 .elemento-valor {
-  font-family: "Nunito", sans-serif; /* Fuente Nunito */
+  font-family: "Nunito", sans-serif;
   font-size: min(1.5vw, 24px);
   font-weight: bold;
-  color: #292929; /* Color del texto */
+  color: #292929;
   margin-right: 10px;
 }
+
 .bottom-estado {
   font-family: "Nunito", sans-serif;
   font-size: min(1.1vw, 24px);
   font-weight: bold;
   color: #292929;
-  border: none; /* Quita el borde */
-  background-color: #be7530; /* Color de fondo */
-  padding: 8px 16px; /* Espaciado interno */
-  border-radius: 20px; /* Bordes redondeados */
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* Sombra */
-  transition: box-shadow 0.3s ease; /* Transición suave */
+  border: none;
+  background-color: #be7530;
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s ease;
 }
 
-/* Efecto hover */
 .bottom-estado:hover {
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Cambia la sombra al pasar el cursor */
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .subtitle {
-  font-family: "Nunito", sans-serif; /* Fuente Nunito */
+  font-family: "Nunito", sans-serif;
   font-size: min(3.5vw, 40px);
   font-weight: bold;
-  color: #292929; /* Color del texto */
+  color: #292929;
   margin-right: 10px;
   font-weight: 900;
-  display: inline-block; /* Alinear el texto en línea */
-  margin: 0 auto; /* Centrar texto horizontalmente */
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.container-titulo {
+  margin: 2px auto;
+  /* Margen superior e inferior de 20px y centrado horizontal */
+  width: 90vw;
+  /* Anchura del contenedor */
+  height: 40px;
+  font-family: "Nunito", sans-serif;
+  /* Fuente Nunito */
+  background-color: #ffffff;
+  font-size: min(1.5vw, 24px);
+  font-weight: bold;
+  border-radius: 20px;
+  /* Bordes redondos de 10px */
+
+  text-align: center;
+  /* Centrar texto horizontalmente */
 }
 
 .elemento-valor {
   border-radius: 10px;
   background-color: #be7530;
   font-weight: 800;
-  color: #292929; /* Color del texto */
+  color: #292929;
   padding: 8px;
 }
 
 .container-estado {
-  margin: 20px auto; /* Margen superior e inferior de 20px y centrado horizontal */
-  width: 90vw; /* Anchura del contenedor */
-  background-color: #FEFAF6; /* Color marrón con transparencia */
-  border-radius: 10px; /* Bordes redondos de 10px */
-  padding: 10px; /* Espaciado interno del contenedor */
-  text-align: center; /* Centrar texto horizontalmente */
+  margin: 20px auto;
+  width: 90vw;
+  background-color: #fefaf6;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
 }
 
 table {
-  width: 80vw; /* Ancho completo de la tabla */
+  width: 80vw;
   height: 80%;
-  border-collapse: separate; /* Separar los bordes de las celdas */
-  border-spacing: 2px; /* Espacio de 2px entre las columnas */
-  border-radius: 10px; /* Bordes redondos para toda la tabla */
-  overflow: hidden; /* Ocultar el contenido que se desborda de la tabla */
+  border-collapse: separate;
+  border-spacing: 2px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 thead {
-  background-color: #be7530; /* Color de fondo del encabezado */
-  color: #fff; /* Color del texto blanco */
+  background-color: #be7530;
+  color: #fff;
 }
 
-td.estado, th.estado {
+td.estado,
+th.estado {
   border: 1px;
-  padding: 8px; /* Espaciado interno de celdas */
-  font-family: "Nunito", sans-serif; /* Fuente Nunito */
+  padding: 8px;
+  font-family: "Nunito", sans-serif;
   text-align: center;
 }
 
 th.estado {
-  font-weight: bold; /* Fuente en negrita para los encabezados */
+  font-weight: bold;
+}
+
+/* media ajuste en los dispositivos*/
+@media only screen and (max-width: 600px) {
+  .header-text {
+    font-size: 1vh;
+    max-Width: "60%";
+  }
+
+  .back-button {
+    font-size: 2vh;
+  }
+
+
+  .container-conteo {
+    flex-direction: column;
+    width: 100%;
+    padding: 5px;
+  }
+
+  .contenedor-label1 {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .elemento-label,
+  .elemento-valor {
+    font-size: 10px;
+    margin-right: 0;
+  }
+
+  .bottom-estado {
+    font-size: 18px;
+    padding: 5px 10px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+  }
+
+  table {
+    width: 100%;
+    font-size: 12px;
+  }
+
+  th.estado,
+  td.estado {
+    padding: 5px;
+  }
+}
+
+
+@media only screen and (max-width: 768px) {
+  .header-text {
+    font-size: 1vh;
+  }
+
+  .back-button {
+    font-size: 1vh;
+  }
+
+  .container-conteo {
+    flex-direction: column;
+    width: 95%;
+    padding: 8px;
+  }
+
+  .contenedor-label1 {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .elemento-label,
+  .elemento-valor {
+    font-size: 18px;
+    margin-right: 0;
+  }
+
+  .bottom-estado {
+    font-size: 20px;
+    padding: 6px 12px;
+  }
+
+  .subtitle {
+    font-size: 28px;
+  }
+
+  table {
+    width: 95%;
+    font-size: 14px;
+  }
+
+  th.estado,
+  td.estado {
+    padding: 6px;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .header-text {
+    font-size: 3vh;
+  }
+
+  .back-button {
+    font-size: 4vh;
+  }
+
+  .container-conteo {
+    flex-direction: row;
+    width: 90%;
+    padding: 10px;
+  }
+
+  .contenedor-label1 {
+    width: auto;
+  }
+
+  .elemento-label,
+  .elemento-valor {
+    font-size: 20px;
+  }
+
+  .bottom-estado {
+    font-size: 22px;
+    padding: 7px 14px;
+  }
+
+  .subtitle {
+    font-size: 32px;
+  }
+
+  table {
+    width: 90%;
+    font-size: 16px;
+  }
+
+  th.estado,
+  td.estado {
+    padding: 7px;
+  }
 }

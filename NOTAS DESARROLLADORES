@@ -10,7 +10,7 @@ ANTES DE INICIAR A TRABAJAR REALIZAR ESTE COMANDO(Actualiza a la version mas act
 
 PASOS PARA CORRER EL CODIGO:
     Primera vez: 
-        cd CENTRAL/centralserver && npm i react-scripts
+        cd CENTRAL/centralserver && npm i react-scripts 
         cd CENTRAL/centralserver && npm start
 
     De manera normal:

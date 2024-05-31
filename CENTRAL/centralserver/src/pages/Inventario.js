@@ -5,18 +5,37 @@ import "./Inventario.css";
 
 function Inventario() {
   const [data, setData] = useState([]);
+
   useEffect(() => {
-    fetch("http://localhost:5000/michi")
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((error) => console.error("Error:", error));
+    const fetchData = () => {
+      fetch("http://localhost:5000/michi")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("No se pudo obtener la respuesta del servidor");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setData(data);
+        })
+        .catch((error) => console.error("Error:", error));
+    };
+
+    // Realizar la primera llamada para obtener los datos iniciales
+    fetchData();
+
+    // Establecer un intervalo para realizar la consulta cada segundo
+    const intervalId = setInterval(fetchData, 1000);
+
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
     <div>
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
         <link
           href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
           rel="stylesheet"
@@ -29,10 +48,8 @@ function Inventario() {
             <tr>
               <th>ID</th>
               <th>Nombre</th>
-              <th>Bahia</th>
               <th>Hora de entrada al laboratorio</th>
               <th>Hora de entrada a bodega</th>
-              <th>Hora de salida de bodega</th>
             </tr>
           </thead>
           <tbody>
@@ -40,10 +57,8 @@ function Inventario() {
               <tr key={index}>
                 <td>{item.ID}</td>
                 <td>{item.Nombre}</td>
-                <td>{item.Bahia}</td>
                 <td>{item.Hora_entrada_lab}</td>
                 <td>{item.Hora_entrada_bodega}</td>
-                <td>{item.Hora_salida_bodega}</td>
               </tr>
             ))}
           </tbody>

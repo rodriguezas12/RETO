@@ -147,7 +147,7 @@ conexion.commit()
 
 # Conectar al lector RFID de la estación 1 a la 3
 reader_1 = R420('192.168.0.20')
-reader_2 = R420('192.168.0.13')
+reader_2 = R420('192.168.0.21')
 
 antena_1 = []
 
@@ -263,7 +263,7 @@ while True:
             # Asignación de nombre
             nombre_tag_3 = nombres_tags.get(tags3, "No registrado")
             
-            # Verificar si el tag ya está presente en la tabla de la Estación 1
+            # Verificar si el tag ya está presente en la tabla de la Estación 3
             cursor.execute("SELECT Tag FROM Estación_3 WHERE Tag = %s", (tags3,))
             resultado = cursor.fetchone()
             
