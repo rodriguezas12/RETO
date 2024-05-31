@@ -50,6 +50,7 @@ function Inventario() {
               <th>Tag</th>
               <th>Nombre</th>
               <th>Cantidad</th>
+              <th>Bahia</th>
               <th>Hora de entrada al laboratorio</th>
               <th>Hora de salida del laboratorio</th>
               <th>inventario</th>
