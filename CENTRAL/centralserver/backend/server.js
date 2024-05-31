@@ -16,6 +16,8 @@ const db = mysql.createConnection({
   database: "RETORFID",
 });
 
+
+
 db.connect((err) => {
   if (err) {
     console.error("Error de conexión a la base de datos:", err);
@@ -231,7 +233,17 @@ app.get("/inventario_rack", (req, res) => {
 
 // inventario llamado de tabla a sql
 app.get('/michi', (req, res) => {
-  db.query('SELECT ID, Nombre, DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab,  DATE_FORMAT(Hora_entrada_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_bodega, DATE_FORMAT(Hora_salida_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_salida_bodega FROM RETORFID.Datos WHERE INV = "si"', (err, results) => {
+  db.query(`SELECT 
+              ID,
+              Tag,
+              Nombre,
+              Cantidad,
+              DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab,
+              DATE_FORMAT(Hora_salida_lab, "%Y-%m-%d %H:%i:%s") AS Hora_salida_lab,
+              INV,
+              DATE_FORMAT(Hora_entrada_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_bodega,
+              DATE_FORMAT(Hora_salida_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_salida_bodega 
+            FROM RETORFID.Datos`, (err, results) => {
     if (err) {
       console.error("Error al obtener los datos:", err);
       res.status(500).send("Error en el servidor");
@@ -442,6 +454,67 @@ app.post("/idkit/:tag", (req, res) => {
 });
 
 
+// ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+// crear tabla de contenido
+
+// Crear la tabla 'Contenido' si no existe
+const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS Contenido (
+      Kits VARCHAR(45),
+      Contenido VARCHAR(255)
+    );
+  `;
+
+db.query(createTableQuery, (err, result) => {
+  if (err) {
+    console.error('Error al crear la tabla Contenido:', err);
+    return;
+  }
+  console.log('Tabla Contenido creada o ya existe');
+});
+
+
+// Aqui se solicita la tabla Contenido para la pagina contenido
+
+app.post('/contenido/:kits', (req, res) => {
+  const { kits } = req.params;
+  const { Contenido } = req.body;
+
+  const query = 'UPDATE RETORFID.Contenido SET Contenido = ? WHERE Kits = ?';
+  db.query(query, [Contenido, kits], (err, result) => {
+    if (err) {
+      console.error('Error al actualizar los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    res.send({ Kits: kits, Contenido });
+  });
+});
+
+app.post('/contenido', (req, res) => {
+  const { Kits, Contenido } = req.body;
+
+  const query = 'INSERT INTO RETORFID.Contenido (Kits, Contenido) VALUES (?, ?)';
+  db.query(query, [Kits, Contenido], (err, result) => {
+    if (err) {
+      console.error('Error al insertar los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    res.send({ Kits, Contenido });
+  });
+});
+
+app.get('/contenido', (req, res) => {
+  db.query('SELECT Kits, Contenido FROM RETORFID.Contenido', (err, results) => {
+    if (err) {
+      console.error('Error al obtener los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    res.json(results);
+  });
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

@@ -10,6 +10,7 @@ import Nopage from "./pages/Nopage";
 import Register from "./pages/Register";
 import Solicitud from "./pages/Solicitud";
 import Asignacion from "./pages/Asignacion";
+import Contenido from "./pages/Contenido";
 
 function PrivateRoute({ element, isAuthenticated }) {
   return isAuthenticated ? element : <Navigate to="/" replace />;
@@ -58,6 +59,15 @@ function App() {
           element={
             <PrivateRoute
               element={<IngresoMaterial />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
+          path="/contenido"
+          element={
+            <PrivateRoute
+              element={<Contenido />}
               isAuthenticated={isAuthenticated}
             />
           }

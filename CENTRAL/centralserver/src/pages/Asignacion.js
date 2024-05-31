@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import "./Asignacion.css";
-import Header from "../components/header";
+import Header from '../components/header';
 import axios from "axios";
 
 const Asignacion = () => {
@@ -107,7 +107,7 @@ const Asignacion = () => {
         />
       </Helmet>
       <Header titulo="Asignación Kits" />
-      
+
       <div className="contenedor">
         {/* Sección para TAG LEIDO */}
         <div className="column">
