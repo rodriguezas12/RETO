@@ -1,58 +1,47 @@
+/* Estilo del contenedor de inventario */
 .container-ingreso {
+  margin: 20px auto;
   width: 90%;
-  margin: 5% auto;
-  text-align: center;
-  background-color: white;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  /* Fija el ancho de las columnas */
-}
-
-th,
-td {
-  border: 1px solid #ddd;
+  background-color: transparent;
+  border-radius: 10px;
   padding: 10px;
-  text-align: center;
+  overflow: auto;
+  /* Añadir scroll si es necesario */
+  font-family: 'Nunito', sans-serif;
 }
 
-th {
-  background-color: #f2f2f2;
-  /* Color de fondo para las cabeceras */
+/* Estilo de la cabecera */
+.header {
+  display: flex;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
 }
 
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-  /* Color de fondo para filas pares */
+/* Estilo de los items de la cabecera */
+.header-item {
+  flex: 1;
+  padding: 10px;
 }
 
-@media only screen and (max-width: 600px) {
-  .container-ingreso {
-    width: 95%;
-    margin: 10% auto;
-  }
+/* Estilo de las filas */
+.row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
 }
 
-@media only screen and (min-width: 601px) and (max-width: 780px) {
-  .container-ingreso {
-    width: 80%;
-    margin: 7% auto;
-  }
+/* Estilo de las celdas */
+.cell {
+  flex: 1;
+  padding: 10px;
 }
 
-@media only screen and (min-width: 781px) and (max-width: 1024px) {
-  .container-ingreso {
-    width: 70%;
-    margin: 5% auto;
-  }
-}
-
-@media only screen and (min-width: 1025px) {
-  .container-ingreso {
-    width: 60%;
-    margin: 3% auto;
-  }
+/* Estilo del input */
+.cell input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }

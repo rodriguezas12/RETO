@@ -378,7 +378,7 @@ app.post("/nombrekit/:tag", (req, res) => {
       }
       console.log(`Nombre de kit actualizado para el tag ${tag} en Estación_1`);
       // Update Datos
-  db.query(
+      db.query(
         "UPDATE Datos SET Nombre = ? WHERE Tag = ?",
         [nombreKit, tag],
         (err, results) => {
@@ -556,8 +556,36 @@ app.get("/disponibilidad-kits", (req, res) => {
     res.json(disponibles);
   });
 });
+// Desde aqui se implementa ingreso de material
+app.post('/Bahia/:ID', (req, res) => {
+  const { ID } = req.params; // Obtén el ID de los parámetros de la URL
+  const { Bahia } = req.body; // Obtén el valor de Bahia del cuerpo de la solicitud
 
+  // Define la consulta SQL para actualizar la columna Bahia en la tabla Datos
+  const query = 'UPDATE RETORFID.Datos SET Bahia = ? ';
 
+  // Ejecuta la consulta SQL
+  db.query(query, [Bahia, ID], (err, result) => {
+    if (err) {
+      // Maneja los errores
+      console.error('Error al actualizar los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    // Envía una respuesta de éxito
+    res.send({ ID, Bahia });
+  });
+});
+app.get('/IDingreso', (req, res) => {
+  db.query('SELECT ID  FROM RETORFID.Estación_1', (err, results) => {
+    if (err) {
+      console.error('Error al obtener los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    res.json(results);
+  });
+});
 
 
 const PORT = process.env.PORT || 5000;

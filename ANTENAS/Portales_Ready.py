@@ -2,6 +2,7 @@ import mysql.connector
 from reader import R420
 import time
 import datetime
+import re
 
 # Diccionario para almacenar la última detección de cada tag en bodega
 ultima_deteccion_bodega = {}
@@ -36,6 +37,7 @@ nombres_tags = {
     "ad89180010d6fd8e3a00008d": "Kit 4", #ID 3
     "ad89180010d94d8f390000d1": "Kit 4", #ID 4
     "ad89180010dad5893b000000": "Kit 4", #ID 5
+    "ad89180010d6b18a39000084": "Kit 4", #ID 6
     "ad89180010d6dd8a36000089": "Kit 5", #ID 1
     "ad89180010d6e58c3600008a": "Kit 5", #ID 2
     "ad89180010d6f58f3600008b": "Kit 5", #ID 3
@@ -70,7 +72,6 @@ CREATE TABLE IF NOT EXISTS Datos (ID INT,
   Hora_salida_lab TIMESTAMP DEFAULT NULL,
   INV ENUM('SI', 'NO') NOT NULL DEFAULT 'NO', -- Nueva columna 'inv' con valores 'si' o 'no'
   PRIMARY KEY (Tag)
-  
 ) COMMENT 'Base de datos de los tags'
 """
 
@@ -83,11 +84,32 @@ CREATE TABLE IF NOT EXISTS Contabilidad_Kits (
 ) COMMENT 'Contabilidad de los kits'
 """
 
-# Ejecutar la consulta SQL para crear la tabla de datos
-cursor.execute(sql_create_table_datos)
+sql_create_table_dropeo = """
+CREATE TABLE IF NOT EXISTS dropeo (
+  dropp VARCHAR(100) NOT NULL,
+  PRIMARY KEY (dropp)
+) COMMENT 'tabla de dropeo';
+"""
 
-# Ejecutar la consulta SQL para crear la tabla de contabilidad de kits
+sql_insert_first_row_if_empty = """
+INSERT INTO dropeo (dropp)
+SELECT '0'
+WHERE NOT EXISTS (SELECT 1 FROM dropeo);
+"""
+
+cursor.execute(sql_create_table_dropeo)
+conexion.commit()
+
+cursor.execute(sql_insert_first_row_if_empty)
+conexion.commit()
+
+cursor.execute(sql_create_table_datos)
+conexion.commit()
+
 cursor.execute(sql_create_table_contabilidad_kits)
+conexion.commit()
+
+
 
 # Verificar si la tabla de contabilidad está vacía
 cursor.execute("SELECT COUNT(*) FROM Contabilidad_Kits")
@@ -145,11 +167,19 @@ reader_RACK = R420('192.168.0.20')
 def obtener_hora_actual():
     return time.strftime('%Y-%m-%d %H:%M:%S')
 
+def extract_number_from_string(drop_kit):
+
+    match = re.search(r'\d+', str(drop_kit))
+    if match:
+        return match.group(0)
+    else:
+        return None
+
 durationn=0.5
 
 while True:
     # Detectar tags con el lector RFID de entrada
-    tags_IN = reader_IN.detectTags(powerDBm=reader_IN.power_table[35], freqMHz=reader_IN.freq_table[0], mode=1001, session=2, population=1, duration=durationn, searchmode=2)
+    tags_IN = reader_IN.detectTags(powerDBm=reader_IN.power_table[50], freqMHz=reader_IN.freq_table[1], mode=1001, session=2, population=1, duration=durationn, searchmode=2)
     for tag_IN in tags_IN:
      tag_id_IN = tag_IN['EPC-96'].decode('utf-8')
      nombre_IN = nombres_tags.get(tag_id_IN, "No registrado")
@@ -176,7 +206,7 @@ while True:
         # Obtener el ID correspondiente al kit
         id_kit = (list(nombres_tags.keys())).index(tag_id_IN) % 5 + 1
         # Insertar la tag como nueva entrada si no existe previamente en la base de datos
-        cursor.execute("INSERT INTO Datos (Tag, Nombre, Cantidad, Hora_entrada_lab) VALUES (%s, %s, %s, 1, %s)", (id_kit, tag_id_IN, nombre_IN, hora_actual))
+        cursor.execute("INSERT INTO Datos (ID, Tag, Nombre, Cantidad, Hora_entrada_lab) VALUES (%s, %s, %s, 1, %s)", (id_kit, tag_id_IN, nombre_IN, hora_actual))
         print(f"Nueva tag '{tag_id_IN}' registrada en entrada.")
     
     conexion.commit()
@@ -250,78 +280,144 @@ while True:
 
      
         
-    #################
-    cursor.execute("""
-    SELECT COUNT(*) FROM Datos
-    WHERE Nombre = 'Kit 1' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
-    """)
-    cantidad_kit1_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 1' disponible en bodega: {cantidad_kit1_disponible}")
-    #####################
-    cursor.execute("""
-    SELECT COUNT(*) FROM Datos
-    WHERE Nombre = 'Kit 2' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
-    """)
-    cantidad_kit2_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 2' disponible en bodega: {cantidad_kit2_disponible}")
-   ############
-    cursor.execute("""
-    SELECT COUNT(*) FROM Datos
-    WHERE Nombre = 'Kit 3' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
-    """)
-    cantidad_kit3_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 3' disponible en bodega: {cantidad_kit3_disponible}")
-    #################
-    cursor.execute("""
-    SELECT COUNT(*) FROM Datos
-    WHERE Nombre = 'Kit 4' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
-    """)
-    cantidad_kit4_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 4' disponible en bodega: {cantidad_kit4_disponible}")
-       ############
-    cursor.execute("""
-    SELECT COUNT(*) FROM Datos
-    WHERE Nombre = 'Kit 5' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
-    """)
-    cantidad_kit5_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 5' disponible en bodega: {cantidad_kit5_disponible}")
-    #################
-    cursor.execute("""
-    SELECT COUNT(*) FROM Datos
-    WHERE Nombre = 'Kit 6' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
-    """)
-    cantidad_kit6_disponible = cursor.fetchone()[0]
-    print(f"Cantidad de 'Kit 6' disponible en bodega: {cantidad_kit6_disponible}")
+#     #################
+#     cursor.execute("""
+#     SELECT COUNT(*) FROM Datos
+#     WHERE Nombre = 'Kit 1' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+#     """)
+#     cantidad_kit1_disponible = cursor.fetchone()[0]
+#     print(f"Cantidad de 'Kit 1' disponible en bodega: {cantidad_kit1_disponible}")
+#     #####################
+#     cursor.execute("""
+#     SELECT COUNT(*) FROM Datos
+#     WHERE Nombre = 'Kit 2' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+#     """)
+#     cantidad_kit2_disponible = cursor.fetchone()[0]
+#     print(f"Cantidad de 'Kit 2' disponible en bodega: {cantidad_kit2_disponible}")
+#    ############
+#     cursor.execute("""
+#     SELECT COUNT(*) FROM Datos
+#     WHERE Nombre = 'Kit 3' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+#     """)
+#     cantidad_kit3_disponible = cursor.fetchone()[0]
+#     print(f"Cantidad de 'Kit 3' disponible en bodega: {cantidad_kit3_disponible}")
+#     #################
+#     cursor.execute("""
+#     SELECT COUNT(*) FROM Datos
+#     WHERE Nombre = 'Kit 4' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+#     """)
+#     cantidad_kit4_disponible = cursor.fetchone()[0]
+#     print(f"Cantidad de 'Kit 4' disponible en bodega: {cantidad_kit4_disponible}")
+#        ############
+#     cursor.execute("""
+#     SELECT COUNT(*) FROM Datos
+#     WHERE Nombre = 'Kit 5' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+#     """)
+#     cantidad_kit5_disponible = cursor.fetchone()[0]
+#     print(f"Cantidad de 'Kit 5' disponible en bodega: {cantidad_kit5_disponible}")
+#     #################
+#     cursor.execute("""
+#     SELECT COUNT(*) FROM Datos
+#     WHERE Nombre = 'Kit 6' AND Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+#     """)
+#     cantidad_kit6_disponible = cursor.fetchone()[0]
+#     print(f"Cantidad de 'Kit 6' disponible en bodega: {cantidad_kit6_disponible}")
 
 
 
     ############
     # Verifica cuántos registros cumplirían con la condición antes de la actualización a 'SI'
+
     cursor.execute("""
-        SELECT COUNT(*) FROM Datos
+        SELECT Nombre FROM Datos
         WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
     """)
-    count = cursor.fetchone()[0]
-    print(f"Registros a actualizar a 'SI': {count}")
+    resultado = cursor.fetchone()
+    cursor.fetchall()
+    print("resultado", resultado)
+    if resultado:
+        
+        nombre_dropp = resultado[0]
+        nombre_dropp = extract_number_from_string(nombre_dropp)
+        cursor.execute("SELECT dropp FROM dropeo")
+        rows = cursor.fetchone()  # Obtener todos los resultados de la consulta
+        drops_registrados = [registro[0] for registro in cursor.fetchall()]
+        #cursor.fetchall()
 
-    # Si count es mayor que 0, realiza la actualización a 'SI'
-    if count > 0:
+        try:
+
+            # Verificar si el valor ya existe en la tabla 'dropeo'
+            cursor.execute("SELECT COUNT(*) FROM dropeo WHERE dropp = %s", (nombre_dropp,))
+            count = cursor.fetchone()
+            if count is not None:
+                count = count[0]
+            else:
+                count = 0
+        
+        except Exception as e:
+            print(f"lol1: {e}")
+
+            
+        print("nombre_dropp= ", nombre_dropp)
+        print("drops_registrados= ", drops_registrados)
+
+        # Evitar resultados no leídos
+        cursor.fetchall()
+
+        if nombre_dropp in drops_registrados:  # Si el valor no existe, insertarlo
+            print(f"El valor '{nombre_dropp}' ya existe en la tabla 'dropeo'. No se ha insertado nuevamente.")
+        else:
+            cursor.execute("INSERT INTO dropeo (dropp) VALUES (%s)", (nombre_dropp,))
+            print("el valor se registro en dropp existosamente")
+            conexion.commit()
+            primer_si_detectado = True
+        
+
+        
+        # Verificar si hay registros para actualizar a 'SI'
         cursor.execute("""
-            UPDATE Datos
-            SET INV = 'SI'
+            SELECT COUNT(*) FROM Datos
             WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
         """)
-        conexion.commit()
-        print("INV actualizado a 'SI' para registros en bodega.")
+
+        count = cursor.fetchone()
+        try:
+            if count is not None:
+                count = count[0]
+            else:
+                count = 0  
+            print(count)
+        
+        except Exception as e:
+            print(f"lol2: {e}")
+
+
+        if count > 0:
+            # Actualizar INV a 'SI' en la tabla 'Datos'
+            cursor.execute("""
+                UPDATE Datos
+                SET INV = 'SI'
+                WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+                """)
+            conexion.commit()
+        
     else:
-        print("No hay registros para actualizar a 'SI'.")
+        print("No hay registros con Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL.")
+
+
 
     # Ahora verifica cuántos registros deberían ser actualizados a 'NO'
     cursor.execute("""
         SELECT COUNT(*) FROM Datos
         WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NOT NULL
     """)
-    count_no = cursor.fetchone()[0]
+    
+    count_no = cursor.fetchone()
+    if count_no is not None:
+        count_no = count_no[0]
+    else:
+        count_no = 0    
+    print(count_no)
     print(f"Registros a actualizar a 'NO': {count_no}")
 
     # Si count_no es mayor que 0, realiza la actualización a 'NO'
@@ -335,4 +431,3 @@ while True:
         print("INV actualizado a 'NO' para registros con salida de bodega.")
     else:
         print("No hay registros para actualizar a 'NO'.")
-
