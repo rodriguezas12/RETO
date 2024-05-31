@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import "./Asignacion.css";
-import Header from "../components/header";
+import Header from '../components/header';
 import axios from "axios";
 
 const Asignacion = () => {
-  const [tags, setTags] = useState([]); // Estado para almacenar los tags
-  const [nombresKits, setNombresKits] = useState({}); // Estado para almacenar los nombres de los kits
+  const [tags, setTags] = useState([]);
+  const [nombresKits, setNombresKits] = useState({});
+  const [idsKits, setIdsKits] = useState({});
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -14,31 +15,57 @@ const Asignacion = () => {
         const response = await axios.get("http://localhost:5000/tag");
 
         if (response.data.length > 0) {
-          setTags(response.data); // Almacenamos todos los tags en el estado
           const initialNombresKits = {};
+          const initialIdsKits = {};
           for (const tag of response.data) {
-            const nombreKitResponse = await axios.get(`http://localhost:5000/nombrekit/${tag}`);
-            initialNombresKits[tag] = nombreKitResponse.data || ""; // Si no hay nombre, se deja vacío
+            initialNombresKits[tag] = await fetchNombreKit(tag); // Obtener nombres de kits
+            initialIdsKits[tag] = await fetchIdKit(tag); // Obtener IDs de kits
           }
-          setNombresKits(initialNombresKits); // Inicializamos los nombres de los kits
+          setTags(response.data);
+          setNombresKits(initialNombresKits);
+          setIdsKits(initialIdsKits);
         } else {
-          setTags(["No hay tags disponibles"]); // En caso de no haber tags disponibles
+          setTags(["No hay tags disponibles"]);
         }
       } catch (error) {
         console.error("Error al obtener los tags:", error);
-        setTags(["Error al obtener los tags"]); // Manejamos errores
+        setTags(["Error al obtener los tags"]);
+      }
+    };
+
+    const fetchNombreKit = async (tag) => {
+      try {
+        const nombreKitResponse = await axios.get(
+          `http://localhost:5000/nombrekit/${tag}`
+        );
+        return nombreKitResponse.data || "";
+      } catch (error) {
+        console.error(`Error al obtener el nombre del kit para el tag ${tag}:`, error);
+        return "";
+      }
+    };
+
+    const fetchIdKit = async (tag) => {
+      try {
+        const idKitResponse = await axios.get(
+          `http://localhost:5000/idkit/${tag}`
+        );
+        return idKitResponse.data || "";
+      } catch (error) {
+        console.error(`Error al obtener el ID del kit para el tag ${tag}:`, error);
+        return "";
       }
     };
 
     fetchTags();
 
-    const interval = setInterval(fetchTags, 20000); // Actualizamos cada 5 segundos
+    const interval = setInterval(fetchTags, 20000);
 
-    return () => clearInterval(interval); // Limpiamos el intervalo al desmontar el componente
-  }, []); // La dependencia vacía asegura que este efecto se ejecute solo una vez al cargar el componente
+    return () => clearInterval(interval);
+  }, []);
 
   const handleNombreKitChange = (event, tag) => {
-    setNombresKits({ ...nombresKits, [tag]: event.target.value }); // Actualizamos el estado del nombre del kit
+    setNombresKits({ ...nombresKits, [tag]: event.target.value });
   };
 
   const handleGuardarNombreKit = async (tag) => {
@@ -47,8 +74,25 @@ const Asignacion = () => {
         nombreKit: nombresKits[tag],
       });
       console.log(`Nombre de kit para el tag ${tag} guardado correctamente`);
+      setNombresKits({ ...nombresKits, [tag]: nombresKits[tag] });
     } catch (error) {
       console.error(`Error al guardar el nombre del kit para el tag ${tag}:`, error);
+    }
+  };
+
+  const handleIdKitChange = (event, tag) => {
+    setIdsKits({ ...idsKits, [tag]: event.target.value });
+  };
+
+  const handleGuardarIdKit = async (tag) => {
+    try {
+      await axios.post(`http://localhost:5000/idkit/${tag}`, {
+        idKit: idsKits[tag],
+      });
+      console.log(`ID de kit para el tag ${tag} guardado correctamente`);
+      setIdsKits({ ...idsKits, [tag]: idsKits[tag] });
+    } catch (error) {
+      console.error(`Error al guardar el ID del kit para el tag ${tag}:`, error);
     }
   };
 
@@ -63,11 +107,11 @@ const Asignacion = () => {
         />
       </Helmet>
       <Header titulo="Asignación Kits" />
-      
+
       <div className="contenedor">
         {/* Sección para TAG LEIDO */}
         <div className="column">
-          <div style={{ textAlign: "center", marginBottom: "10px" }}>TAGS LEÍDOS</div>
+          <div style={{ textAlign: "center", marginBottom: "10px" }}>KITS LEÍDOS</div>
           {tags.length > 0 ? (
             tags.map((tag, index) => (
               <div key={index}>
@@ -92,6 +136,26 @@ const Asignacion = () => {
                   placeholder="Escribir nombre de kit"
                 />
                 <button onClick={() => handleGuardarNombreKit(tag)}>Guardar</button>
+              </div>
+            ))
+          ) : (
+            <span>{tags[0]}</span>
+          )}
+        </div>
+
+        {/* Sección para ID DEL KIT */}
+        <div className="column">
+          <div style={{ textAlign: "center", marginBottom: "10px" }}>ID DEL KIT</div>
+          {tags.length > 0 ? (
+            tags.map((tag, index) => (
+              <div key={index}>
+                <input
+                  type="text"
+                  value={idsKits[tag]}
+                  onChange={(event) => handleIdKitChange(event, tag)}
+                  placeholder="Escribir ID de kit"
+                />
+                <button onClick={() => handleGuardarIdKit(tag)}>Guardar</button>
               </div>
             ))
           ) : (

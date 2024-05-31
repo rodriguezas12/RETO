@@ -34,6 +34,9 @@ const Home = () => {
           <Link to="/ingresomaterial">
             <button>Ingreso de Material</button>
           </Link>
+          <Link to="/contenido">
+            <button>Asignación de contenido</button>
+          </Link>
           <Link to="/asignacion">
             <button>Asignación de Kits</button>
           </Link>

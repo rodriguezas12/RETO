@@ -16,6 +16,8 @@ const db = mysql.createConnection({
   database: "RETORFID",
 });
 
+
+
 db.connect((err) => {
   if (err) {
     console.error("Error de conexión a la base de datos:", err);
@@ -231,7 +233,17 @@ app.get("/inventario_rack", (req, res) => {
 
 // inventario llamado de tabla a sql
 app.get('/michi', (req, res) => {
-  db.query('SELECT Tag, Cantidad, DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab, DATE_FORMAT(Hora_salida_lab, "%Y-%m-%d %H:%i:%s") AS Hora_salida_lab, DATE_FORMAT(Hora_entrada_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_bodega, DATE_FORMAT(Hora_salida_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_salida_bodega FROM RETORFID.Datos', (err, results) => {
+  db.query(`SELECT 
+              ID,
+              Tag,
+              Nombre,
+              Cantidad,
+              DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab,
+              DATE_FORMAT(Hora_salida_lab, "%Y-%m-%d %H:%i:%s") AS Hora_salida_lab,
+              INV,
+              DATE_FORMAT(Hora_entrada_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_bodega,
+              DATE_FORMAT(Hora_salida_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_salida_bodega 
+            FROM RETORFID.Datos`, (err, results) => {
     if (err) {
       console.error("Error al obtener los datos:", err);
       res.status(500).send("Error en el servidor");
@@ -303,6 +315,7 @@ app.get('/said', (req, res) => {
 });
 
 // ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+// Obtener tags de la estación 1
 app.get("/tag", (req, res) => {
   db.query(
     "SELECT Tag FROM Estación_1",
@@ -322,7 +335,6 @@ app.get("/tag", (req, res) => {
   );
 });
 
-
 // Obtener el nombre del kit de un tag específico
 app.get("/nombrekit/:tag", (req, res) => {
   const { tag } = req.params;
@@ -337,7 +349,7 @@ app.get("/nombrekit/:tag", (req, res) => {
         return;
       }
       if (results.length > 0) {
-        res.json(results[0].nombre); // Devolvemos el nombre del kit si existe
+        res.json(results[0].Kit); // Devolvemos el nombre del kit si existe
       } else {
         res.json(""); // Devolvemos un nombre vacío si no existe
       }
@@ -345,30 +357,164 @@ app.get("/nombrekit/:tag", (req, res) => {
   );
 });
 
+
 // Actualizar el nombre del kit de un tag específico
 app.post("/nombrekit/:tag", (req, res) => {
   const { tag } = req.params;
   const { nombreKit } = req.body;
 
+  // Update Estación_1
   db.query(
-    "UPDATE Datos SET Nombre = ? WHERE Tag = ?",
+    "UPDATE Estación_1 SET Kit = ? WHERE Tag = ?",
     [nombreKit, tag],
     (err, results) => {
       if (err) {
-        console.error("Error al actualizar el nombre del kit:", err);
+        console.error("Error al actualizar el nombre del kit en Estación_1:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
-      console.log(`Nombre de kit actualizado para el tag ${tag}`);
-      res.status(200).send(`Nombre de kit actualizado para el tag ${tag}`);
+      console.log(`Nombre de kit actualizado para el tag ${tag} en Estación_1`);
+      // Update Datos
+  db.query(
+        "UPDATE Datos SET Nombre = ? WHERE Tag = ?",
+        [nombreKit, tag],
+        (err, results) => {
+          if (err) {
+            console.error("Error al actualizar el nombre del kit en Datos:", err);
+            res.status(500).send("Error interno del servidor");
+            return;
+          }
+          console.log(`Nombre de kit actualizado para el tag ${tag} en Datos`);
+          // Send response after both updates are complete
+          res.status(200).send(`Nombre de kit actualizado para el tag ${tag}`);
+        }
+      );
+    }
+  );
+});
+
+
+//////////////////////////////
+// Obtener el ID del kit de un tag específico
+app.get("/idkit/:tag", (req, res) => {
+  const { tag } = req.params;
+
+  db.query(
+    "SELECT ID FROM Datos WHERE Tag = ?",
+    [tag],
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener el ID del kit:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      if (results.length > 0) {
+        res.json(results[0].ID); // Devolvemos el ID del kit si existe
+      } else {
+        res.json(""); // Devolvemos un ID vacío si no existe
+      }
+    }
+  );
+});
+
+// Actualizar el ID del kit de un tag específico
+app.post("/idkit/:tag", (req, res) => {
+  const { tag } = req.params;
+  const { idKit } = req.body;
+
+  // Update Estación_1
+  db.query(
+    "UPDATE Estación_1 SET ID = ? WHERE Tag = ?",
+    [idKit, tag],
+    (err, results) => {
+      if (err) {
+        console.error("Error al actualizar el ID del kit en Estación_1:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      console.log(`ID de kit actualizado para el tag ${tag} en Estación_1`);
+
+      // Update Datos
+      db.query(
+        "UPDATE Datos SET ID = ? WHERE Tag = ?",
+        [idKit, tag],
+        (err, results) => {
+          if (err) {
+            console.error("Error al actualizar el ID del kit en Datos:", err);
+            res.status(500).send("Error interno del servidor");
+            return;
+          }
+          console.log(`ID de kit actualizado para el tag ${tag} en Datos`);
+          // Enviar respuesta después de que ambas actualizaciones estén completas
+          res.status(200).send(`ID de kit actualizado para el tag ${tag}`);
+        }
+      );
     }
   );
 });
 
 
 // ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+// crear tabla de contenido
+
+// Crear la tabla 'Contenido' si no existe
+const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS Contenido (
+      Kits VARCHAR(45),
+      Contenido VARCHAR(255)
+    );
+  `;
+
+db.query(createTableQuery, (err, result) => {
+  if (err) {
+    console.error('Error al crear la tabla Contenido:', err);
+    return;
+  }
+  console.log('Tabla Contenido creada o ya existe');
+});
 
 
+// Aqui se solicita la tabla Contenido para la pagina contenido
+
+app.post('/contenido/:kits', (req, res) => {
+  const { kits } = req.params;
+  const { Contenido } = req.body;
+
+  const query = 'UPDATE RETORFID.Contenido SET Contenido = ? WHERE Kits = ?';
+  db.query(query, [Contenido, kits], (err, result) => {
+    if (err) {
+      console.error('Error al actualizar los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    res.send({ Kits: kits, Contenido });
+  });
+});
+
+app.post('/contenido', (req, res) => {
+  const { Kits, Contenido } = req.body;
+
+  const query = 'INSERT INTO RETORFID.Contenido (Kits, Contenido) VALUES (?, ?)';
+  db.query(query, [Kits, Contenido], (err, result) => {
+    if (err) {
+      console.error('Error al insertar los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    res.send({ Kits, Contenido });
+  });
+});
+
+app.get('/contenido', (req, res) => {
+  db.query('SELECT Kits, Contenido FROM RETORFID.Contenido', (err, results) => {
+    if (err) {
+      console.error('Error al obtener los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    res.json(results);
+  });
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
