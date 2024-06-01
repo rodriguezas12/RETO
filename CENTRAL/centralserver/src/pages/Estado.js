@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import Header from "../components/header";
+import Instructivo from "../Media/Instructivo.pdf"; // Importa el PDF
 import "./Estado.css";
 
 function Estado() {
@@ -128,29 +129,34 @@ function Estado() {
           </select>
         </div>
       </div>
-      <div className="container-conteo">
-        <table className="estado">
-          <thead>
-            <tr>
-              <th className="estado">ID</th>
-              <th className="estado">KIT</th>
-              <th className="estado">Hora de entrada a la estación</th>
-              <th className="estado">Tiempo Transcurrido</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={index}>
-                <td className="estado">{item.ID}</td>
-                <td className="estado">{item.Kit}</td>
-                <td className="estado">{item.fechaIngreso}</td>{" "}
-                {/* Utiliza item.fechaIngreso */}
-                <td className="estado">{item.TiempoTranscurrido}</td>{" "}
-                {/* Verifica que TiempoTranscurrido tenga datos */}
+      <div className="contenido-columnas">
+        <div className="tabla-columna">
+          <table className="estado">
+            <thead>
+              <tr>
+                <th className="estado">ID</th>
+                <th className="estado">KIT</th>
+                <th className="estado">Hora de entrada a la estación</th>
+                <th className="estado">Tiempo Transcurrido</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td className="estado">{item.ID}</td>
+                  <td className="estado">{item.Kit}</td>
+                  <td className="estado">{item.fechaIngreso}</td>
+                  <td className="estado">{item.TiempoTranscurrido}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="pdf-columna">
+          <div className="pdf-container">
+            <embed src={Instructivo} type="application/pdf" width="100%" height="400px" />
+          </div>
+        </div>
       </div>
     </div>
   );
