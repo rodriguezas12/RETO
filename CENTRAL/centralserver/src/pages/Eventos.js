@@ -13,6 +13,11 @@ function Eventos() {
     ingresoMaterial: false,
     kitsArmados: false,
   });
+  const [filters, setFilters] = useState({
+    fechaInteres: "",
+    horaInicial: "",
+    horaFinal: "",
+  });
 
   const stations = [
     "Estación 1",
@@ -23,6 +28,23 @@ function Eventos() {
     "Estación 6",
     "Estación 7",
   ];
+
+  const formatDateTime = (dateTimeString) => {
+    const dateObj = new Date(dateTimeString);
+    const formattedDate = dateObj.toLocaleString();
+    return formattedDate;
+  };
+
+  const calculateElapsedTime = (startTime) => {
+    const startDate = new Date(startTime).getTime();
+    const currentDate = new Date().getTime();
+
+    const elapsedTime = currentDate - startDate;
+    const elapsedMinutes = Math.floor(elapsedTime / (1000 * 60));
+    const elapsedSeconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+
+    return `${elapsedMinutes} minutos ${elapsedSeconds} segundos`;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,27 +96,32 @@ function Eventos() {
     };
 
     fetchData();
-    const intervalId = setInterval(fetchData, 1000);
-
-    function formatDateTime(dateTimeString) {
-      const dateObj = new Date(dateTimeString);
-      const formattedDate = dateObj.toLocaleString();
-      return formattedDate;
-    }
-
-    const calculateElapsedTime = (startTime) => {
-      const startDate = new Date(startTime).getTime();
-      const currentDate = new Date().getTime();
-
-      const elapsedTime = currentDate - startDate;
-      const elapsedMinutes = Math.floor(elapsedTime / (1000 * 60));
-      const elapsedSeconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
-
-      return `${elapsedMinutes} minutos ${elapsedSeconds} segundos`;
-    };
-
-    return () => clearInterval(intervalId);
   }, [selectedStation]);
+
+  const fetchSolicitudes = async () => {
+    if (checkboxes.solicitudes || checkboxes.ingresoMaterial || checkboxes.kitsArmados) {
+      try {
+        const { fechaInteres, horaInicial, horaFinal } = filters;
+        const query = new URLSearchParams({
+          fechaInteres,
+          horaInicial,
+          horaFinal,
+        }).toString();
+
+        const response = await fetch(`http://localhost:5000/eventos?${query}`);
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const solicitudesData = await response.json();
+        setData(solicitudesData);
+        console.log("Consulta a Solicitudes exitosa");
+      } catch (error) {
+        console.error("Error fetching data for Solicitudes:", error);
+      }
+    } else {
+      setData([]); // Clear data if no checkboxes are selected
+    }
+  };
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
@@ -104,60 +131,110 @@ function Eventos() {
     }));
   };
 
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
+
+  const handleConsultaClick = () => {
+    fetchSolicitudes();
+  };
+
+  const areCheckboxesSelected = () => {
+    return checkboxes.solicitudes || checkboxes.ingresoMaterial || checkboxes.kitsArmados;
+  };
+
   return (
     <div>
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000&display=swap"
           rel="stylesheet"
         />
       </Helmet>
       <Header titulo="CONSULTA DE EVENTOS" />
       <div className="container-titulo">
-      <h2 className="titulo-evento">Seleccione evento de interés</h2>
+        <h2 className="titulo-evento">Seleccione evento de interés</h2>
       </div>
 
-      <div className="container-conteo">
-        
-        <div className="contenedor-label1">
+      <div className="container">
+        <div className="container-checkboxes">
+          <div className="contenedor-label1">
+            <label>
+              <input
+                type="checkbox"
+                name="solicitudes"
+                checked={checkboxes.solicitudes}
+                onChange={handleCheckboxChange}
+              />
+              Solicitudes
+            </label>
           
-        <label>
-          <input
-            type="checkbox"
-            name="solicitudes"
-            checked={checkboxes.solicitudes}
-            onChange={handleCheckboxChange}
-          />
-          Solicitudes
-        </label>
-        </div>
-        
-        <div className="contenedor-label1">
-        <label>
-          <input
-            type="checkbox"
-            name="ingresoMaterial"
-            checked={checkboxes.ingresoMaterial}
-            onChange={handleCheckboxChange}
-          />
-          Ingreso Material
-        </label>
+            <label>
+              <input
+                type="checkbox"
+                name="ingresoMaterial"
+                checked={checkboxes.ingresoMaterial}
+                onChange={handleCheckboxChange}
+              />
+              Ingreso Material
+            </label>
+          
+            <label>
+              <input
+                type="checkbox"
+                name="kitsArmados"
+                checked={checkboxes.kitsArmados}
+                onChange={handleCheckboxChange}
+              />
+              Kits Armados
+            </label>
+          </div>
         </div>
 
-        <div className="contenedor-label1">
-        <label>
-          <input
-            type="checkbox"
-            name="kitsArmados"
-            checked={checkboxes.kitsArmados}
-            onChange={handleCheckboxChange}
-          />
-          Kits Armados
-        </label>
+        <div className="container-filtros">
+          <div className="contenedor-label1">
+            <label>
+              Fecha de interés:
+              <input
+                type="date"
+                name="fechaInteres"
+                value={filters.fechaInteres}
+                onChange={handleFilterChange}
+              />
+            </label>
+          
+            <label>
+              Hora inicial:
+              <input
+                type="time"
+                name="horaInicial"
+                value={filters.horaInicial}
+                onChange={handleFilterChange}
+              />
+            </label>
+          
+            <label>
+              Hora final:
+              <input
+                type="time"
+                name="horaFinal"
+                value={filters.horaFinal}
+                onChange={handleFilterChange}
+              />
+            </label>
+          </div>
+          <div className="container-boton-consulta">
+        <button onClick={handleConsultaClick}>Consultar</button>
+      </div>
         </div>
       </div>
+
       <div className="container-conteo">
         <div className="contenedor-label1">
           <span className="elemento-label">Kits Armados:</span>
@@ -185,53 +262,34 @@ function Eventos() {
           </select>
         </div>
       </div>
-      <div className="container-conteo">
-        <table className="estado">
-          <thead>
-            <tr>
-              <th className="estado">ID</th>
-              <th className="estado">KIT</th>
-              <th className="estado">Hora de entrada a la estación</th>
-              <th className="estado">Tiempo Transcurrido</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={index}>
-                <td className="estado">{item.ID}</td>
-                <td className="estado">{item.Kit}</td>
-                <td className="estado">{item.fechaIngreso}</td>
-                <td className="estado">{item.TiempoTranscurrido}</td>
+
+      {data.length > 0 && (
+        <div className="container-estado">
+          <span className="subtitle">REGISTRO DE KITS ARMADOS EN ESTACIÓN:</span>
+          <table>
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Evento</th>
+                <th>Descripción</th>
+                <th>Fecha</th>
+                <th>Hora</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="container-estado">
-        <span className="subtitle">REGISTRO DE KITS ARMADOS EN ESTACIÓN:</span>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>KIT</th>
-              <th>Hora de entrada a la estación</th>
-              <th>Tiempo Transcurrido</th>
-              <th>Hora de salida de la estación</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={index}>
-                <td>{item.ID}</td>
-                <td>{item.Kit}</td>
-                <td>{item.Hora_entrada}</td>
-                <td>{item.Tiempo_transcurrido}</td>
-                <td>{item.Hora_salida}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.usuario}</td>
+                  <td>{item.evento}</td>
+                  <td>{item.descripcion}</td>
+                  <td>{item.fecha}</td>
+                  <td>{item.hora}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

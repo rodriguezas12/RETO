@@ -114,7 +114,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.post("/solicitar", (req, res) => {
+app.post("/contenido", (req, res) => {
   const { nuevoPedido } = req.body;
 
   // Crear la tabla Solicitud si no existe
@@ -518,6 +518,8 @@ app.post('/contenido', (req, res) => {
   });
 });
 
+
+
 app.get('/contenido', (req, res) => {
   db.query('SELECT Kits, Contenido FROM RETORFID.Contenido', (err, results) => {
     if (err) {
@@ -530,10 +532,53 @@ app.get('/contenido', (req, res) => {
 });
 
 
-app.get("/contenido_said", (req, res) => {
-  db.query("SELECT * FROM Contenido", (err, results) => {
+app.get("/kits_info", (req, res) => {
+  const contenidoQuery = "SELECT COUNT(*) AS count FROM Contenido";
+  const disponibilidadQuery = `
+    SELECT Nombre, COUNT(*) as Disponibles
+    FROM Datos
+    WHERE INV = 'SI'
+    GROUP BY Nombre
+  `;
+
+  db.query(contenidoQuery, (err, contenidoResults) => {
     if (err) {
       console.error("Error al obtener los datos de Contenido:", err);
+      res.status(500).send("Error en el servidor");
+      return;
+    }
+
+    db.query(disponibilidadQuery, (err, disponibilidadResults) => {
+      if (err) {
+        console.error("Error al obtener la disponibilidad de kits:", err);
+        res.status(500).send("Error en el servidor");
+        return;
+      }
+
+      const disponibles = disponibilidadResults.reduce((acc, row) => {
+        acc[row.Nombre] = row.Disponibles;
+        return acc;
+      }, {});
+
+      console.log("Número de kits en Contenido:", contenidoResults[0].count);
+      console.log("Disponibles:", disponibles);
+
+      res.json({
+        contenidoCount: contenidoResults[0].count,
+        disponibles: disponibles
+      });
+    });
+  });
+});
+
+
+
+
+
+app.get("/solicitud", (req, res) => {
+  db.query("SELECT * FROM Solicitud", (err, results) => {
+    if (err) {
+      console.error("Error al obtener los datos de la tabla Solicitud:", err);
       res.status(500).send("Error en el servidor");
       return;
     }
@@ -541,32 +586,86 @@ app.get("/contenido_said", (req, res) => {
   });
 });
 
+app.get("/eventos", (req, res) => {
+  const { fechaInteres, horaInicial, horaFinal } = req.query;
 
-// Ruta para obtener la cantidad disponible de cada tipo de kit
-app.get("/disponibilidad-kits", (req, res) => {
-  const query = `
-    SELECT Nombre, COUNT(*) as Disponibles
-    FROM Datos
-    WHERE INV = 'SI'
-    GROUP BY Nombre
-  `;
+  let query = "SELECT * FROM Eventos WHERE evento = 'solicitud'";
+  let queryParams = [];
 
-  db.query(query, (err, results) => {
+  if (fechaInteres) {
+    query += " AND fecha = ?";
+    queryParams.push(fechaInteres);
+  }
+  if (horaInicial) {
+    query += " AND hora >= ?";
+    queryParams.push(horaInicial);
+  }
+  if (horaFinal) {
+    query += " AND hora <= ?";
+    queryParams.push(horaFinal);
+  }
+
+  db.query(query, queryParams, (err, results) => {
     if (err) {
-      console.error("Error al obtener la disponibilidad de kits:", err);
+      console.error("Error al obtener los datos de eventos:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+    res.json(results);
+  });
+});
+
+
+
+app.get("/Datos", (req, res) => {
+  db.query("SELECT * FROM Datos", (err, results) => {
+    if (err) {
+      console.error("Error al obtener los datos de la tabla Solicitud:", err);
+      res.status(500).send("Error en el servidor");
+      return;
+    }
+    res.json(results);
+  });
+});
+
+app.get("/Kits_armados", (req, res) => {
+  db.query("SELECT * FROM Contenido", (err, results) => {
+    if (err) {
+      console.error("Error al obtener los datos de la tabla Solicitud:", err);
+      res.status(500).send("Error en el servidor");
+      return;
+    }
+    res.json(results);
+  });
+});
+
+app.post("/solicitar", (req, res) => {
+  const { nuevoPedido, nombreUsuario } = req.body;
+
+  const insertSolicitudQuery = "INSERT INTO Solicitud (Pedido) VALUES (?)";
+  const insertEventosQuery = "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, CURDATE(), CURTIME())";
+
+  db.query(insertSolicitudQuery, [nuevoPedido], (err, results) => {
+    if (err) {
+      console.error("Error al insertar el pedido:", err);
       res.status(500).send("Error interno del servidor");
       return;
     }
 
-    const disponibles = results.reduce((acc, row) => {
-      acc[row.Nombre] = row.Disponibles;
-      return acc;
-    }, {});
+    const evento = 'solicitud';
+    const descripcion = `Se solicitaron los siguientes kits: ${nuevoPedido}`;
 
-    res.json(disponibles);
+    db.query(insertEventosQuery, [nombreUsuario, evento, descripcion], (err, results) => {
+      if (err) {
+        console.error("Error al insertar el evento:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+
+      res.status(201).json({ message: "Pedido registrado correctamente y evento guardado" });
+    });
   });
 });
-
 
 
 
