@@ -10,6 +10,23 @@
   font-family: 'Nunito', sans-serif;
 }
 
+.container-estacion {
+  display: flex;
+  align-items: center;
+  margin: 5px;
+  font-family: "Nunito", sans-serif;
+  /* Fuente Nunito */
+  font-size: min(1.5vw, 24px);
+  font-weight: bold;
+  padding: 10px;
+  background-color: #ecd4b6;
+  /* Color azul acero */
+  border-radius: 30px;
+  /* Bordes redondos de 30px */
+  color: #fff;
+  /* Color del texto blanco */
+}
+
 /* Estilo de la cabecera */
 .header {
   display: flex;

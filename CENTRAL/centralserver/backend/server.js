@@ -577,11 +577,19 @@ app.post('/Bahia/:ID', (req, res) => {
   });
 });
 app.get('/IDingreso', (req, res) => {
-  db.query('SELECT ID  FROM RETORFID.Estación_1', (err, results) => {
+  const { estacion } = req.query;
+
+  // Verifica que la estación proporcionada sea válida (1, 2 o 3)
+  if (estacion !== '1' && estacion !== '2' && estacion !== '3') {
+    return res.status(400).json({ error: 'Estación inválida' });
+  }
+
+  const tableName = `Estación_${estacion}`;
+
+  db.query(`SELECT ID FROM RETORFID.${tableName}`, (err, results) => {
     if (err) {
       console.error('Error al obtener los datos:', err);
-      res.status(500).send('Error en el servidor');
-      return;
+      return res.status(500).send('Error en el servidor');
     }
     res.json(results);
   });

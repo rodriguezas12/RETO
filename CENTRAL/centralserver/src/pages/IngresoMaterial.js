@@ -27,6 +27,12 @@ function Ingresomaterial() {
         console.error('Error:', error);
       });
   };
+  const [selectedStation, setSelectedStation] = useState('1');
+
+  const handleStationChange = (e) => {
+    setSelectedStation(e.target.value);
+  };
+
 
   const handleInputChange = (index, e) => {
     const { name, value } = e.target;
@@ -87,7 +93,14 @@ function Ingresomaterial() {
             </div>
           </div>
         ))}
-        <button onClick={handleSaveChanges}>Guardar Cambios</button>
+        <div className="container-estacion">
+          <select value={selectedStation} onChange={handleStationChange}>
+            <option value="1">Estación 1</option>
+            <option value="2">Estación 2</option>
+            <option value="3">Estación 3</option>
+          </select>
+          <button onClick={handleSaveChanges}>Guardar Cambios</button>
+        </div>
       </div>
     </div>
   );
