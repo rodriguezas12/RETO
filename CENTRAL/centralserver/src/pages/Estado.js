@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import Instructivo from "../Media/Instructivo.pdf"; // Importa el PDF
-import { ReactComponent as IconPause } from "../Media/pause-solid.svg";
-import { ReactComponent as IconPlay } from "../Media/play-solid.svg";
-import { ReactComponent as IconStop } from "../Media/stop-solid.svg";
+import Instructivo from "../Media/Instructivo.pdf";
+import IconPause from "../Media/pause-solid.svg";
+import IconPlay from "../Media/play-solid.svg";
+import IconStop from "../Media/stop-solid.svg";
 import Header from "../components/header";
+import Popup from "../components/popup";
 import "./Estado.css";
+
 function Estado() {
   const [data, setData] = useState([]);
   const [showButtons, setShowButtons] = useState(false); // Estado para controlar la visibilidad de los botones
@@ -15,6 +17,7 @@ function Estado() {
   const [intervalId, setIntervalId] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0); // Guarda el tiempo transcurrido en milisegundos
   const [showPopup, setShowPopup] = useState(false);
+  const [mensaje, setMensaje] = useState("");
 
   // Simulación de datos de estaciones
   const stations = [
@@ -112,49 +115,37 @@ function Estado() {
 
   // Función para manejar el clic en el botón de Play/Pause
   const handlePlayPauseClick = () => {
-    setIsPlaying(!isPlaying); // Cambia el estado de isPlaying al contrario de su valor actual
+    setIsPlaying(!isPlaying);
 
     if (!isPlaying) {
-      // Si está en modo 'play', iniciar el contador de tiempo
-      const startTime = Date.now() - elapsedTime; // Obtener el tiempo actual menos el tiempo transcurrido antes de pausar
+      const startTime = Date.now() - elapsedTime;
       const id = setInterval(() => {
-        const newElapsedTime = Date.now() - startTime; // Calcular el tiempo transcurrido en milisegundos
+        const newElapsedTime = Date.now() - startTime;
         setElapsedTime(newElapsedTime);
-        setTiempoSet(formatTime(Math.floor(newElapsedTime / 1000))); // Actualizar el estado de tiempo transcurrido en formato mm:ss
+        setTiempoSet(formatTime(Math.floor(newElapsedTime / 1000)));
       }, 1000);
-      setIntervalId(id); // Guardar el ID del intervalo para poder limpiarlo más tarde
-      setShowPopup(true);
+      setIntervalId(id);
+      setMensaje("Contador iniciado");
     } else {
-      // Si está en modo 'pause', detener el contador de tiempo
-      clearInterval(intervalId); // Limpiar el intervalo activo
-      setShowPopup(true);
+      clearInterval(intervalId);
+      setMensaje("Contador pausado");
     }
+    setShowPopup(true);
   };
 
   // Función para manejar el clic en el botón de Stop
   const handleStopClick = () => {
-    setIsPlaying(false); // Cambiar el estado de play a false
-    clearInterval(intervalId); // Limpiar el intervalo activo
-    setElapsedTime(0); // Reiniciar el tiempo transcurrido
-    setTiempoSet("00:00"); // Reiniciar el contador de tiempo a "00:00"
+    setIsPlaying(false);
+    clearInterval(intervalId);
+    setElapsedTime(0);
+    setTiempoSet("00:00");
     setShowPopup(true);
+    setMensaje("Contador detenido");
   };
 
   useEffect(() => {
-    // Limpiar el intervalo al desmontar el componente
     return () => clearInterval(intervalId);
   }, [intervalId]);
-
-  useEffect(() => {
-    if (showPopup) {
-      const timer = setTimeout(() => {
-        setShowPopup(false);
-      }, 3000); // Tiempo en milisegundos (3000ms = 3 segundos)
-
-      return () => clearTimeout(timer); // Limpiar el timer si el componente se desmonta o si showPopup cambia
-    }
-  }, [showPopup]);
-
 
   return (
     <div>
@@ -207,20 +198,14 @@ function Estado() {
                 className="bottom-time-estado"
                 onClick={handlePlayPauseClick}
               >
-                <div className="contenedor-svg">
-                  {/* Icono de Play */}
-                  {isPlaying ? (
-                    <IconPause className="icono-svg" />
-                  ) : (
-                    <IconPlay className="icono-svg" />
-                  )}
-                </div>
+                <img
+                  src={isPlaying ? IconPause : IconPlay}
+                  alt="Play/Pause"
+                  className="icono-svg"
+                />
               </button>
               <button className="bottom-time-estado" onClick={handleStopClick}>
-                <div className="contenedor-svg">
-                  {/* Icono de Stop */}
-                  <IconStop className="icono-svg" />
-                </div>
+                <img src={IconStop} alt="Stop" className="icono-svg" />
               </button>
               <span className="elemento-valor">{tiempoSet}</span>
             </div>
@@ -260,6 +245,11 @@ function Estado() {
             />
           </div>
         </div>
+        <Popup
+          mensaje={mensaje}
+          showPopup={showPopup}
+          setShowPopup={setShowPopup}
+        />
       </div>
     </div>
   );
