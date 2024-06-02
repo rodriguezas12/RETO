@@ -142,11 +142,48 @@ function Estado() {
   // Función para manejar el clic en el botón de Stop
   const handleStopClick = () => {
     if (!isPlaying) {
-      setMensaje("Por favor, inicie el contador.");
       setShowPopup(true);
+      setMensaje("Por favor, inicie el contador antes de detenerlo");
       return;
     }
 
+    // Obtener la fecha y hora actual
+    const now = new Date();
+    const fecha = `${now.getFullYear()}-${(now.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`;
+    const hora = `${now.getHours().toString().padStart(2, "0")}:${now
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+
+    // Datos a enviar a la base de datos
+    const usuario = `${selectedStation}`;
+    const evento = "Set Terminado";
+    const descripcion = `Tiempo total de armado del Set: ${tiempoSet}`;
+
+    // Enviar datos a la base de datos mediante POST
+    fetch("http://localhost:5000/sets", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ usuario, evento, descripcion, fecha, hora }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error en la solicitud POST");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Datos enviados correctamente a la base de datos:", data);
+      })
+      .catch((error) => {
+        console.error("Error al enviar datos a la base de datos:", error);
+      });
+
+    // Detener el contador y mostrar el mensaje
     setIsPlaying(false);
     clearInterval(intervalId);
     setElapsedTime(0);

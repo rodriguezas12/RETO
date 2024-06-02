@@ -295,6 +295,23 @@ app.get("/estaciones/:numeroEstacion", (req, res) => {
   );
 });
 
+// Endpoint para enviar datos a la base de datos al detener el contador
+app.post('/sets', (req, res) => {
+  const {usuario, evento, descripcion, fecha, hora } = req.body;
+
+  const query = 'INSERT INTO RETORFID.Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)';
+  db.query(query, [usuario, evento, descripcion, fecha, hora], (err, result) => {
+    if (err) {
+      console.error('Error al insertar los datos en la base de datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    res.send('Datos insertados correctamente en la tabla Eventos');
+  });
+});
+
+
+
 
 app.get('/said', (req, res) => {
   // Consulta para obtener las últimas 3 filas ordenadas por una columna específica
