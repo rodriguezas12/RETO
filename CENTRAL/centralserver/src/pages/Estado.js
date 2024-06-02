@@ -115,6 +115,12 @@ function Estado() {
 
   // Función para manejar el clic en el botón de Play/Pause
   const handlePlayPauseClick = () => {
+    if (!stations.includes(selectedStation)) {
+      setMensaje("Por favor, seleccione una estación de trabajo");
+      setShowPopup(true);
+      return;
+    }
+
     setIsPlaying(!isPlaying);
 
     if (!isPlaying) {
@@ -125,22 +131,28 @@ function Estado() {
         setTiempoSet(formatTime(Math.floor(newElapsedTime / 1000)));
       }, 1000);
       setIntervalId(id);
-      setMensaje("Contador iniciado");
+      setMensaje("Contador Iniciado");
     } else {
       clearInterval(intervalId);
-      setMensaje("Contador pausado");
+      setMensaje("Contador Pausado");
     }
     setShowPopup(true);
   };
 
   // Función para manejar el clic en el botón de Stop
   const handleStopClick = () => {
+    if (!isPlaying) {
+      setMensaje("Por favor, inicie el contador.");
+      setShowPopup(true);
+      return;
+    }
+
     setIsPlaying(false);
     clearInterval(intervalId);
     setElapsedTime(0);
     setTiempoSet("00:00");
     setShowPopup(true);
-    setMensaje("Contador detenido");
+    setMensaje("Contador Detenido");
   };
 
   useEffect(() => {
