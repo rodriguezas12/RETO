@@ -680,8 +680,44 @@ app.post("/solicitar", (req, res) => {
     });
   });
 });
+// Desde aqui se implementa ingreso de material
+app.post('/Bahia/:ID', (req, res) => {
+  const { ID } = req.params; // Obtén el ID de los parámetros de la URL
+  const { Bahia } = req.body; // Obtén el valor de Bahia del cuerpo de la solicitud
 
+  // Define la consulta SQL para actualizar la columna Bahia en la tabla Datos
+  const query = 'UPDATE RETORFID.Datos SET Bahia = ? ';
 
+  // Ejecuta la consulta SQL
+  db.query(query, [Bahia, ID], (err, result) => {
+    if (err) {
+      // Maneja los errores
+      console.error('Error al actualizar los datos:', err);
+      res.status(500).send('Error en el servidor');
+      return;
+    }
+    // Envía una respuesta de éxito
+    res.send({ ID, Bahia });
+  });
+});
+app.get('/IDingreso', (req, res) => {
+  const { estacion } = req.query;
+
+  // Verifica que la estación proporcionada sea válida (1, 2 o 3)
+  if (estacion !== '1' && estacion !== '2' && estacion !== '3') {
+    return res.status(400).json({ error: 'Estación inválida' });
+  }
+
+  const tableName = `Estación_${estacion}`;
+
+  db.query(`SELECT ID FROM RETORFID.${tableName}`, (err, results) => {
+    if (err) {
+      console.error('Error al obtener los datos:', err);
+      return res.status(500).send('Error en el servidor');
+    }
+    res.json(results);
+  });
+});
 
 
 const PORT = process.env.PORT || 5000;
