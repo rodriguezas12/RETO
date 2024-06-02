@@ -1,12 +1,11 @@
 /* Estilos regulares */
 /* Estilos básicos para el Header */
 
-
 .container-conteo {
-  margin: 20px auto;
+  margin: 10px auto;
   width: 90vw;
   background-color: #fefaf6;
-  border-radius: 30px;
+  border-radius: 10px;
   padding: 10px;
   display: flex;
   justify-content: space-around;
@@ -18,26 +17,20 @@
   text-align: center;
 }
 
-
 .contenedor-label1 {
   display: flex;
   align-items: center;
   margin: 5px;
   font-family: "Nunito", sans-serif;
-  /* Fuente Nunito */
-  font-size: min(1.5vw, 24px);
+  font-size: min(1.1vw, 20px);
   font-weight: bold;
-  padding: 10px;
+  padding: 8px;
   background-color: #ecd4b6;
-  /* Color azul acero */
-  border-radius: 30px;
-  /* Bordes redondos de 30px */
+  border-radius: 20px;
   color: #fff;
-  /* Color del texto blanco */
 }
 
-.elemento-label,
-.elemento-valor {
+.elemento-label {
   font-family: "Nunito", sans-serif;
   font-size: min(1.5vw, 24px);
   font-weight: bold;
@@ -45,9 +38,9 @@
   margin-right: 10px;
 }
 
-.bottom-estado {
+.bottom-time-estado {
   font-family: "Nunito", sans-serif;
-  font-size: min(1.1vw, 24px);
+  font-size: min(1.1vw, 20px);
   font-weight: bold;
   color: #292929;
   border: none;
@@ -56,9 +49,10 @@
   border-radius: 20px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
   transition: box-shadow 0.3s ease;
+  margin: 1vh;
 }
 
-.bottom-estado:hover {
+.bottom-time-estado:hover {
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
 }
 
@@ -68,35 +62,31 @@
   font-weight: bold;
   color: #292929;
   margin-right: 10px;
-  font-weight: 900;
   display: inline-block;
   margin: 0 auto;
 }
 
 .container-titulo {
   margin: 2px auto;
-  /* Margen superior e inferior de 20px y centrado horizontal */
   width: 90vw;
-  /* Anchura del contenedor */
   height: 40px;
   font-family: "Nunito", sans-serif;
-  /* Fuente Nunito */
   background-color: #ffffff;
   font-size: min(1.5vw, 24px);
   font-weight: bold;
   border-radius: 20px;
-  /* Bordes redondos de 10px */
-
   text-align: center;
-  /* Centrar texto horizontalmente */
 }
 
 .elemento-valor {
   border-radius: 10px;
   background-color: #be7530;
-  font-weight: 800;
-  color: #292929;
+  font-weight: bold;
   padding: 8px;
+  font-family: "Nunito", sans-serif;
+  font-size: min(2vw, 20px);
+  color: #292929;
+  margin-right: 10px;
 }
 
 .container-estado {
@@ -106,6 +96,118 @@
   border-radius: 10px;
   padding: 10px;
   text-align: center;
+}
+
+.icono-svg {
+  width: 20px;
+  height: 20px;
+  fill: #000000; 
+}
+
+/* Estilos regulares */
+/* Estilos básicos para el Header */
+
+.container-conteo {
+  margin: 10px auto;
+  width: 90vw;
+  background-color: #fefaf6;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.titulo-evento {
+  text-align: center;
+}
+
+.contenedor-label1 {
+  display: flex;
+  align-items: center;
+  margin: 5px;
+  font-family: "Nunito", sans-serif;
+  font-size: min(1.1vw, 20px);
+  font-weight: bold;
+  padding: 8px;
+  background-color: #ecd4b6;
+  border-radius: 20px;
+  color: #fff;
+}
+
+.elemento-label {
+  font-family: "Nunito", sans-serif;
+  font-size: min(1.5vw, 24px);
+  font-weight: bold;
+  color: #292929;
+  margin-right: 10px;
+}
+
+.bottom-time-estado {
+  font-family: "Nunito", sans-serif;
+  font-size: min(1.1vw, 20px);
+  font-weight: bold;
+  color: #292929;
+  border: none;
+  background-color: #be7530;
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s ease;
+  margin: 1vh;
+}
+
+.bottom-time-estado:hover {
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.subtitle {
+  font-family: "Nunito", sans-serif;
+  font-size: min(3.5vw, 40px);
+  font-weight: bold;
+  color: #292929;
+  margin-right: 10px;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.container-titulo {
+  margin: 2px auto;
+  width: 90vw;
+  height: 40px;
+  font-family: "Nunito", sans-serif;
+  background-color: #ffffff;
+  font-size: min(1.5vw, 24px);
+  font-weight: bold;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.elemento-valor {
+  border-radius: 10px;
+  background-color: #be7530;
+  font-weight: bold;
+  padding: 8px;
+  font-family: "Nunito", sans-serif;
+  font-size: min(2vw, 20px);
+  color: #292929;
+  margin-right: 10px;
+}
+
+.container-estado {
+  margin: 20px auto;
+  width: 90vw;
+  background-color: #fefaf6;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.icono-svg {
+  width: 20px;
+  height: 20px;
+  fill: #000000; 
 }
 
 table {
@@ -122,32 +224,49 @@ thead {
   color: #fff;
 }
 
-td.estado,
-th.estado {
-  border: 1px;
-  padding: 8px;
-  font-family: "Nunito", sans-serif;
-  text-align: center;
+th.estado{
+  padding: 7px;
 }
 
-th.estado {
-  font-weight: bold;
+td.estado {
+  padding: 7px;
+  background: #fefaf6;
 }
 
-/* media ajuste en los dispositivos*/
+/* Estilo básico para el checkbox */
+.custom-checkbox-estado {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #7c7c7c;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-checkbox-estado:checked {
+  background-color: #53df5a;
+  border: 3px solid #000000;
+}
+
+.custom-checkbox-estado:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: #53df5a;
+  border-radius: 2px;
+}
+
+/* Media Queries para ajuste en dispositivos */
+
 @media only screen and (max-width: 600px) {
-  .header-text {
-    font-size: 1vh;
-    max-Width: "60%";
-  }
-
-  .back-button {
-    font-size: 2vh;
-  }
-
-
   .container-conteo {
-    flex-direction: column;
     width: 100%;
     padding: 5px;
   }
@@ -157,13 +276,12 @@ th.estado {
     justify-content: center;
   }
 
-  .elemento-label,
-  .elemento-valor {
+  .elemento-label {
     font-size: 10px;
     margin-right: 0;
   }
 
-  .bottom-estado {
+  .bottom-time-estado {
     font-size: 18px;
     padding: 5px 10px;
   }
@@ -177,24 +295,28 @@ th.estado {
     font-size: 12px;
   }
 
-  th.estado,
+  th.estado{
+    padding: 5px;
+  }
+
   td.estado {
     padding: 5px;
+    background: #fefaf6;
+  }
+
+  .custom-checkbox-estado {
+    width: 15px;
+    height: 15px;
+  }
+
+  .custom-checkbox-estado:checked::after {
+    width: 7px;
+    height: 7px;
   }
 }
 
-
 @media only screen and (max-width: 768px) {
-  .header-text {
-    font-size: 1vh;
-  }
-
-  .back-button {
-    font-size: 1vh;
-  }
-
   .container-conteo {
-    flex-direction: column;
     width: 95%;
     padding: 8px;
   }
@@ -210,7 +332,7 @@ th.estado {
     margin-right: 0;
   }
 
-  .bottom-estado {
+  .bottom-time-estado {
     font-size: 20px;
     padding: 6px 12px;
   }
@@ -219,42 +341,20 @@ th.estado {
     font-size: 28px;
   }
 
-  table {
-    width: 95%;
-    font-size: 14px;
-  }
-
-  th.estado,
-  td.estado {
-    padding: 6px;
-  }
 }
 
 @media only screen and (max-width: 1024px) {
-  .header-text {
-    font-size: 3vh;
-  }
-
-  .back-button {
-    font-size: 4vh;
-  }
-
   .container-conteo {
-    flex-direction: row;
     width: 90%;
     padding: 10px;
   }
 
-  .contenedor-label1 {
-    width: auto;
-  }
-
   .elemento-label,
   .elemento-valor {
-    font-size: 20px;
+    font-size: 18px;
   }
 
-  .bottom-estado {
+  .bottom-time-estado {
     font-size: 22px;
     padding: 7px 14px;
   }
@@ -268,8 +368,289 @@ th.estado {
     font-size: 16px;
   }
 
-  th.estado,
+  th.estado{
+    padding: 7px;
+  }
+
   td.estado {
     padding: 7px;
+    background: #fefaf6;
+  }
+}
+
+
+.contenido-columnas {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin: 20px auto;
+  width: 87vw;
+}
+
+.tabla-columna {
+  width: 40%;
+}
+
+.pdf-columna {
+  width: 50%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.pdf-container {
+  width: 100%;
+  height: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .contenido-columnas {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tabla-columna,
+  .pdf-columna {
+    width: 100%;
+  }
+
+  table {
+    width: 90%;
+    font-size: 16px;
+  }
+
+  th.estado{
+    padding: 7px;
+  }
+
+  td.estado {
+    padding: 7px;
+    background: #fefaf6;
+  }
+}
+
+
+/* Estilo básico para el checkbox */
+.custom-checkbox-estado {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #7c7c7c;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-checkbox-estado:checked {
+  background-color: #53df5a;
+  border: 3px solid #000000;
+}
+
+.custom-checkbox-estado:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: #53df5a;
+  border-radius: 2px;
+}
+
+/* Media Queries para ajuste en dispositivos */
+
+@media only screen and (max-width: 600px) {
+  .container-conteo {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .contenedor-label1 {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .elemento-label {
+    font-size: 10px;
+    margin-right: 0;
+  }
+
+  .bottom-time-estado {
+    font-size: 18px;
+    padding: 5px 10px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+  }
+
+  table {
+    width: 100%;
+    font-size: 12px;
+  }
+
+  table {
+    width: 90%;
+    font-size: 16px;
+  }
+
+  th.estado{
+    padding: 7px;
+  }
+
+  td.estado {
+    padding: 7px;
+    background: #fefaf6;
+  }
+
+  .custom-checkbox-estado {
+    width: 15px;
+    height: 15px;
+  }
+
+  .custom-checkbox-estado:checked::after {
+    width: 7px;
+    height: 7px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .container-conteo {
+    width: 95%;
+    padding: 8px;
+  }
+
+  .contenedor-label1 {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .elemento-label,
+  .elemento-valor {
+    font-size: 18px;
+    margin-right: 0;
+  }
+
+  .bottom-time-estado {
+    font-size: 20px;
+    padding: 6px 12px;
+  }
+
+  .subtitle {
+    font-size: 28px;
+  }
+
+  table {
+    width: 95%;
+    font-size: 14px;
+  }
+
+  table {
+    width: 90%;
+    font-size: 16px;
+  }
+
+  th.estado{
+    padding: 7px;
+  }
+
+  td.estado {
+    padding: 7px;
+    background: #fefaf6;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .container-conteo {
+    width: 90%;
+    padding: 10px;
+  }
+
+  .elemento-label,
+  .elemento-valor {
+    font-size: 18px;
+  }
+
+  .bottom-time-estado {
+    font-size: 22px;
+    padding: 7px 14px;
+  }
+
+  .subtitle {
+    font-size: 32px;
+  }
+
+  table {
+    width: 90%;
+    font-size: 16px;
+  }
+
+  table {
+    width: 90%;
+    font-size: 16px;
+  }
+
+  th.estado{
+    padding: 7px;
+  }
+
+  td.estado {
+    padding: 7px;
+    background: #fefaf6;
+  }
+}
+
+
+.contenido-columnas {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin: 20px auto;
+  width: 87vw;
+}
+
+.tabla-columna {
+  width: 40%;
+}
+
+.pdf-columna {
+  width: 50%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.pdf-container {
+  width: 100%;
+  height: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .contenido-columnas {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tabla-columna,
+  .pdf-columna {
+    width: 100%;
+  }
+  table {
+    width: 90%;
+    font-size: 16px;
+  }
+
+  th.estado{
+    padding: 7px;
+  }
+
+  td.estado {
+    padding: 7px;
+    background: #fefaf6;
   }
 }

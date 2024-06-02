@@ -63,15 +63,17 @@ cursor = conexion.cursor()
 
 # Definir la consulta SQL para crear la tabla de datos si no existe
 sql_create_table_datos = """
-CREATE TABLE IF NOT EXISTS Datos (ID INT, 
-  Tag VARCHAR(25) NOT NULL,
-  Nombre TEXT NOT NULL,
-  Cantidad INT NOT NULL, 
+CREATE TABLE IF NOT EXISTS Datos (
+  ID INT AUTO_INCREMENT PRIMARY KEY,
+  Tag VARCHAR(25) UNIQUE,
+  Nombre TEXT,
   Bahia INT NOT NULL,
+  Cantidad INT NOT NULL, 
   Hora_entrada_lab TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Hora_salida_lab TIMESTAMP DEFAULT NULL,
-  INV ENUM('SI', 'NO') NOT NULL DEFAULT 'NO', -- Nueva columna 'inv' con valores 'si' o 'no'
-  PRIMARY KEY (Tag)
+  Hora_entrada_bodega TIMESTAMP DEFAULT NULL,
+  Hora_salida_bodega TIMESTAMP DEFAULT NULL,
+  INV ENUM('SI', 'NO') NOT NULL DEFAULT 'NO' 
 ) COMMENT 'Base de datos de los tags'
 """
 
@@ -181,35 +183,34 @@ while True:
     # Detectar tags con el lector RFID de entrada
     tags_IN = reader_IN.detectTags(powerDBm=reader_IN.power_table[50], freqMHz=reader_IN.freq_table[1], mode=1001, session=2, population=1, duration=durationn, searchmode=2)
     for tag_IN in tags_IN:
-     tag_id_IN = tag_IN['EPC-96'].decode('utf-8')
-     nombre_IN = nombres_tags.get(tag_id_IN, "No registrado")
-     hora_actual = obtener_hora_actual()
-     cursor.execute("SELECT * FROM Datos WHERE Tag = %s", (tag_id_IN,))
-     resultado = cursor.fetchone()
-     if resultado:
-        # Si la tag ya existe y tiene registrada una hora de salida, significa que está reingresando.
-        if resultado[4] is not None:  # Asumiendo que el índice 4 es Hora_salida_lab
-            # Resetear las horas relevantes y actualizar la entrada
-            cursor.execute("""
-            UPDATE Datos 
-            SET Nombre = %s, 
-                Cantidad = Cantidad, 
-                Hora_entrada_lab = %s, 
-                Hora_salida_lab = NULL, 
-                Hora_entrada_bodega = NULL 
-            WHERE Tag = %s""", (nombre_IN, hora_actual, tag_id_IN))
-            print(f"Tag '{tag_id_IN}' ha reingresado y sus tiempos han sido reseteados.")
+        tag_id_IN = tag_IN['EPC-96'].decode('utf-8')
+        nombre_IN = nombres_tags.get(tag_id_IN, "No registrado")
+        hora_actual = obtener_hora_actual()
+        cursor.execute("SELECT * FROM Datos WHERE Tag = %s", (tag_id_IN,))
+        resultado = cursor.fetchone()
+        if resultado:
+            # Si la tag ya existe y tiene registrada una hora de salida, significa que está reingresando.
+            if resultado[6] is not None:  # Asumiendo que el índice 6 es Hora_salida_lab
+                # Resetear las horas relevantes y actualizar la entrada
+                cursor.execute("""
+                UPDATE Datos 
+                SET Cantidad = Cantidad, 
+                    Hora_entrada_lab = %s, 
+                    Hora_salida_lab = NULL, 
+                    Hora_entrada_bodega = NULL 
+                WHERE Tag = %s""", (hora_actual, tag_id_IN))
+                print(f"Tag '{tag_id_IN}' ha reingresado y sus tiempos han sido reseteados.")
+            else:
+                # Si la hora de salida es NULL, es un error lógico, pues no debería detectarse entrada sin salida.
+                print(f"Error: Tag '{tag_id_IN}' detectado en entrada sin registro de salida.")
         else:
-            # Si la hora de salida es NULL, es un error lógico, pues no debería detectarse entrada sin salida.
-            print(f"Error: Tag '{tag_id_IN}' detectado en entrada sin registro de salida.")
-     else:
-        # Obtener el ID correspondiente al kit
-        id_kit = (list(nombres_tags.keys())).index(tag_id_IN) % 5 + 1
-        # Insertar la tag como nueva entrada si no existe previamente en la base de datos
-        cursor.execute("INSERT INTO Datos (ID, Tag, Nombre, Cantidad, Hora_entrada_lab) VALUES (%s, %s, %s, 1, %s)", (id_kit, tag_id_IN, nombre_IN, hora_actual))
-        print(f"Nueva tag '{tag_id_IN}' registrada en entrada.")
+            # Insertar la tag como nueva entrada si no existe previamente en la base de datos
+            cursor.execute("INSERT INTO Datos (ID, Tag, Bahia, Cantidad, Hora_entrada_lab) VALUES (%s, 0, 1, %s)", (tag_id_IN, hora_actual))
+            print(f"Nueva tag '{tag_id_IN}' registrada en entrada.")
     
     conexion.commit()
+
+
 
     # Detectar tags con el lector RFID de salida
     tags_OUT = reader_OUT.detectTags(powerDBm=reader_OUT.power_table[35], freqMHz=reader_OUT.freq_table[0], mode=1001, session=2, population=1, duration=durationn, searchmode=2)
@@ -222,14 +223,14 @@ while True:
             # Definir el nombre basado en el diccionario
             nombre_OUT = nombres_tags.get(tag_id_OUT, "No registrado")
             # Definir los valores para la inserción en la tabla de datos
-            valores_datos_OUT = (tag_id_OUT, nombre_OUT, 1)
+            valores_datos_OUT = (tag_id_OUT, 1)
             try:
                 # Verificar si el tag ya está en la base de datos
                 cursor.execute("SELECT * FROM Datos WHERE Tag = %s", (tag_id_OUT,))
                 if cursor.fetchone():  # El tag ya existe, actualizar el nombre
-                    cursor.execute("UPDATE Datos SET Nombre = %s WHERE Tag = %s", (nombre_OUT, tag_id_OUT))
-                else:  # El tag no existe, insertarlo
-                    cursor.execute("INSERT INTO Datos (Tag, Nombre, Cantidad, Hora_salida_lab) VALUES (%s, %s, %s)", valores_datos_OUT)
+                    cursor.execute("UPDATE Datos SET Nombre = %s WHERE Tag = %s", ("", tag_id_OUT))
+                else:  # El tag no existe, insertarlo CAMBIOOOOOOOOOOOOO
+                    cursor.execute("INSERT INTO Datos (Tag, Cantidad, Hora_salida_lab) VALUES (%s, %s)", valores_datos_OUT)
                 # Actualizar la contabilidad de kits
                 cursor.execute("UPDATE Contabilidad_Kits SET Cantidad = Cantidad - 1 WHERE Kit = %s", (nombre_OUT,))
                 # Confirmar los cambios en la base de datos

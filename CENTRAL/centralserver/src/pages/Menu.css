@@ -1,23 +1,20 @@
 /* Estilos base */
 .menu-box {
   width: 300px;
-  padding: 40px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 20px;
+  position: relative;
   background: #f5f5dc;
   /* Fondo blanco hueso */
   text-align: center;
   border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  margin: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  margin: 15px;
   margin-right: 20px;
 }
 
 .menu-box img {
-  width: 150px;
-  height: 150px;
+  width: 125px;
+  height: 125px;
   border-radius: 50%;
   margin: 0 auto;
   display: block;
@@ -25,8 +22,8 @@
 
 .menu-box h3 {
   font-family: "ChauPhilomeneOne-Regular";
-  margin: 10px 0 20px;
-  padding-bottom: 20px;
+  margin: 10px 0 10px;
+  padding-bottom: 10px;
   position: relative;
   color: #8b4513;
 }
@@ -157,6 +154,6 @@
   .menu-box form button,
   .menu-box button {
     font-size: 18px;
-    padding: 12px;
+    padding: 10px;
   }
 }

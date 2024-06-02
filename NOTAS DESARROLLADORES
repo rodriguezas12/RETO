@@ -1,6 +1,6 @@
 Installar extensiones:
 
-    Git Action 
+    Git Action
     Git Pull Request
 
 COMANDOS GIT:
@@ -9,14 +9,15 @@ ANTES DE INICIAR A TRABAJAR REALIZAR ESTE COMANDO(Actualiza a la version mas act
     git pull https://github.com/rodriguezas12/RETO
 
 PASOS PARA CORRER EL CODIGO:
-    Primera vez: 
-        cd CENTRAL/centralserver && npm i react-scripts 
+    Primera vez:
+        cd CENTRAL/centralserver
+        npm i react-scripts
+
         cd CENTRAL/centralserver && npm start
 
     De manera normal:
     >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    cd CENTRAL/centralserver && npm start  >>>>>>
-        
+    cd CENTRAL/centralserver && npm start
     >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Automaticamente se debe abrir el localhost/3000, se debe ver la pagina sin ningun problema
 --------------------------------------------------------------

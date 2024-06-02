@@ -10,18 +10,18 @@ const Header = ({ titulo }) => {
     backgroundColor: "#EB7D3D",
     color: "white",
     border: "none",
-    borderRadius: "20px",
+    borderRadius: "10px",
     boxShadow: "0 6px 6px 0 rgba(0, 0, 0, 0.5)",
     fontWeight: "bold",
     cursor: "pointer",
     transition: "background-color 0.3s, box-shadow 0.3s",
-    fontSize: "2.5vh",
+    fontSize: "2vh",
     maxWidth: "200px",
     marginBottom: "10px",
   });
   const [logoStyles, setLogoStyles] = useState({
     width: "auto",
-    height: "80px",
+    height: "70px",
   });
 
   const handleResize = () => {
@@ -29,7 +29,7 @@ const Header = ({ titulo }) => {
       window.innerWidth <= 600
         ? "2vh"
         : window.innerWidth <= 768
-        ? "3vh"
+        ? "2vh"
         : window.innerWidth <= 1024
         ? "3.5vh"
         : "4vh"
@@ -45,10 +45,10 @@ const Header = ({ titulo }) => {
           : window.innerWidth <= 1024
           ? "10px"
           : "10px",
-      backgroundColor: "#EB7D3D",
+      backgroundColor: "#ff4500",
       color: "white",
       border: "none",
-      borderRadius: "20px",
+      borderRadius: "10px",
       boxShadow: "0 6px 6px 0 rgba(0, 0, 0, 0.5)",
       fontWeight: "bold",
       cursor: "pointer",
@@ -59,8 +59,8 @@ const Header = ({ titulo }) => {
           : window.innerWidth <= 768
           ? "2.8vh"
           : window.innerWidth <= 1024
-          ? "3vh"
-          : "3vh",
+          ? "2.5vh"
+          : "2.5vh",
       maxWidth:
         window.innerWidth <= 600
           ? "150px"
@@ -76,12 +76,12 @@ const Header = ({ titulo }) => {
       width: "auto",
       height:
         window.innerWidth <= 600
-          ? "50px"
+          ? "40px"
           : window.innerWidth <= 768
-          ? "60px"
+          ? "50px"
           : window.innerWidth <= 1024
-          ? "70px"
-          : "80px",
+          ? "60px"
+          : "70px",
     });
   };
 
@@ -114,17 +114,12 @@ const Header = ({ titulo }) => {
         padding: "10px",
         margin: "10px",
         backgroundColor: "#FEFAF6",
-        borderRadius: "20px",
+        borderRadius: "10px",
         boxShadow: "0 4px 4px rgba(0, 0, 0, 0.1)",
       }}
     >
       <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap"
-          rel="stylesheet"
-        />
+        
       </Helmet>
       <img src={logo} alt="logo" style={logoStyles} />
       <h1

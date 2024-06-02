@@ -4,26 +4,19 @@ import Header from "../components/header";
 import "./Solicitud.css";
 
 export default function Picking() {
-  const [kits, setKits] = useState([]);
+  const [numKits, setNumKits] = useState(0);
   const [disponibles, setDisponibles] = useState({});
   const [carrito, setCarrito] = useState({});
 
   useEffect(() => {
-    // Obtener los kits y su contenido
-    fetch("http://localhost:5000/contenido_said")
+    // Obtener la información combinada de kits
+    fetch("http://localhost:5000/kits_info")
       .then((response) => response.json())
       .then((data) => {
-        setKits(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-
-    // Obtener la disponibilidad de kits
-    fetch("http://localhost:5000/disponibilidad-kits")
-      .then((response) => response.json())
-      .then((data) => {
-        setDisponibles(data);
+        console.log("Número de kits en Contenido:", data.contenidoCount);
+        console.log("Disponibles:", data.disponibles);
+        setNumKits(data.contenidoCount);
+        setDisponibles(data.disponibles);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -32,9 +25,8 @@ export default function Picking() {
 
   const addToCart = (kitName) => {
     if (disponibles[kitName] > 0) {
-      const kitNumber = parseInt(kitName.replace("Kit ", ""));
       const updatedCart = { ...carrito };
-      updatedCart[kitNumber] = updatedCart[kitNumber] ? updatedCart[kitNumber] + 1 : 1;
+      updatedCart[kitName] = updatedCart[kitName] ? updatedCart[kitName] + 1 : 1;
       setCarrito(updatedCart);
 
       const updatedDisponibles = { ...disponibles };
@@ -47,9 +39,8 @@ export default function Picking() {
 
   const removeFromCart = (kitName) => {
     if (carrito[kitName] > 0) {
-      const kitNumber = parseInt(kitName.replace("Kit ", ""));
       const updatedCart = { ...carrito };
-      updatedCart[kitNumber] -= 1;
+      updatedCart[kitName] -= 1;
       setCarrito(updatedCart);
 
       const updatedDisponibles = { ...disponibles };
@@ -60,28 +51,30 @@ export default function Picking() {
 
   const enviarPedido = () => {
     const pedido = Object.keys(carrito).reduce((acc, kitName) => {
-      const kitNumber = parseInt(kitName.replace("Kit ", ""));
       const count = carrito[kitName];
+      const kitNumber = kitName.replace(/\D/g, ''); // Eliminar todo lo que no sea número
       for (let i = 0; i < count; i++) {
         acc.push(kitNumber);
       }
       return acc;
     }, []);
-    
+
+    const nombreUsuario = "NombreDelUsuario"; // Reemplaza esto con el método correcto para obtener el nombre del usuario logueado
+
+    // Enviar el pedido inicial
     fetch("http://localhost:5000/solicitar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ nuevoPedido: pedido.join(",") }),
+      body: JSON.stringify({ nuevoPedido: pedido.join(","), nombreUsuario }),
     })
       .then((response) => response.json())
       .then((data) => {
-        alert(data); // Mostrar mensaje de éxito o error
+        alert(data.message); // Mostrar mensaje de éxito o error
         // Limpiar el carrito después de enviar el pedido
         setCarrito({});
-        // Restaurar disponibilidad inicial (opcional)
-        setDisponibles({});
+        
       })
       .catch((error) => {
         console.error("Error al enviar el pedido:", error);
@@ -100,24 +93,26 @@ export default function Picking() {
         />
       </Helmet>
       <Header titulo="SOLICITUD DE MATERIALES" />
+
       <div className="container-items">
-        {kits.map((kit, index) => (
-          <div
-            key={kit.Kits}
-            className={`kit-container ${
-              disponibles[kit.Kits] === 0 ? "kit-container-white" : ""
-            }`}
-          >
-            <h3>{kit.Kits}</h3>
-            <p>{`Contenido: ${kit.Contenido}`}</p>
-            <p>{`Disponibles: ${disponibles[kit.Kits] || 0}`}</p>
-            <div>
-              <button onClick={() => addToCart(kit.Kits)}>+</button>
-              <span>{carrito[kit.Kits] || 0}</span>
-              <button onClick={() => removeFromCart(kit.Kits)}>-</button>
+        <div className="kit-container">
+          <h3>Total de Kits</h3>
+          <p>{`Hay ${numKits} kits en total`}</p>
+        </div>
+        {[...Array(numKits)].map((_, index) => {
+          const kitName = `Kit ${index + 1}`;
+          return (
+            <div key={index} className="kit-container">
+              <h3>{kitName}</h3>
+              <p>{`Disponibles: ${disponibles[kitName] !== undefined ? disponibles[kitName] : 0}`}</p>
+              <div>
+                <button onClick={() => addToCart(kitName)}>+</button>
+                <span>{carrito[kitName] || 0}</span>
+                <button onClick={() => removeFromCart(kitName)}>-</button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <div style={{ textAlign: "center", marginTop: "20px" }}>
         <button onClick={enviarPedido}>Enviar</button>
