@@ -75,37 +75,10 @@ export default function Picking() {
         // Limpiar el carrito después de enviar el pedido
         setCarrito({});
         
-        // Enviar dos pedidos vacíos a intervalos de 20 segundos
-        setTimeout(() => {
-          enviarPedidoVacio();
-        }, 20000);
-
-        setTimeout(() => {
-          enviarPedidoVacio();
-        }, 40000);
       })
       .catch((error) => {
         console.error("Error al enviar el pedido:", error);
         alert("Error al enviar el pedido");
-      });
-  };
-
-  const enviarPedidoVacio = () => {
-    const nombreUsuario = "NombreDelUsuario"; // Reemplaza esto con el método correcto para obtener el nombre del usuario logueado
-
-    fetch("http://localhost:5000/solicitar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ nuevoPedido: "", nombreUsuario }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Pedido vacío enviado:", data.message);
-      })
-      .catch((error) => {
-        console.error("Error al enviar el pedido vacío:", error);
       });
   };
 
