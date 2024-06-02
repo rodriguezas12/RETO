@@ -32,9 +32,26 @@
   /* Color azul acero */
   border-radius: 30px;
   /* Bordes redondos de 30px */
-  color: #fff;
+  color: #000000;
   /* Color del texto blanco */
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container-checkboxes, .container-filtros {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.contenedor-label1 {
+  margin: 0 10px;
+}
+
 
 .elemento-label,
 .elemento-valor {
