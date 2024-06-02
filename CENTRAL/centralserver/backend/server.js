@@ -360,7 +360,6 @@ app.get("/nombrekit/:tag", (req, res) => {
   );
 });
 
-
 // Actualizar el nombre del kit de un tag específico
 app.post("/nombrekit/:tag", (req, res) => {
   const { tag } = req.params;
@@ -378,7 +377,7 @@ app.post("/nombrekit/:tag", (req, res) => {
       }
       console.log(`Nombre de kit actualizado para el tag ${tag} en Estación_1`);
       // Update Datos
-  db.query(
+      db.query(
         "UPDATE Datos SET Nombre = ? WHERE Tag = ?",
         [nombreKit, tag],
         (err, results) => {
@@ -388,22 +387,19 @@ app.post("/nombrekit/:tag", (req, res) => {
             return;
           }
           console.log(`Nombre de kit actualizado para el tag ${tag} en Datos`);
-          // Send response after both updates are complete
-          res.status(200).send(`Nombre de kit actualizado para el tag ${tag}`);
+          res.send("Nombre de kit actualizado correctamente");
         }
       );
     }
   );
 });
 
-
-//////////////////////////////
 // Obtener el ID del kit de un tag específico
 app.get("/idkit/:tag", (req, res) => {
   const { tag } = req.params;
 
   db.query(
-    "SELECT ID FROM Datos WHERE Tag = ?",
+    "SELECT Id FROM Estación_1 WHERE Tag = ?",
     [tag],
     (err, results) => {
       if (err) {
@@ -412,7 +408,7 @@ app.get("/idkit/:tag", (req, res) => {
         return;
       }
       if (results.length > 0) {
-        res.json(results[0].ID); // Devolvemos el ID del kit si existe
+        res.json(results[0].Id); // Devolvemos el ID del kit si existe
       } else {
         res.json(""); // Devolvemos un ID vacío si no existe
       }
@@ -427,7 +423,7 @@ app.post("/idkit/:tag", (req, res) => {
 
   // Update Estación_1
   db.query(
-    "UPDATE Estación_1 SET ID = ? WHERE Tag = ?",
+    "UPDATE Estación_1 SET Id = ? WHERE Tag = ?",
     [idKit, tag],
     (err, results) => {
       if (err) {
@@ -436,10 +432,9 @@ app.post("/idkit/:tag", (req, res) => {
         return;
       }
       console.log(`ID de kit actualizado para el tag ${tag} en Estación_1`);
-
       // Update Datos
       db.query(
-        "UPDATE Datos SET ID = ? WHERE Tag = ?",
+        "UPDATE Datos SET Id = ? WHERE Tag = ?",
         [idKit, tag],
         (err, results) => {
           if (err) {
@@ -448,14 +443,12 @@ app.post("/idkit/:tag", (req, res) => {
             return;
           }
           console.log(`ID de kit actualizado para el tag ${tag} en Datos`);
-          // Enviar respuesta después de que ambas actualizaciones estén completas
-          res.status(200).send(`ID de kit actualizado para el tag ${tag}`);
+          res.send("ID de kit actualizado correctamente");
         }
       );
     }
   );
 });
-
 
 // ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
 // crear tabla de contenido

@@ -273,3 +273,43 @@ th.estado {
     padding: 7px;
   }
 }
+
+/* Estilos para la disposición de las columnas */
+.contenido-columnas {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start; /* Ajusta esto según sea necesario */
+  flex-wrap: wrap;
+  margin: 20px auto;
+  width: 90vw;
+}
+
+.tabla-columna {
+  width: 60%; /* Ancho para la columna de la tabla */
+}
+
+.pdf-columna {
+  width: 35%; /* Ancho para la columna del PDF */
+  display: flex;
+  justify-content: center;
+}
+
+.pdf-container {
+  width: 100%;
+}
+
+/* Ajustes adicionales según necesidades */
+@media only screen and (max-width: 768px) {
+  .contenido-columnas {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tabla-columna {
+    width: 100%;
+  }
+
+  .pdf-columna {
+    width: 100%;
+  }
+}
