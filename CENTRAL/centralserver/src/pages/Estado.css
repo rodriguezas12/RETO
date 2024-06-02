@@ -62,7 +62,6 @@
   font-weight: bold;
   color: #292929;
   margin-right: 10px;
-  font-weight: 900;
   display: inline-block;
   margin: 0 auto;
 }
@@ -82,11 +81,10 @@
 .elemento-valor {
   border-radius: 10px;
   background-color: #be7530;
-  font-weight: 800;
+  font-weight: bold;
   padding: 8px;
   font-family: "Nunito", sans-serif;
   font-size: min(2vw, 20px);
-  font-weight: bold;
   color: #292929;
   margin-right: 10px;
 }
@@ -156,27 +154,10 @@ th.estado {
   border-radius: 2px;
 }
 
-/* Estilos.css */
-.icono-svg {
-  width: 20px; /* Ajusta el tamaño del icono según tus necesidades */
-  height: 20px;
-  fill: #000000; /* Cambia el color de relleno del icono */
-  /* Agrega cualquier otra propiedad CSS que desees para personalizar el icono */
-}
+/* Media Queries para ajuste en dispositivos */
 
-/* media ajuste en los dispositivos */
 @media only screen and (max-width: 600px) {
-  .header-text {
-    font-size: 1vh;
-    max-width: 60%;
-  }
-
-  .back-button {
-    font-size: 2vh;
-  }
-
   .container-conteo {
-    flex-direction: column;
     width: 100%;
     padding: 5px;
   }
@@ -191,7 +172,7 @@ th.estado {
     margin-right: 0;
   }
 
-  .bottom-estado {
+  .bottom-time-estado {
     font-size: 18px;
     padding: 5px 10px;
   }
@@ -222,16 +203,7 @@ th.estado {
 }
 
 @media only screen and (max-width: 768px) {
-  .header-text {
-    font-size: 1vh;
-  }
-
-  .back-button {
-    font-size: 1vh;
-  }
-
   .container-conteo {
-    flex-direction: column;
     width: 95%;
     padding: 8px;
   }
@@ -247,7 +219,7 @@ th.estado {
     margin-right: 0;
   }
 
-  .bottom-estado {
+  .bottom-time-estado {
     font-size: 20px;
     padding: 6px 12px;
   }
@@ -268,31 +240,17 @@ th.estado {
 }
 
 @media only screen and (max-width: 1024px) {
-  .header-text {
-    font-size: 3vh;
-  }
-
-  .back-button {
-    font-size: 4vh;
-  }
-
   .container-conteo {
-    flex-direction: row;
     width: 90%;
     padding: 10px;
-  }
-
-  .contenedor-label1 {
-    width: auto;
   }
 
   .elemento-label,
   .elemento-valor {
     font-size: 18px;
-    width: 1.5vh;
   }
 
-  .bottom-estado {
+  .bottom-time-estado {
     font-size: 22px;
     padding: 7px 14px;
   }
@@ -342,10 +300,7 @@ th.estado {
     align-items: center;
   }
 
-  .tabla-columna {
-    width: 100%;
-  }
-
+  .tabla-columna,
   .pdf-columna {
     width: 100%;
   }
