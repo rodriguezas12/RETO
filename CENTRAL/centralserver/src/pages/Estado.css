@@ -1,12 +1,11 @@
 /* Estilos regulares */
 /* Estilos básicos para el Header */
 
-
 .container-conteo {
-  margin: 20px auto;
+  margin: 10px auto;
   width: 90vw;
   background-color: #fefaf6;
-  border-radius: 30px;
+  border-radius: 10px;
   padding: 10px;
   display: flex;
   justify-content: space-around;
@@ -18,26 +17,20 @@
   text-align: center;
 }
 
-
 .contenedor-label1 {
   display: flex;
   align-items: center;
   margin: 5px;
   font-family: "Nunito", sans-serif;
-  /* Fuente Nunito */
-  font-size: min(1.5vw, 24px);
+  font-size: min(1.1vw, 20px);
   font-weight: bold;
-  padding: 10px;
+  padding: 8px;
   background-color: #ecd4b6;
-  /* Color azul acero */
-  border-radius: 30px;
-  /* Bordes redondos de 30px */
+  border-radius: 20px;
   color: #fff;
-  /* Color del texto blanco */
 }
 
-.elemento-label,
-.elemento-valor {
+.elemento-label {
   font-family: "Nunito", sans-serif;
   font-size: min(1.5vw, 24px);
   font-weight: bold;
@@ -45,9 +38,9 @@
   margin-right: 10px;
 }
 
-.bottom-estado {
+.bottom-time-estado {
   font-family: "Nunito", sans-serif;
-  font-size: min(1.1vw, 24px);
+  font-size: min(1.1vw, 20px);
   font-weight: bold;
   color: #292929;
   border: none;
@@ -56,9 +49,10 @@
   border-radius: 20px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
   transition: box-shadow 0.3s ease;
+  margin: 1vh;
 }
 
-.bottom-estado:hover {
+.bottom-time-estado:hover {
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
 }
 
@@ -75,28 +69,26 @@
 
 .container-titulo {
   margin: 2px auto;
-  /* Margen superior e inferior de 20px y centrado horizontal */
   width: 90vw;
-  /* Anchura del contenedor */
   height: 40px;
   font-family: "Nunito", sans-serif;
-  /* Fuente Nunito */
   background-color: #ffffff;
   font-size: min(1.5vw, 24px);
   font-weight: bold;
   border-radius: 20px;
-  /* Bordes redondos de 10px */
-
   text-align: center;
-  /* Centrar texto horizontalmente */
 }
 
 .elemento-valor {
   border-radius: 10px;
   background-color: #be7530;
   font-weight: 800;
-  color: #292929;
   padding: 8px;
+  font-family: "Nunito", sans-serif;
+  font-size: min(2vw, 20px);
+  font-weight: bold;
+  color: #292929;
+  margin-right: 10px;
 }
 
 .container-estado {
@@ -134,17 +126,54 @@ th.estado {
   font-weight: bold;
 }
 
-/* media ajuste en los dispositivos*/
+/* Estilo básico para el checkbox */
+.custom-checkbox-estado {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #7c7c7c;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-checkbox-estado:checked {
+  background-color: #53df5a;
+  border: 3px solid #000000;
+}
+
+.custom-checkbox-estado:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: #53df5a;
+  border-radius: 2px;
+}
+
+/* Estilos.css */
+.icono-svg {
+  width: 20px; /* Ajusta el tamaño del icono según tus necesidades */
+  height: 20px;
+  fill: #000000; /* Cambia el color de relleno del icono */
+  /* Agrega cualquier otra propiedad CSS que desees para personalizar el icono */
+}
+
+/* media ajuste en los dispositivos */
 @media only screen and (max-width: 600px) {
   .header-text {
     font-size: 1vh;
-    max-Width: "60%";
+    max-width: 60%;
   }
 
   .back-button {
     font-size: 2vh;
   }
-
 
   .container-conteo {
     flex-direction: column;
@@ -157,8 +186,7 @@ th.estado {
     justify-content: center;
   }
 
-  .elemento-label,
-  .elemento-valor {
+  .elemento-label {
     font-size: 10px;
     margin-right: 0;
   }
@@ -181,8 +209,17 @@ th.estado {
   td.estado {
     padding: 5px;
   }
-}
 
+  .custom-checkbox-estado {
+    width: 15px;
+    height: 15px;
+  }
+
+  .custom-checkbox-estado:checked::after {
+    width: 7px;
+    height: 7px;
+  }
+}
 
 @media only screen and (max-width: 768px) {
   .header-text {
@@ -251,7 +288,8 @@ th.estado {
 
   .elemento-label,
   .elemento-valor {
-    font-size: 20px;
+    font-size: 18px;
+    width: 1.5vh;
   }
 
   .bottom-estado {
@@ -278,18 +316,18 @@ th.estado {
 .contenido-columnas {
   display: flex;
   justify-content: space-around;
-  align-items: flex-start; /* Ajusta esto según sea necesario */
+  align-items: flex-start;
   flex-wrap: wrap;
   margin: 20px auto;
   width: 90vw;
 }
 
 .tabla-columna {
-  width: 60%; /* Ancho para la columna de la tabla */
+  width: 60%;
 }
 
 .pdf-columna {
-  width: 35%; /* Ancho para la columna del PDF */
+  width: 35%;
   display: flex;
   justify-content: center;
 }
@@ -298,7 +336,6 @@ th.estado {
   width: 100%;
 }
 
-/* Ajustes adicionales según necesidades */
 @media only screen and (max-width: 768px) {
   .contenido-columnas {
     flex-direction: column;
