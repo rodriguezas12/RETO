@@ -27,6 +27,16 @@ export default function Inventario() {
     setCeldas(updatedCeldas);
   };
 
+  const contarKits = () => {
+    const conteo = {};
+    celdas.flat().forEach((kit) => {
+      if (kit) {
+        conteo[kit] = (conteo[kit] || 0) + 1;
+      }
+    });
+    return conteo;
+  };
+
   const handleSubmit = async () => {
     const filasParaEnviar = celdas.map((row) => ({
       "Col1": row[0],
@@ -54,6 +64,28 @@ export default function Inventario() {
         console.log("Respuesta de inserción:", message);
       }
       console.log("Todas las solicitudes fueron realizadas con éxito");
+
+      // Enviar datos del evento
+      const conteoKits = contarKits();
+      const descripcion = Object.entries(conteoKits).map(([kit, count]) => `Kit ${kit}: ${count}`).join(', ');
+      const eventoData = {
+        usuario: "NombreDelUsuario", // Reemplaza con la obtención correcta del nombre del usuario
+        evento: "Ingreso material",
+        descripcion: descripcion,
+        fecha: new Date().toISOString().split('T')[0],
+        hora: new Date().toTimeString().split(' ')[0]
+      };
+
+      const eventoResponse = await fetch("http://localhost:5000/eventosIngreso", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(eventoData),
+      });
+      const eventoMessage = await eventoResponse.text();
+      console.log("Respuesta del evento:", eventoMessage);
+
       setCeldas(Array(3).fill(null).map(() => Array(10).fill("")));
     } catch (error) {
       console.error("Error al realizar la solicitud:", error);

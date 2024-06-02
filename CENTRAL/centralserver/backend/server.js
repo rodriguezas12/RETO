@@ -586,11 +586,37 @@ app.get("/solicitud", (req, res) => {
   });
 });
 
-app.get("/eventos", (req, res) => {
-  const { fechaInteres, horaInicial, horaFinal } = req.query;
+app.post("/eventosIngreso", (req, res) => {
+  const { usuario, evento, descripcion, fecha, hora } = req.body;
 
-  let query = "SELECT * FROM Eventos WHERE evento = 'solicitud'";
+  const insertEventoQuery = "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)";
+
+  db.query(insertEventoQuery, [usuario, evento, descripcion, fecha, hora], (err, results) => {
+    if (err) {
+      console.error("Error al insertar el evento:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+    console.log("Evento insertado correctamente");
+    res.status(201).send("Evento insertado correctamente");
+  });
+});
+
+
+app.get("/eventos", (req, res) => {
+  const { fechaInteres, horaInicial, horaFinal, solicitudes, ingresoMaterial } = req.query;
+
+  let query = "SELECT * FROM Eventos WHERE 1=1"; // Base de la consulta
   let queryParams = [];
+
+  // Añadir condiciones para los eventos
+  if (solicitudes && ingresoMaterial) {
+    query += " AND (evento = 'solicitud' OR evento = 'Ingreso material')";
+  } else if (solicitudes) {
+    query += " AND evento = 'solicitud'";
+  } else if (ingresoMaterial) {
+    query += " AND evento = 'Ingreso material'";
+  }
 
   if (fechaInteres) {
     query += " AND fecha = ?";
@@ -614,6 +640,7 @@ app.get("/eventos", (req, res) => {
     res.json(results);
   });
 });
+
 
 
 
@@ -643,7 +670,11 @@ app.post("/solicitar", (req, res) => {
   const { nuevoPedido, nombreUsuario } = req.body;
 
   const insertSolicitudQuery = "INSERT INTO Solicitud (Pedido) VALUES (?)";
-  const insertEventosQuery = "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, CURDATE(), CURTIME())";
+  const insertEventosQuery = "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)";
+
+  const now = new Date();
+  const fecha = now.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+  const hora = now.toTimeString().split(' ')[0]; // Formato HH:MM:SS
 
   db.query(insertSolicitudQuery, [nuevoPedido], (err, results) => {
     if (err) {
@@ -655,7 +686,7 @@ app.post("/solicitar", (req, res) => {
     const evento = 'solicitud';
     const descripcion = `Se solicitaron los siguientes kits: ${nuevoPedido}`;
 
-    db.query(insertEventosQuery, [nombreUsuario, evento, descripcion], (err, results) => {
+    db.query(insertEventosQuery, [nombreUsuario, evento, descripcion, fecha, hora], (err, results) => {
       if (err) {
         console.error("Error al insertar el evento:", err);
         res.status(500).send("Error interno del servidor");
@@ -664,22 +695,36 @@ app.post("/solicitar", (req, res) => {
 
       res.status(201).json({ message: "Pedido registrado correctamente y evento guardado" });
 
-      // Enviar evento vacío 20 segundos después
+      // Enviar solicitud y evento vacíos 20 segundos después
       setTimeout(() => {
         const eventoVacio = '';
         const descripcionVacia = '';
+        const emptyFecha = new Date().toISOString().split('T')[0]; // Fecha actual
+        const emptyHora = new Date().toTimeString().split(' ')[0]; // Hora actual
 
-        db.query(insertEventosQuery, [nombreUsuario, eventoVacio, descripcionVacia], (err, results) => {
+        // Insertar evento vacío
+        db.query(insertEventosQuery, [nombreUsuario, eventoVacio, descripcionVacia, emptyFecha, emptyHora], (err, results) => {
           if (err) {
             console.error("Error al insertar el evento vacío:", err);
           } else {
             console.log("Evento vacío insertado correctamente");
           }
         });
+
+        // Insertar solicitud vacía
+        db.query(insertSolicitudQuery, [''], (err, results) => {
+          if (err) {
+            console.error("Error al insertar la solicitud vacía:", err);
+          } else {
+            console.log("Solicitud vacía insertada correctamente");
+          }
+        });
       }, 20000);
     });
   });
 });
+
+
 
 
 
