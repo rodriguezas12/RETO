@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Header from "../components/header";
 import "./Eventos.css";
@@ -28,6 +28,18 @@ function Eventos() {
     "Estación 6",
     "Estación 7",
   ];
+
+  useEffect(() => {
+    // Aplica la clase eventos-body al body y html cuando el componente se monta
+    document.body.classList.add("eventos-body");
+    document.documentElement.classList.add("eventos-body");
+
+    // Limpia la clase eventos-body cuando el componente se desmonta
+    return () => {
+      document.body.classList.remove("eventos-body");
+      document.documentElement.classList.remove("eventos-body");
+    };
+  }, []);
 
   const fetchSolicitudes = async () => {
     if (checkboxes.solicitudes) {
@@ -73,7 +85,7 @@ function Eventos() {
   };
 
   return (
-    <div>
+    <div className="eventos-wrapper">
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -83,13 +95,13 @@ function Eventos() {
         />
       </Helmet>
       <Header titulo="CONSULTA DE EVENTOS" />
-      <div className="container-titulo">
-        <h2 className="titulo-evento">Seleccione evento de interés</h2>
+      <div className="eventos-container-titulo">
+        <h2 className="eventos-titulo-evento">Seleccione evento de interés</h2>
       </div>
 
-      <div className="container">
-        <div className="container-checkboxes">
-          <div className="contenedor-label1">
+      <div className="eventos-container">
+        <div className="eventos-container-checkboxes">
+          <div className="eventos-contenedor-label1">
             <label>
               <input
                 type="checkbox"
@@ -122,8 +134,8 @@ function Eventos() {
           </div>
         </div>
 
-        <div className="container-filtros">
-          <div className="contenedor-label1">
+        <div className="eventos-container-filtros">
+          <div className="eventos-contenedor-label1">
             <label>
               Fecha de interés:
               <input
@@ -154,27 +166,27 @@ function Eventos() {
               />
             </label>
           </div>
-          <div className="container-boton-consulta">
+          <div className="eventos-container-boton-consulta">
             <button onClick={handleConsultaClick}>Consultar</button>
           </div>
         </div>
       </div>
 
-      <div className="container-conteo">
-        <div className="contenedor-label1">
-          <span className="elemento-label">Kits Armados:</span>
-          <span className="elemento-valor">{kitArmado}</span>
+      <div className="eventos-container-conteo">
+        <div className="eventos-contenedor-label1">
+          <span className="eventos-elemento-label">Kits Armados:</span>
+          <span className="eventos-elemento-valor">{kitArmado}</span>
         </div>
-        <div className="contenedor-label1">
-          <span className="elemento-label">Productos Ensamblados:</span>
-          <span className="elemento-valor">{ensamblados}</span>
+        <div className="eventos-contenedor-label1">
+          <span className="eventos-elemento-label">Productos Ensamblados:</span>
+          <span className="eventos-elemento-valor">{ensamblados}</span>
         </div>
-        <div className="contenedor-label1">
-          <span className="elemento-label">
+        <div className="eventos-contenedor-label1">
+          <span className="eventos-elemento-label">
             Seleccione la estación de interés:
           </span>
           <select
-            className="elemento-valor"
+            className="eventos-elemento-valor"
             value={selectedStation}
             onChange={(e) => setSelectedStation(e.target.value)}
           >
@@ -189,14 +201,14 @@ function Eventos() {
       </div>
 
       {data.length > 0 && (
-        <div className="container-estado">
-          <span className="subtitle">REGISTRO DE EVENTOS:</span>
+        <div className="eventos-container-estado">
+          <span className="eventos-subtitle">REGISTRO DE EVENTOS:</span>
         </div>
       )}
 
       {data.length > 0 && (
-        <div className="tabla-container">
-          <table className="tabla-eventos">
+        <div className="eventos-tabla-container">
+          <table className="eventos-tabla-eventos">
             <thead>
               <tr>
                 <th>Usuario</th>
