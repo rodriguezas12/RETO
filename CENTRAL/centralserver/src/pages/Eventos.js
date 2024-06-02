@@ -99,7 +99,11 @@ function Eventos() {
   }, [selectedStation]);
 
   const fetchSolicitudes = async () => {
-    if (checkboxes.solicitudes || checkboxes.ingresoMaterial || checkboxes.kitsArmados) {
+    if (
+      checkboxes.solicitudes ||
+      checkboxes.ingresoMaterial ||
+      checkboxes.kitsArmados
+    ) {
       try {
         const { fechaInteres, horaInicial, horaFinal } = filters;
         const query = new URLSearchParams({
@@ -110,7 +114,9 @@ function Eventos() {
 
         const response = await fetch(`http://localhost:5000/eventos?${query}`);
         if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
         }
         const solicitudesData = await response.json();
         setData(solicitudesData);
@@ -143,9 +149,9 @@ function Eventos() {
     fetchSolicitudes();
   };
 
-  const areCheckboxesSelected = () => {
-    return checkboxes.solicitudes || checkboxes.ingresoMaterial || checkboxes.kitsArmados;
-  };
+  //const areCheckboxesSelected = () => {
+  //  return checkboxes.solicitudes || checkboxes.ingresoMaterial || checkboxes.kitsArmados;
+  //};
 
   return (
     <div>
@@ -158,12 +164,8 @@ function Eventos() {
         />
       </Helmet>
       <Header titulo="CONSULTA DE EVENTOS" />
-      <div className="container-titulo">
-        <h2 className="titulo-evento">Seleccione evento de interés</h2>
-      </div>
-
       <div className="container">
-        <div className="container-checkboxes">
+        <div className="container-filtros">
           <div className="contenedor-label1">
             <label>
               <input
@@ -174,7 +176,7 @@ function Eventos() {
               />
               Solicitudes
             </label>
-          
+
             <label>
               <input
                 type="checkbox"
@@ -184,7 +186,7 @@ function Eventos() {
               />
               Ingreso Material
             </label>
-          
+
             <label>
               <input
                 type="checkbox"
@@ -195,56 +197,8 @@ function Eventos() {
               Kits Armados
             </label>
           </div>
-        </div>
 
-        <div className="container-filtros">
           <div className="contenedor-label1">
-            <label>
-              Fecha de interés:
-              <input
-                type="date"
-                name="fechaInteres"
-                value={filters.fechaInteres}
-                onChange={handleFilterChange}
-              />
-            </label>
-          
-            <label>
-              Hora inicial:
-              <input
-                type="time"
-                name="horaInicial"
-                value={filters.horaInicial}
-                onChange={handleFilterChange}
-              />
-            </label>
-          
-            <label>
-              Hora final:
-              <input
-                type="time"
-                name="horaFinal"
-                value={filters.horaFinal}
-                onChange={handleFilterChange}
-              />
-            </label>
-          </div>
-          <div className="container-boton-consulta">
-        <button onClick={handleConsultaClick}>Consultar</button>
-      </div>
-        </div>
-      </div>
-
-      <div className="container-conteo">
-        <div className="contenedor-label1">
-          <span className="elemento-label">Kits Armados:</span>
-          <span className="elemento-valor">{kit_armado}</span>
-        </div>
-        <div className="contenedor-label1">
-          <span className="elemento-label">Productos Ensamblados:</span>
-          <span className="elemento-valor">{ensamblados}</span>
-        </div>
-        <div className="contenedor-label1">
           <span className="elemento-label">
             Seleccione la estación de interés:
           </span>
@@ -261,11 +215,50 @@ function Eventos() {
             ))}
           </select>
         </div>
+
+          <div className="contenedor-label1">
+            <label>
+              Fecha de interés:
+              <input
+                type="date"
+                name="fechaInteres"
+                value={filters.fechaInteres}
+                onChange={handleFilterChange}
+              />
+            </label>
+
+            <label>
+              Hora inicial:
+              <input
+                type="time"
+                name="horaInicial"
+                value={filters.horaInicial}
+                onChange={handleFilterChange}
+              />
+            </label>
+
+            <label>
+              Hora final:
+              <input
+                type="time"
+                name="horaFinal"
+                value={filters.horaFinal}
+                onChange={handleFilterChange}
+              />
+            </label>
+          </div>
+          <div className="container-boton-consulta">
+            <button onClick={handleConsultaClick}>Consultar</button>
+          </div>
+
+        </div>
       </div>
 
       {data.length > 0 && (
         <div className="container-estado">
-          <span className="subtitle">REGISTRO DE KITS ARMADOS EN ESTACIÓN:</span>
+          <span className="subtitle">
+            REGISTRO DE KITS ARMADOS EN ESTACIÓN:
+          </span>
           <table>
             <thead>
               <tr>
