@@ -1,30 +1,46 @@
 /* Estilo del contenedor de inventario */
-.container-ingreso {
-  margin: 20px auto;
-  width: 90%;
-  background-color: transparent;
+.container-Ingreso {
+  margin: 10px auto;
+  width: 90vw;
+  background-color: #fefaf6;
   border-radius: 10px;
   padding: 10px;
-  overflow: auto;
-  /* Añadir scroll si es necesario */
-  font-family: 'Nunito', sans-serif;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.container-estacion {
+.contenedor-labelingreso {
   display: flex;
   align-items: center;
   margin: 5px;
   font-family: "Nunito", sans-serif;
-  /* Fuente Nunito */
+  font-size: min(1.1vw, 20px);
+  font-weight: bold;
+  padding: 8px;
+  background-color: #ecd4b6;
+  border-radius: 20px;
+  color: #fff;
+}
+
+.elemento-labelingreso {
+  font-family: "Nunito", sans-serif;
   font-size: min(1.5vw, 24px);
   font-weight: bold;
-  padding: 10px;
-  background-color: #ecd4b6;
-  /* Color azul acero */
-  border-radius: 30px;
-  /* Bordes redondos de 30px */
-  color: #fff;
-  /* Color del texto blanco */
+  color: #292929;
+  margin-right: 10px;
+}
+
+.container-estacion {
+  border-radius: 10px;
+  background-color: #be7530;
+  font-weight: bold;
+  padding: 8px;
+  font-family: "Nunito", sans-serif;
+  font-size: min(2vw, 20px);
+  color: #292929;
+  margin-right: 10px;
 }
 
 /* Estilo de la cabecera */

@@ -4,35 +4,34 @@ import Header from "../components/header";
 import "./IngresoMaterial.css";
 
 
+
 function Ingresomaterial() {
   const [data, setData] = useState([]);
+  const [selectedStation, setSelectedStation] = useState('1');
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(selectedStation);
+  }, [selectedStation]);
 
-  const fetchData = () => {
-    fetch('http://localhost:5000/IDingreso')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al obtener los datos');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Si los datos recibidos son un array de objetos con una propiedad 'ID'
-        setData(data.map(item => ({ id: item.ID, bahia: '' })));
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+  const fetchData = async (stationNumber) => {
+    try {
+      const response = await fetch(`http://localhost:5000/estaciones/${stationNumber}`);
+      if (!response.ok) {
+        throw new Error('Error al obtener los datos');
+      }
+      const result = await response.json();
+      setData(result.map(item => ({ id: item.ID, bahia: item.Bahia || '' })));
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
-  const [selectedStation, setSelectedStation] = useState('1');
 
   const handleStationChange = (e) => {
     setSelectedStation(e.target.value);
   };
-
+  const handleCheckboxChange = (e) => {
+    setShowButtons(e.target.checked); // Cambia el estado de showButtons según el estado del checkbox
+  };
 
   const handleInputChange = (index, e) => {
     const { name, value } = e.target;
@@ -43,7 +42,7 @@ function Ingresomaterial() {
   };
 
   const handleSaveChanges = () => {
-    fetch('http://localhost:5000/Bahia/:ID', {
+    fetch('http://localhost:5000/guardarCambios', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,6 +63,7 @@ function Ingresomaterial() {
       });
   };
 
+
   return (
     <div>
       <Helmet>
@@ -75,6 +75,31 @@ function Ingresomaterial() {
         />
       </Helmet>
       <Header titulo="Ingreso de material" />
+      <div className="container-Ingreso">
+        <div className="contenedor-labelingreso">
+          <span className="elemento-labelingreso"></span>
+          <input
+            type="checkbox"
+            id="checklist"
+            className="custom-checkbox-estado"
+            onChange={handleCheckboxChange} // Maneja el cambio en el checkbox
+          />
+          <span className="elemento-label">Estación Ensamble</span>
+        </div>
+        <div className="container-estacion" style={{ textAlign: 'left' }}>
+          <span>Seleccione la estación de interés:</span>
+          <select
+            className="elemento-valor"
+            value={selectedStation}
+            onChange={handleStationChange}
+          >
+            <option value="1">Estación 1</option>
+            <option value="2">Estación 2</option>
+            <option value="3">Estación 3</option>
+          </select>
+          <button className="container-estacion" onClick={handleSaveChanges}>Guardar Cambios</button>
+        </div>
+      </div>
       <div className="container-ingreso">
         <div className="header">
           <div className="header-item">ID</div>
@@ -93,18 +118,9 @@ function Ingresomaterial() {
             </div>
           </div>
         ))}
-        <div className="container-estacion">
-          <select value={selectedStation} onChange={handleStationChange}>
-            <option value="1">Estación 1</option>
-            <option value="2">Estación 2</option>
-            <option value="3">Estación 3</option>
-          </select>
-          <button onClick={handleSaveChanges}>Guardar Cambios</button>
-        </div>
       </div>
     </div>
   );
 }
-
 export default Ingresomaterial;
 
