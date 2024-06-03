@@ -12,6 +12,9 @@ function Eventos() {
     solicitudes: false,
     ingresoMaterial: false,
     kitsArmados: false,
+    asignacionKits: false,
+    asignacionContenido: false,
+    setsTerminados: false,
   });
   const [filters, setFilters] = useState({
     fechaInteres: "",
@@ -42,7 +45,14 @@ function Eventos() {
   }, []);
 
   const fetchEventos = async () => {
-    if (!checkboxes.solicitudes && !checkboxes.ingresoMaterial) {
+    if (
+      !checkboxes.solicitudes &&
+      !checkboxes.ingresoMaterial &&
+      !checkboxes.kitsArmados &&
+      !checkboxes.asignacionKits &&
+      !checkboxes.asignacionContenido &&
+      !checkboxes.setsTerminados
+    ) {
       // Si ningún checkbox está seleccionado, limpiar los datos
       setData([]);
       return;
@@ -54,8 +64,12 @@ function Eventos() {
         fechaInteres,
         horaInicial,
         horaFinal,
-        solicitudes: checkboxes.solicitudes ? 'true' : '',
-        ingresoMaterial: checkboxes.ingresoMaterial ? 'true' : ''
+        solicitudes: checkboxes.solicitudes ? "true" : "",
+        ingresoMaterial: checkboxes.ingresoMaterial ? "true" : "",
+        kitsArmados: checkboxes.kitsArmados ? "true" : "",
+        asignacionKits: checkboxes.asignacionKits ? "true" : "",
+        asignacionContenido: checkboxes.asignacionContenido ? "true" : "",
+        setsTerminados: checkboxes.setsTerminados ? "true" : "",
       }).toString();
 
       const response = await fetch(`http://localhost:5000/eventos?${query}`);
@@ -136,6 +150,36 @@ function Eventos() {
                 onChange={handleCheckboxChange}
               />
               Kits Armados
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="asignacionKits"
+                checked={checkboxes.asignacionKits}
+                onChange={handleCheckboxChange}
+              />
+              Asignación de Kits
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="asignacionContenido"
+                checked={checkboxes.asignacionContenido}
+                onChange={handleCheckboxChange}
+              />
+              Asignación de Contenido
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="setsTerminados"
+                checked={checkboxes.setsTerminados}
+                onChange={handleCheckboxChange}
+              />
+              Sets Terminados
             </label>
           </div>
         </div>
