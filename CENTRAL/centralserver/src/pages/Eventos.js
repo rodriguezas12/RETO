@@ -19,9 +19,10 @@ function Eventos() {
     entrada: false,
   });
   const [filters, setFilters] = useState({
-    fechaInteres: "",
-    horaInicial: "",
-    horaFinal: "",
+    fechaInicio: "",
+    fechaFin: "",
+    horaInicio: "",
+    horaFin: "",
   });
 
   const stations = [
@@ -63,11 +64,12 @@ function Eventos() {
     }
 
     try {
-      const { fechaInteres, horaInicial, horaFinal } = filters;
+      const { fechaInicio, fechaFin, horaInicio, horaFin } = filters;
       const query = new URLSearchParams({
-        fechaInteres,
-        horaInicial,
-        horaFinal,
+        fechaInteres: fechaInicio,
+        fechaFin,
+        horaInicial: horaInicio,
+        horaFinal: horaFin,
         solicitudes: checkboxes.solicitudes ? "true" : "",
         ingresoMaterial: checkboxes.ingresoMaterial ? "true" : "",
         kitsArmados: checkboxes.kitsArmados ? "true" : "",
@@ -100,10 +102,34 @@ function Eventos() {
 
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: value,
-    }));
+
+    if (name === "fechaInicio") {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        fechaInicio: value,
+        fechaFin: "", // Reset fechaFin when fechaInicio changes
+        horaInicio: "", // Reset horaInicio when fechaInicio changes
+        horaFin: "", // Reset horaFin when fechaInicio changes
+      }));
+    } else if (name === "fechaFin") {
+      if (new Date(value) >= new Date(filters.fechaInicio)) {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          fechaFin: value,
+        }));
+      }
+    } else if (name === "horaInicio") {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        horaInicio: value,
+        horaFin: "", // Reset horaFin when horaInicio changes
+      }));
+    } else if (name === "horaFin") {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        horaFin: value,
+      }));
+    }
   };
 
   const handleConsultaClick = () => {
@@ -213,32 +239,46 @@ function Eventos() {
         <div className="eventos-container-filtros">
           <div className="eventos-contenedor-label1">
             <label>
-              Fecha de interés:
+              Fecha de inicio:
               <input
                 type="date"
-                name="fechaInteres"
-                value={filters.fechaInteres}
+                name="fechaInicio"
+                value={filters.fechaInicio}
                 onChange={handleFilterChange}
               />
             </label>
 
             <label>
-              Hora inicial:
+              Fecha de fin:
               <input
-                type="time"
-                name="horaInicial"
-                value={filters.horaInicial}
+                type="date"
+                name="fechaFin"
+                value={filters.fechaFin}
                 onChange={handleFilterChange}
+                disabled={!filters.fechaInicio}
+                min={filters.fechaInicio}
               />
             </label>
 
             <label>
-              Hora final:
+              Hora de inicio:
               <input
                 type="time"
-                name="horaFinal"
-                value={filters.horaFinal}
+                name="horaInicio"
+                value={filters.horaInicio}
                 onChange={handleFilterChange}
+                disabled={!filters.fechaFin}
+              />
+            </label>
+
+            <label>
+              Hora de fin:
+              <input
+                type="time"
+                name="horaFin"
+                value={filters.horaFin}
+                onChange={handleFilterChange}
+                disabled={!filters.horaInicio}
               />
             </label>
           </div>
