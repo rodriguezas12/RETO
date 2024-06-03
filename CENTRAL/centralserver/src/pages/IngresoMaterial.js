@@ -8,12 +8,15 @@ import "./IngresoMaterial.css";
 function Ingresomaterial() {
   const [data, setData] = useState([]);
   const [selectedStation, setSelectedStation] = useState('1');
-  const [showButtons, setShowButtons] = useState(false); // Agregar esta línea
-
+  const [isEditing, setIsEditing] = useState(false); // Estado para controlar el modo edición
 
   useEffect(() => {
-    fetchData(selectedStation);
-  }, [selectedStation]);
+    if (!isEditing) {
+      fetchData(selectedStation);
+      const interval = setInterval(() => fetchData(selectedStation), 2000); // Actualiza cada 5 segundos
+      return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente o cambiar el modo
+    }
+  }, [selectedStation, isEditing]);
 
   const fetchData = async (stationNumber) => {
     try {
@@ -31,8 +34,10 @@ function Ingresomaterial() {
   const handleStationChange = (e) => {
     setSelectedStation(e.target.value);
   };
+
   const handleCheckboxChange = (e) => {
-    setShowButtons(e.target.checked); // Cambia el estado de showButtons según el estado del checkbox
+    setIsEditing(e.target.checked); // Cambia el modo según el estado del checkbox
+
   };
 
   const handleInputChange = (index, e) => {
@@ -63,8 +68,8 @@ function Ingresomaterial() {
       .catch(error => {
         console.error('Error:', error);
       });
-  };
 
+  };
 
   return (
     <div>
@@ -79,6 +84,7 @@ function Ingresomaterial() {
       <Header titulo="Ingreso de material" />
       <div className="container-Ingreso">
         <div className="contenedor-labelingreso">
+          <span className="elemento-labelingreso"></span>
           <input
             type="checkbox"
             id="checklist"
@@ -98,9 +104,8 @@ function Ingresomaterial() {
             <option value="2">Estación 2</option>
             <option value="3">Estación 3</option>
           </select>
-          {showButtons && (
-            <button className="large-button" onClick={handleSaveChanges}>Guardar Cambios</button>
-          )}
+          <button className="boton-ingreso"
+            onClick={handleSaveChanges}>Guardar Cambios</button>
         </div>
       </div>
       <div className="container-ingreso">
@@ -117,6 +122,7 @@ function Ingresomaterial() {
                 name="bahia"
                 value={item.bahia}
                 onChange={(e) => handleInputChange(index, e)}
+                placeholder={item.bahia}
               />
             </div>
           </div>
@@ -125,5 +131,5 @@ function Ingresomaterial() {
     </div>
   );
 }
-
 export default Ingresomaterial;
+

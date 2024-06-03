@@ -241,6 +241,7 @@ app.get('/michi', (req, res) => {
               Tag,
               Nombre,
               Cantidad,
+              Bahia,
               DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab,
               DATE_FORMAT(Hora_salida_lab, "%Y-%m-%d %H:%i:%s") AS Hora_salida_lab,
               INV,
@@ -697,6 +698,7 @@ app.post('/guardarCambios', (req, res) => {
       }
     });
   });
+
 
   // Envía una respuesta de éxito una vez que todas las consultas se han ejecutado
   res.send({ status: 'success', message: 'Datos actualizados correctamente' });

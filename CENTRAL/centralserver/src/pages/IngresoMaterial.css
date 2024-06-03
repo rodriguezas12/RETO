@@ -43,6 +43,20 @@
   margin-right: 10px;
 }
 
+.boton-ingreso {
+  font-family: "Nunito", sans-serif;
+  font-size: min(1.1vw, 20px);
+  font-weight: bold;
+  color: #292929;
+  border: none;
+  background-color: #be7530;
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s ease;
+  margin: 1vh;
+}
+
 /* Estilo de la cabecera */
 .header {
   display: flex;
