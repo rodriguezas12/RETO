@@ -11,42 +11,12 @@ function Ingresomaterial() {
   const [isEditing, setIsEditing] = useState(false); // Estado para controlar el modo edición
 
   useEffect(() => {
-    loadData();
-    const interval = setInterval(loadData, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleCellClick = (rowIndex, columnIndex) => {
-    if (!kitSeleccionado) return;
-    const updatedCeldas = [...celdas];
-    updatedCeldas[rowIndex][columnIndex] = kitSeleccionado;
-    setCeldas(updatedCeldas);
-  };
-
-  const contarKits = () => {
-    const conteo = {};
-    celdas.flat().forEach((kit) => {
-      if (kit) {
-        conteo[kit] = (conteo[kit] || 0) + 1;
-      }
-    });
-    return conteo;
-  };
-
-  const handleSubmit = async () => {
-    const filasParaEnviar = celdas.map((row) => ({
-      "Col1": row[0],
-      "Col2": row[1],
-      "Col3": row[2],
-      "Col4": row[3],
-      "Col5": row[4],
-      "Col6": row[5],
-      "Col7": row[6],
-      "Col8": row[7],
-      "Col9": row[8],
-      "Col10": row[9],
-    }));
+    if (!isEditing) {
+      fetchData(selectedStation);
+      const interval = setInterval(() => fetchData(selectedStation), 2000); // Actualiza cada 5 segundos
+      return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente o cambiar el modo
+    }
+  }, [selectedStation, isEditing]);
 
   const fetchData = async (stationNumber) => {
     try {
@@ -54,30 +24,8 @@ function Ingresomaterial() {
       if (!response.ok) {
         throw new Error('Error al obtener los datos');
       }
-      console.log("Todas las solicitudes fueron realizadas con éxito");
-
-      // Enviar datos del evento
-      const conteoKits = contarKits();
-      const descripcion = Object.entries(conteoKits).map(([kit, count]) => `Kit ${kit}: ${count}`).join(', ');
-      const eventoData = {
-        usuario: "NombreDelUsuario", // Reemplaza con la obtención correcta del nombre del usuario
-        evento: "Ingreso material",
-        descripcion: descripcion,
-        fecha: new Date().toISOString().split('T')[0],
-        hora: new Date().toTimeString().split(' ')[0]
-      };
-
-      const eventoResponse = await fetch("http://localhost:5000/eventosIngreso", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(eventoData),
-      });
-      const eventoMessage = await eventoResponse.text();
-      console.log("Respuesta del evento:", eventoMessage);
-
-      setCeldas(Array(3).fill(null).map(() => Array(10).fill("")));
+      const result = await response.json();
+      setData(result.map(item => ({ id: item.ID, bahia: item.Bahia || '' })));
     } catch (error) {
       console.error('Error:', error);
     }
@@ -183,4 +131,5 @@ function Ingresomaterial() {
     </div>
   );
 }
-}
+export default Ingresomaterial;
+  
