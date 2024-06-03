@@ -101,7 +101,7 @@
 .icono-svg {
   width: 20px;
   height: 20px;
-  fill: #000000; 
+  fill: #000000;
 }
 
 /* Estilos regulares */
@@ -185,7 +185,7 @@
 }
 
 .elemento-valor {
-  border-radius: 10px;
+  border-radius: 100px;
   background-color: #be7530;
   font-weight: bold;
   padding: 8px;
@@ -207,7 +207,7 @@
 .icono-svg {
   width: 20px;
   height: 20px;
-  fill: #000000; 
+  fill: #000000;
 }
 
 table {
@@ -224,7 +224,7 @@ thead {
   color: #fff;
 }
 
-th.estado{
+th.estado {
   padding: 7px;
 }
 
@@ -295,7 +295,7 @@ td.estado {
     font-size: 12px;
   }
 
-  th.estado{
+  th.estado {
     padding: 5px;
   }
 
@@ -368,7 +368,7 @@ td.estado {
     font-size: 16px;
   }
 
-  th.estado{
+  th.estado {
     padding: 7px;
   }
 
@@ -420,7 +420,7 @@ td.estado {
     font-size: 16px;
   }
 
-  th.estado{
+  th.estado {
     padding: 7px;
   }
 
@@ -498,7 +498,7 @@ td.estado {
     font-size: 16px;
   }
 
-  th.estado{
+  th.estado {
     padding: 7px;
   }
 
@@ -554,7 +554,7 @@ td.estado {
     font-size: 16px;
   }
 
-  th.estado{
+  th.estado {
     padding: 7px;
   }
 
@@ -594,7 +594,7 @@ td.estado {
     font-size: 16px;
   }
 
-  th.estado{
+  th.estado {
     padding: 7px;
   }
 
@@ -640,12 +640,13 @@ td.estado {
   .pdf-columna {
     width: 100%;
   }
+
   table {
     width: 90%;
     font-size: 16px;
   }
 
-  th.estado{
+  th.estado {
     padding: 7px;
   }
 

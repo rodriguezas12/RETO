@@ -15,9 +15,10 @@ PASOS PARA CORRER EL CODIGO:
 
         cd CENTRAL/centralserver && npm start
 
-    De manera normal:
-    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    cd CENTRAL/centralserver && npm start
+    De manera normal:cd CENTRAL/centralserver && npm start
+    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    >>>>>>
+    
     >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Automaticamente se debe abrir el localhost/3000, se debe ver la pagina sin ningun problema
 --------------------------------------------------------------
