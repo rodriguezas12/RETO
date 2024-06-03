@@ -2,6 +2,7 @@ import mysql.connector
 from reader import R420
 import time
 import datetime
+import re
 
 # Diccionario para almacenar la última detección de cada tag en bodega
 ultima_deteccion_bodega = {}
@@ -55,6 +56,8 @@ tags_detectados_RACK= []
 conexion = mysql.connector.connect(user='admin', password='usuario123', host='db-retorfid.cdsc040qszy0.us-east-2.rds.amazonaws.com',
                                    database='RETORFID', port='3306')
 
+# conexion = mysql.connector.connect(user='root', password='asdasd', host='localhost',
+#                                    database='prueba', port='3306')
 
 # Crear un cursor
 cursor = conexion.cursor()
@@ -84,11 +87,31 @@ CREATE TABLE IF NOT EXISTS Contabilidad_Kits (
 ) COMMENT 'Contabilidad de los kits'
 """
 
-# Ejecutar la consulta SQL para crear la tabla de datos
-cursor.execute(sql_create_table_datos)
+sql_create_table_dropeo = """
+CREATE TABLE IF NOT EXISTS dropeo (
+  id INT AUTO_INCREMENT,
+  dropp VARCHAR(45) DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT 'tabla de solicitud';
+"""
 
-# Ejecutar la consulta SQL para crear la tabla de contabilidad de kits
+sql_insert_first_row_if_empty = """
+INSERT INTO dropeo (dropp)
+SELECT ''
+WHERE NOT EXISTS (SELECT 1 FROM dropeo);
+"""
+
+cursor.execute(sql_create_table_dropeo)
+conexion.commit()
+
+cursor.execute(sql_insert_first_row_if_empty)
+conexion.commit()
+
+cursor.execute(sql_create_table_datos)
+conexion.commit()
+
 cursor.execute(sql_create_table_contabilidad_kits)
+conexion.commit()
 
 # Verificar si la tabla de contabilidad está vacía
 cursor.execute("SELECT COUNT(*) FROM Contabilidad_Kits")
@@ -145,6 +168,14 @@ reader_RACK = R420('192.168.0.20')
 # Definir una función para obtener la hora actual formateada
 def obtener_hora_actual():
     return time.strftime('%Y-%m-%d %H:%M:%S')
+
+def extract_number_from_string(drop_kit):
+
+    match = re.search(r'\d+', str(drop_kit))
+    if match:
+        return match.group(0)
+    else:
+        return None
 
 durationn=0.5
 
@@ -297,12 +328,71 @@ while True:
 
     ############
     # Verifica cuántos registros cumplirían con la condición antes de la actualización a 'SI'
+
     cursor.execute("""
-        SELECT COUNT(*) FROM Datos
-        WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+        SELECT Nombre FROM Datos
+        WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL AND INV = 'NO'
     """)
-    count = cursor.fetchone()[0]
-    print(f"Registros a actualizar a 'SI': {count}")
+    resultado = cursor.fetchone()
+    cursor.fetchall()
+    print("resultado", resultado)
+    if resultado:
+        
+        nombre_dropp = resultado[0]
+        nombre_dropp = extract_number_from_string(nombre_dropp)
+        cursor.execute("SELECT dropp FROM dropeo")
+        rows = cursor.fetchone()  # Obtener todos los resultados de la consulta
+        
+        drops_registrados = [registro[0] for registro in cursor.fetchall()]
+        #cursor.fetchall()
+
+        try:
+
+            # Verificar si el valor ya existe en la tabla 'dropeo'
+            cursor.execute("SELECT COUNT(*) FROM dropeo WHERE dropp = %s", (nombre_dropp,))
+            count = cursor.fetchone()
+            if count is not None:
+                count = count[0]
+            else:
+                count = 0
+        
+        except Exception as e:
+            print(f"lol1: {e}")
+
+            
+        print("nombre_dropp= ", nombre_dropp)
+        print("drops_registrados= ", drops_registrados)
+
+        # Evitar resultados no leídos
+        cursor.fetchall()
+
+        if nombre_dropp in drops_registrados:  # Si el valor no existe, insertarlo
+            print(f"El valor '{nombre_dropp}' ya existe en la tabla 'dropeo'. No se ha insertado nuevamente.")
+        else:
+            cursor.execute("INSERT INTO dropeo (dropp) VALUES (%s)", (nombre_dropp,))
+            print("el valor se registro en dropp existosamente")
+            conexion.commit()
+            
+            primer_si_detectado = True
+        
+
+        
+        # Verificar si hay registros para actualizar a 'SI'
+        cursor.execute("""
+            SELECT COUNT(*) FROM Datos
+            WHERE Hora_entrada_bodega IS NOT NULL AND Hora_salida_bodega IS NULL
+        """)
+
+        count = cursor.fetchone()
+        try:
+            if count is not None:
+                count = count[0]
+            else:
+                count = 0  
+            print(count)
+        
+        except Exception as e:
+            print(f"lol2: {e}")
 
     # Si count es mayor que 0, realiza la actualización a 'SI'
     if count > 0:
