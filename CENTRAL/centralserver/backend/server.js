@@ -241,6 +241,7 @@ app.get('/michi', (req, res) => {
               Tag,
               Nombre,
               Cantidad,
+              Bahia,
               DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab,
               DATE_FORMAT(Hora_salida_lab, "%Y-%m-%d %H:%i:%s") AS Hora_salida_lab,
               INV,
@@ -297,7 +298,7 @@ app.get("/estaciones/:numeroEstacion", (req, res) => {
 
 // Endpoint para enviar datos a la base de datos al detener el contador
 app.post('/sets', (req, res) => {
-  const {usuario, evento, descripcion, fecha, hora } = req.body;
+  const { usuario, evento, descripcion, fecha, hora } = req.body;
 
   const query = 'INSERT INTO RETORFID.Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)';
   db.query(query, [usuario, evento, descripcion, fecha, hora], (err, result) => {
@@ -504,7 +505,7 @@ app.post('/contenido/:kits', (req, res) => {
   });
 });
 
-app.post('/contenido', (req, res) => {
+app.post('/contenido1', (req, res) => {
   const { Kits, Contenido } = req.body;
 
   const query = 'INSERT INTO RETORFID.Contenido (Kits, Contenido) VALUES (?, ?)';
@@ -669,45 +670,27 @@ app.post("/solicitar", (req, res) => {
   });
 });
 // Desde aqui se implementa ingreso de material
-app.post('/Bahia/:ID', (req, res) => {
-  const { ID } = req.params; // Obtén el ID de los parámetros de la URL
-  const { Bahia } = req.body; // Obtén el valor de Bahia del cuerpo de la solicitud
+app.post('/guardarCambios', (req, res) => {
+  const updates = req.body; // Los datos enviados desde el frontend
 
   // Define la consulta SQL para actualizar la columna Bahia en la tabla Datos
-  const query = 'UPDATE RETORFID.Datos SET Bahia = ? ';
+  const query = 'UPDATE RETORFID.Datos SET Bahia = ? WHERE ID = ?';
 
-  // Ejecuta la consulta SQL
-  db.query(query, [Bahia, ID], (err, result) => {
-    if (err) {
-      // Maneja los errores
-      console.error('Error al actualizar los datos:', err);
-      res.status(500).send('Error en el servidor');
-      return;
-    }
-    // Envía una respuesta de éxito
-    res.send({ ID, Bahia });
+  // Ejecuta la consulta SQL para cada actualización
+  updates.forEach(update => {
+    const { id, bahia } = update;
+    db.query(query, [bahia, id], (err, result) => {
+      if (err) {
+        console.error('Error al actualizar los datos:', err);
+        return res.status(500).send('Error en el servidor');
+      }
+    });
   });
+
+
+  // Envía una respuesta de éxito una vez que todas las consultas se han ejecutado
+  res.send({ status: 'success', message: 'Datos actualizados correctamente' });
 });
-app.get('/IDingreso', (req, res) => {
-  const { estacion } = req.query;
-
-  // Verifica que la estación proporcionada sea válida (1, 2 o 3)
-  if (estacion !== '1' && estacion !== '2' && estacion !== '3') {
-    return res.status(400).json({ error: 'Estación inválida' });
-  }
-
-  const tableName = `Estación_${estacion}`;
-
-  db.query(`SELECT ID FROM RETORFID.${tableName}`, (err, results) => {
-    if (err) {
-      console.error('Error al obtener los datos:', err);
-      return res.status(500).send('Error en el servidor');
-    }
-    res.json(results);
-  });
-});
-
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
