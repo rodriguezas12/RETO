@@ -21,25 +21,16 @@ function Inventario() {
         .catch((error) => console.error("Error:", error));
     };
 
-    // Realizar la primera llamada para obtener los datos iniciales
-    fetchData();
+    fetchData(); // Fetch data initially
+    const interval = setInterval(fetchData, 2000); // Set interval to fetch data every 2 seconds
 
-    // Establecer un intervalo para realizar la consulta cada segundo
-    const intervalId = setInterval(fetchData, 1000);
-
-    // Limpiar el intervalo cuando el componente se desmonte
-    return () => clearInterval(intervalId);
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
   return (
     <div>
       <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
-          rel="stylesheet"
-        />
+
       </Helmet>
       <Header titulo="INVENTARIO" />
       <div className="container-inventario">

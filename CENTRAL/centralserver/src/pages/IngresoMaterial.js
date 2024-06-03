@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from 'react-helmet';
 import Header from "../components/header";
+import "./IngresoMaterial.css";
 
-export default function Inventario() {
-  const [celdas, setCeldas] = useState(Array(3).fill(null).map(() => Array(10).fill("")));
-  const [kitSeleccionado, setKitSeleccionado] = useState("");
+
+
+function Ingresomaterial() {
   const [data, setData] = useState([]);
-
-  const loadData = () => {
-    fetch("http://localhost:5000/said")
-      .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error("Error al cargar los datos:", error));
-  };
+  const [selectedStation, setSelectedStation] = useState('1');
+  const [isEditing, setIsEditing] = useState(false); // Estado para controlar el modo edición
 
   useEffect(() => {
     loadData();
@@ -51,17 +48,11 @@ export default function Inventario() {
       "Col10": row[9],
     }));
 
+  const fetchData = async (stationNumber) => {
     try {
-      for (const fila of filasParaEnviar) {
-        const response = await fetch("http://localhost:5000/posicion", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(fila),
-        });
-        const message = await response.text();
-        console.log("Respuesta de inserción:", message);
+      const response = await fetch(`http://localhost:5000/estaciones/${stationNumber}`);
+      if (!response.ok) {
+        throw new Error('Error al obtener los datos');
       }
       console.log("Todas las solicitudes fueron realizadas con éxito");
 
@@ -88,63 +79,108 @@ export default function Inventario() {
 
       setCeldas(Array(3).fill(null).map(() => Array(10).fill("")));
     } catch (error) {
-      console.error("Error al realizar la solicitud:", error);
+      console.error('Error:', error);
     }
   };
 
+  const handleStationChange = (e) => {
+    setSelectedStation(e.target.value);
+  };
+
+  const handleCheckboxChange = (e) => {
+    setIsEditing(e.target.checked); // Cambia el modo según el estado del checkbox
+
+  };
+
+  const handleInputChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedData = data.map((item, i) =>
+      i === index ? { ...item, [name]: value } : item
+    );
+    setData(updatedData);
+  };
+
+  const handleSaveChanges = () => {
+    fetch('http://localhost:5000/guardarCambios', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al guardar los cambios');
+        }
+        return response.json();
+      })
+      .then(updatedData => {
+        console.log('Datos guardados:', updatedData);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+  };
+
   return (
-    <>
-      <Header titulo="INGRESO DE MATERIAL" />
-      <div className="container-inventario">
-        <table>
-          <thead>
-            <tr>
-              {Array(10).fill(null).map((_, index) => (
-                <th key={index}>Bahía {index * 3 + 1}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, rowIndex) => (
-              <tr key={rowIndex}>
-                {Array(10).fill(null).map((_, columnIndex) => (
-                  <td key={columnIndex}>
-                    Bahía {columnIndex * 3 + rowIndex + 1}: {item[`Col${columnIndex + 1}`] ? `Kit ${item[`Col${columnIndex + 1}`]}` : "Vacío"}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div>
+      <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          rel="stylesheet"
+        />
+      </Helmet>
+      <Header titulo="Ingreso de material" />
+      <div className="container-Ingreso">
+        <div className="contenedor-labelingreso">
+          <span className="elemento-labelingreso"></span>
+          <input
+            type="checkbox"
+            id="checklist"
+            className="custom-checkbox-estado"
+            onChange={handleCheckboxChange} // Maneja el cambio en el checkbox
+          />
+          <span className="elemento-label"> Estado de Edición</span>
+        </div>
+        <div className="container-estacion" style={{ textAlign: 'left' }}>
+          <span>Seleccione la estación de interés:</span>
+          <select
+            className="elemento-valor"
+            value={selectedStation}
+            onChange={handleStationChange}
+          >
+            <option value="1">Estación 1</option>
+            <option value="2">Estación 2</option>
+            <option value="3">Estación 3</option>
+          </select>
+          <button className="boton-ingreso"
+            onClick={handleSaveChanges}>Guardar Cambios</button>
+        </div>
       </div>
-      <p className="instructions">
-        La siguiente tabla representa las bahías disponibles para establecer el nuevo orden del rack, por favor asignelo a su gusto.
-      </p>
-      <select value={kitSeleccionado} onChange={(e) => setKitSeleccionado(e.target.value)}>
-        <option value="">Seleccione un Kit</option>
-        <option value="1">Kit 1</option>
-        <option value="2">Kit 2</option>
-        <option value="3">Kit 3</option>
-        <option value="4">Kit 4</option>
-        <option value="5">Kit 5</option>
-        <option value="6">Kit 6</option>
-      </select>
       <div className="container-ingreso">
-        <table>
-          <tbody>
-            {celdas.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row.map((cell, columnIndex) => (
-                  <td key={columnIndex} onClick={() => handleCellClick(rowIndex, columnIndex)}>
-                    {cell || "Vacío"}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button onClick={handleSubmit}>Enviar</button>
+        <div className="header">
+          <div className="header-item">ID</div>
+          <div className="header-item">Bahía</div>
+        </div>
+        {data.map((item, index) => (
+          <div className="row" key={index}>
+            <div className="cell">{item.id}</div>
+            <div className="cell">
+              <input
+                type="text"
+                name="bahia"
+                value={item.bahia}
+                onChange={(e) => handleInputChange(index, e)}
+                placeholder={item.bahia}
+              />
+            </div>
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
+}
 }

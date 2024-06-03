@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import Header from "../components/header";
 import "./Solicitud.css";
+import { Link } from "react-router-dom";
 
 export default function Picking() {
   const [numKits, setNumKits] = useState(0);
@@ -80,6 +81,7 @@ export default function Picking() {
         console.error("Error al enviar el pedido:", error);
         alert("Error al enviar el pedido");
       });
+
   };
 
   return (
@@ -115,7 +117,9 @@ export default function Picking() {
         })}
       </div>
       <div style={{ textAlign: "center", marginTop: "20px" }}>
+      <Link to="/pick">
         <button onClick={enviarPedido}>Enviar</button>
+          </Link>
       </div>
     </div>
   );

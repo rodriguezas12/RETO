@@ -1,58 +1,94 @@
-.container-ingreso {
-  width: 90%;
-  margin: 5% auto;
-  text-align: center;
-  background-color: white;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  /* Fija el ancho de las columnas */
-}
-
-th,
-td {
-  border: 1px solid #ddd;
+/* Estilo del contenedor de inventario */
+.container-Ingreso {
+  margin: 10px auto;
+  width: 90vw;
+  background-color: #fefaf6;
+  border-radius: 10px;
   padding: 10px;
-  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-th {
-  background-color: #f2f2f2;
-  /* Color de fondo para las cabeceras */
+.contenedor-labelingreso {
+  display: flex;
+  align-items: center;
+  margin: 5px;
+  font-family: "Nunito", sans-serif;
+  font-size: min(1.1vw, 20px);
+  font-weight: bold;
+  padding: 8px;
+  background-color: #ecd4b6;
+  border-radius: 20px;
+  color: #fff;
 }
 
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-  /* Color de fondo para filas pares */
+.elemento-labelingreso {
+  font-family: "Nunito", sans-serif;
+  font-size: min(1.5vw, 24px);
+  font-weight: bold;
+  color: #292929;
+  margin-right: 10px;
 }
 
-@media only screen and (max-width: 600px) {
-  .container-ingreso {
-    width: 95%;
-    margin: 10% auto;
-  }
+.container-estacion {
+  border-radius: 10px;
+  background-color: #be7530;
+  font-weight: bold;
+  padding: 8px;
+  font-family: "Nunito", sans-serif;
+  font-size: min(2vw, 20px);
+  color: #292929;
+  margin-right: 10px;
 }
 
-@media only screen and (min-width: 601px) and (max-width: 780px) {
-  .container-ingreso {
-    width: 80%;
-    margin: 7% auto;
-  }
+.boton-ingreso {
+  font-family: "Nunito", sans-serif;
+  font-size: min(1.1vw, 20px);
+  font-weight: bold;
+  color: #292929;
+  border: none;
+  background-color: #be7530;
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s ease;
+  margin: 1vh;
 }
 
-@media only screen and (min-width: 781px) and (max-width: 1024px) {
-  .container-ingreso {
-    width: 70%;
-    margin: 5% auto;
-  }
+/* Estilo de la cabecera */
+.header {
+  display: flex;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
 }
 
-@media only screen and (min-width: 1025px) {
-  .container-ingreso {
-    width: 60%;
-    margin: 3% auto;
-  }
+/* Estilo de los items de la cabecera */
+.header-item {
+  flex: 1;
+  padding: 10px;
+}
+
+/* Estilo de las filas */
+.row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+/* Estilo de las celdas */
+.cell {
+  flex: 1;
+  padding: 10px;
+}
+
+/* Estilo del input */
+.cell input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
