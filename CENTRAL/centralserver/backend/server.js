@@ -708,6 +708,51 @@ app.get('/IDingreso', (req, res) => {
 });
 
 
+app.post("/actualizarINV", (req, res) => {
+  const { EP } = req.body;
+
+  // Obtener la hora actual en formato TIMESTAMP
+  const currentDateTime = new Date().getTime()
+
+  // Verificar si el EP está en la tabla Datos
+  db.query(
+    "SELECT * FROM Datos WHERE Tag = ?",
+    [EP],
+    (err, results) => {
+      if (err) {
+        console.error("Error al verificar el EP:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+
+      if (results.length > 0) {
+        // Si el EP existe, actualizar INV a 'NO' y Hora_salida_lab a la hora actual
+        db.query(
+          "UPDATE Datos SET INV = 'NO', Hora_salida_bodega = ? WHERE Tag = ?",
+          [currentDateTime, EP],
+          (updateErr, updateResults) => {
+            if (updateErr) {
+              console.error("Error al actualizar INV y Hora_salida_lab:", updateErr);
+              res.status(500).send("Error interno del servidor");
+              return;
+            }
+
+            console.log(`INV y Hora_salida_lab actualizados para EP: ${EP}, ${currentDateTime}`);
+            res.status(200).send(`INV y Hora_salida_lab actualizados correctamente para EP: ${EP}`);
+          }
+        );
+      } else {
+        // Si el EP no existe, enviar mensaje de EP no encontrado
+        console.log(`EP no encontrado en la base de datos: ${EP}`);
+        res.status(404).send(`EP no encontrado en la base de datos: ${EP}`);
+      }
+    }
+  );
+});
+
+
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
