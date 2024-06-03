@@ -148,11 +148,12 @@ function Eventos() {
       </Helmet>
       <Header titulo="CONSULTA DE EVENTOS" />
       <div className="eventos-container-titulo">
-        <h2 className="eventos-titulo-evento">Seleccione evento de interés</h2>
+        
       </div>
 
       <div className="eventos-container">
         <div className="eventos-container-checkboxes">
+        <h2 className="eventos-titulo-evento">Seleccione evento de interés</h2>
           <div className="eventos-contenedor-label1">
             <label>
               <input
@@ -282,9 +283,10 @@ function Eventos() {
               />
             </label>
           </div>
-          <div className="eventos-container-boton-consulta">
-            <button onClick={handleConsultaClick}>Consultar</button>
-          </div>
+          <div class="eventos-container-boton-consulta">
+  <button class="eventos-bottom-time-estado" onClick={handleConsultaClick}>Consultar</button>
+</div>
+
         </div>
       </div>
 
@@ -317,13 +319,8 @@ function Eventos() {
       </div>
 
       {data.length > 0 && (
-        <div className="eventos-container-estado">
-          <span className="eventos-subtitle">REGISTRO DE EVENTOS:</span>
-        </div>
-      )}
-
-      {data.length > 0 && (
         <div className="eventos-tabla-container">
+           <h2 className="eventos-titulo-evento">REGISTRO DE EVENTOS:</h2>
           <table className="eventos-tabla-eventos">
             <thead>
               <tr>
@@ -340,7 +337,7 @@ function Eventos() {
                   <td>{item.usuario}</td>
                   <td>{item.evento}</td>
                   <td>{item.descripcion}</td>
-                  <td>{item.fecha}</td>
+                  <td>{item.fecha.split('T')[0]}</td>
                   <td>{item.hora}</td>
                 </tr>
               ))}
