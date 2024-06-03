@@ -669,6 +669,24 @@ app.get("/Kits_armados", (req, res) => {
 app.post("/solicitar", (req, res) => {
   const { nuevoPedido, nombreUsuario } = req.body;
 
+  const createSolicitudTableQuery = `
+    CREATE TABLE IF NOT EXISTS Solicitud (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      Pedido TEXT NOT NULL
+    )
+  `;
+
+  const createEventosTableQuery = `
+    CREATE TABLE IF NOT EXISTS Eventos (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      usuario VARCHAR(255) NOT NULL,
+      evento VARCHAR(255) NOT NULL,
+      descripcion TEXT NOT NULL,
+      fecha DATE NOT NULL,
+      hora TIME NOT NULL
+    )
+  `;
+
   const insertSolicitudQuery = "INSERT INTO Solicitud (Pedido) VALUES (?)";
   const insertEventosQuery = "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)";
 
@@ -676,53 +694,70 @@ app.post("/solicitar", (req, res) => {
   const fecha = now.toISOString().split('T')[0]; // Formato YYYY-MM-DD
   const hora = now.toTimeString().split(' ')[0]; // Formato HH:MM:SS
 
-  db.query(insertSolicitudQuery, [nuevoPedido], (err, results) => {
+  db.query(createSolicitudTableQuery, (err, results) => {
     if (err) {
-      console.error("Error al insertar el pedido:", err);
+      console.error("Error al crear la tabla Solicitud:", err);
       res.status(500).send("Error interno del servidor");
       return;
     }
 
-    const evento = 'solicitud';
-    const descripcion = `Se solicitaron los siguientes kits: ${nuevoPedido}`;
-
-    db.query(insertEventosQuery, [nombreUsuario, evento, descripcion, fecha, hora], (err, results) => {
+    db.query(createEventosTableQuery, (err, results) => {
       if (err) {
-        console.error("Error al insertar el evento:", err);
+        console.error("Error al crear la tabla Eventos:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
 
-      res.status(201).json({ message: "Pedido registrado correctamente y evento guardado" });
+      db.query(insertSolicitudQuery, [nuevoPedido], (err, results) => {
+        if (err) {
+          console.error("Error al insertar el pedido:", err);
+          res.status(500).send("Error interno del servidor");
+          return;
+        }
 
-      // Enviar solicitud y evento vacíos 20 segundos después
-      setTimeout(() => {
-        const eventoVacio = '';
-        const descripcionVacia = '';
-        const emptyFecha = new Date().toISOString().split('T')[0]; // Fecha actual
-        const emptyHora = new Date().toTimeString().split(' ')[0]; // Hora actual
+        const evento = 'solicitud';
+        const descripcion = `Se solicitaron los siguientes kits: ${nuevoPedido}`;
 
-        // Insertar evento vacío
-        db.query(insertEventosQuery, [nombreUsuario, eventoVacio, descripcionVacia, emptyFecha, emptyHora], (err, results) => {
+        db.query(insertEventosQuery, [nombreUsuario, evento, descripcion, fecha, hora], (err, results) => {
           if (err) {
-            console.error("Error al insertar el evento vacío:", err);
-          } else {
-            console.log("Evento vacío insertado correctamente");
+            console.error("Error al insertar el evento:", err);
+            res.status(500).send("Error interno del servidor");
+            return;
           }
-        });
 
-        // Insertar solicitud vacía
-        db.query(insertSolicitudQuery, [''], (err, results) => {
-          if (err) {
-            console.error("Error al insertar la solicitud vacía:", err);
-          } else {
-            console.log("Solicitud vacía insertada correctamente");
-          }
+          res.status(201).json({ message: "Pedido registrado correctamente y evento guardado" });
+
+          // Enviar solicitud y evento vacíos 20 segundos después
+          setTimeout(() => {
+            const eventoVacio = '';
+            const descripcionVacia = '';
+            const emptyFecha = new Date().toISOString().split('T')[0]; // Fecha actual
+            const emptyHora = new Date().toTimeString().split(' ')[0]; // Hora actual
+
+            // Insertar evento vacío
+            db.query(insertEventosQuery, [nombreUsuario, eventoVacio, descripcionVacia, emptyFecha, emptyHora], (err, results) => {
+              if (err) {
+                console.error("Error al insertar el evento vacío:", err);
+              } else {
+                console.log("Evento vacío insertado correctamente");
+              }
+            });
+
+            // Insertar solicitud vacía
+            db.query(insertSolicitudQuery, [''], (err, results) => {
+              if (err) {
+                console.error("Error al insertar la solicitud vacía:", err);
+              } else {
+                console.log("Solicitud vacía insertada correctamente");
+              }
+            });
+          }, 20000);
         });
-      }, 20000);
+      });
     });
   });
 });
+
 
 
 
