@@ -604,18 +604,36 @@ app.post("/eventosIngreso", (req, res) => {
 
 
 app.get("/eventos", (req, res) => {
-  const { fechaInteres, horaInicial, horaFinal, solicitudes, ingresoMaterial } = req.query;
+  const {
+    fechaInteres,
+    horaInicial,
+    horaFinal,
+    solicitudes,
+    ingresoMaterial,
+    kitsArmados,
+    asignacionKits,
+    asignacionContenido,
+    setsTerminados,
+    salida,
+    entrada
+  } = req.query;
 
   let query = "SELECT * FROM Eventos WHERE 1=1"; // Base de la consulta
   let queryParams = [];
 
   // Añadir condiciones para los eventos
-  if (solicitudes && ingresoMaterial) {
-    query += " AND (evento = 'solicitud' OR evento = 'Ingreso material')";
-  } else if (solicitudes) {
-    query += " AND evento = 'solicitud'";
-  } else if (ingresoMaterial) {
-    query += " AND evento = 'Ingreso material'";
+  let eventConditions = [];
+  if (solicitudes) eventConditions.push("evento = 'solicitud'");
+  if (ingresoMaterial) eventConditions.push("evento = 'Ingreso Material'");
+  if (kitsArmados) eventConditions.push("evento = 'Kit Armado'");
+  if (asignacionKits) eventConditions.push("evento = 'Asignación Kits'");
+  if (asignacionContenido) eventConditions.push("evento = 'Asignación Contenido'");
+  if (setsTerminados) eventConditions.push("evento = 'Set Terminado'");
+  if (salida) eventConditions.push("evento = 'SALIDA'");
+  if (entrada) eventConditions.push("evento = 'ENTRADA'");
+
+  if (eventConditions.length > 0) {
+    query += " AND (" + eventConditions.join(" OR ") + ")";
   }
 
   if (fechaInteres) {
@@ -640,6 +658,7 @@ app.get("/eventos", (req, res) => {
     res.json(results);
   });
 });
+
 
 
 

@@ -12,6 +12,11 @@ function Eventos() {
     solicitudes: false,
     ingresoMaterial: false,
     kitsArmados: false,
+    asignacionKits: false,
+    asignacionContenido: false,
+    setsTerminados: false,
+    salida: false,
+    entrada: false,
   });
   const [filters, setFilters] = useState({
     fechaInteres: "",
@@ -42,7 +47,16 @@ function Eventos() {
   }, []);
 
   const fetchEventos = async () => {
-    if (!checkboxes.solicitudes && !checkboxes.ingresoMaterial) {
+    if (
+      !checkboxes.solicitudes &&
+      !checkboxes.ingresoMaterial &&
+      !checkboxes.kitsArmados &&
+      !checkboxes.asignacionKits &&
+      !checkboxes.asignacionContenido &&
+      !checkboxes.setsTerminados &&
+      !checkboxes.salida &&
+      !checkboxes.entrada
+    ) {
       // Si ningún checkbox está seleccionado, limpiar los datos
       setData([]);
       return;
@@ -54,8 +68,14 @@ function Eventos() {
         fechaInteres,
         horaInicial,
         horaFinal,
-        solicitudes: checkboxes.solicitudes ? 'true' : '',
-        ingresoMaterial: checkboxes.ingresoMaterial ? 'true' : ''
+        solicitudes: checkboxes.solicitudes ? "true" : "",
+        ingresoMaterial: checkboxes.ingresoMaterial ? "true" : "",
+        kitsArmados: checkboxes.kitsArmados ? "true" : "",
+        asignacionKits: checkboxes.asignacionKits ? "true" : "",
+        asignacionContenido: checkboxes.asignacionContenido ? "true" : "",
+        setsTerminados: checkboxes.setsTerminados ? "true" : "",
+        salida: checkboxes.salida ? "true" : "",
+        entrada: checkboxes.entrada ? "true" : "",
       }).toString();
 
       const response = await fetch(`http://localhost:5000/eventos?${query}`);
@@ -94,7 +114,7 @@ function Eventos() {
     <div className="eventos-wrapper">
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
         <link
           href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000&display=swap"
           rel="stylesheet"
@@ -136,6 +156,56 @@ function Eventos() {
                 onChange={handleCheckboxChange}
               />
               Kits Armados
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="asignacionKits"
+                checked={checkboxes.asignacionKits}
+                onChange={handleCheckboxChange}
+              />
+              Asignación de Kits
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="asignacionContenido"
+                checked={checkboxes.asignacionContenido}
+                onChange={handleCheckboxChange}
+              />
+              Asignación de Contenido
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="setsTerminados"
+                checked={checkboxes.setsTerminados}
+                onChange={handleCheckboxChange}
+              />
+              Sets Terminados
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="salida"
+                checked={checkboxes.salida}
+                onChange={handleCheckboxChange}
+              />
+              Salida
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="entrada"
+                checked={checkboxes.entrada}
+                onChange={handleCheckboxChange}
+              />
+              Entrada
             </label>
           </div>
         </div>
