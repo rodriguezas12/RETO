@@ -41,26 +41,32 @@ function Eventos() {
     };
   }, []);
 
-  const fetchSolicitudes = async () => {
-    if (checkboxes.solicitudes) {
-      try {
-        const { fechaInteres, horaInicial, horaFinal } = filters;
-        const query = new URLSearchParams({
-          fechaInteres,
-          horaInicial,
-          horaFinal,
-        }).toString();
+  const fetchEventos = async () => {
+    if (!checkboxes.solicitudes && !checkboxes.ingresoMaterial) {
+      // Si ningún checkbox está seleccionado, limpiar los datos
+      setData([]);
+      return;
+    }
 
-        const response = await fetch(`http://localhost:5000/eventos?${query}`);
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        const solicitudesData = await response.json();
-        setData(solicitudesData);
-        console.log("Consulta a Solicitudes exitosa");
-      } catch (error) {
-        console.error("Error fetching data for Solicitudes:", error);
+    try {
+      const { fechaInteres, horaInicial, horaFinal } = filters;
+      const query = new URLSearchParams({
+        fechaInteres,
+        horaInicial,
+        horaFinal,
+        solicitudes: checkboxes.solicitudes ? 'true' : '',
+        ingresoMaterial: checkboxes.ingresoMaterial ? 'true' : ''
+      }).toString();
+
+      const response = await fetch(`http://localhost:5000/eventos?${query}`);
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
       }
+      const eventosData = await response.json();
+      setData(eventosData);
+      console.log("Consulta a Eventos exitosa");
+    } catch (error) {
+      console.error("Error fetching data for Eventos:", error);
     }
   };
 
@@ -81,7 +87,7 @@ function Eventos() {
   };
 
   const handleConsultaClick = () => {
-    fetchSolicitudes();
+    fetchEventos();
   };
 
   return (
