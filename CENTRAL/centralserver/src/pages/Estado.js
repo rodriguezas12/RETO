@@ -32,15 +32,7 @@ function Estado() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/contabilidad-kits");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-
+      
       if (selectedStation) {
         // Sustituir espacio por '_' para coincidir con el nombre de la tabla
         const stationNumber = selectedStation.split(" ")[1];
