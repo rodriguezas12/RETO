@@ -8,6 +8,8 @@ import "./IngresoMaterial.css";
 function Ingresomaterial() {
   const [data, setData] = useState([]);
   const [selectedStation, setSelectedStation] = useState('1');
+  const [showButtons, setShowButtons] = useState(false); // Agregar esta línea
+
 
   useEffect(() => {
     fetchData(selectedStation);
@@ -77,14 +79,13 @@ function Ingresomaterial() {
       <Header titulo="Ingreso de material" />
       <div className="container-Ingreso">
         <div className="contenedor-labelingreso">
-          <span className="elemento-labelingreso"></span>
           <input
             type="checkbox"
             id="checklist"
             className="custom-checkbox-estado"
             onChange={handleCheckboxChange} // Maneja el cambio en el checkbox
           />
-          <span className="elemento-label">Estación Ensamble</span>
+          <span className="elemento-label"> Estado de Edición</span>
         </div>
         <div className="container-estacion" style={{ textAlign: 'left' }}>
           <span>Seleccione la estación de interés:</span>
@@ -97,7 +98,9 @@ function Ingresomaterial() {
             <option value="2">Estación 2</option>
             <option value="3">Estación 3</option>
           </select>
-          <button className="container-estacion" onClick={handleSaveChanges}>Guardar Cambios</button>
+          {showButtons && (
+            <button className="large-button" onClick={handleSaveChanges}>Guardar Cambios</button>
+          )}
         </div>
       </div>
       <div className="container-ingreso">
@@ -122,5 +125,5 @@ function Ingresomaterial() {
     </div>
   );
 }
-export default Ingresomaterial;
 
+export default Ingresomaterial;
