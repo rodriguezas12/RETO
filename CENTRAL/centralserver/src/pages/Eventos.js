@@ -15,6 +15,8 @@ function Eventos() {
     asignacionKits: false,
     asignacionContenido: false,
     setsTerminados: false,
+    salida: false,
+    entrada: false,
   });
   const [filters, setFilters] = useState({
     fechaInteres: "",
@@ -51,7 +53,9 @@ function Eventos() {
       !checkboxes.kitsArmados &&
       !checkboxes.asignacionKits &&
       !checkboxes.asignacionContenido &&
-      !checkboxes.setsTerminados
+      !checkboxes.setsTerminados &&
+      !checkboxes.salida &&
+      !checkboxes.entrada
     ) {
       // Si ningún checkbox está seleccionado, limpiar los datos
       setData([]);
@@ -70,6 +74,8 @@ function Eventos() {
         asignacionKits: checkboxes.asignacionKits ? "true" : "",
         asignacionContenido: checkboxes.asignacionContenido ? "true" : "",
         setsTerminados: checkboxes.setsTerminados ? "true" : "",
+        salida: checkboxes.salida ? "true" : "",
+        entrada: checkboxes.entrada ? "true" : "",
       }).toString();
 
       const response = await fetch(`http://localhost:5000/eventos?${query}`);
@@ -180,6 +186,26 @@ function Eventos() {
                 onChange={handleCheckboxChange}
               />
               Sets Terminados
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="salida"
+                checked={checkboxes.salida}
+                onChange={handleCheckboxChange}
+              />
+              Salida
+            </label>
+
+            <label>
+              <input
+                type="checkbox"
+                name="entrada"
+                checked={checkboxes.entrada}
+                onChange={handleCheckboxChange}
+              />
+              Entrada
             </label>
           </div>
         </div>

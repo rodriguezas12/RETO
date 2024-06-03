@@ -613,7 +613,9 @@ app.get("/eventos", (req, res) => {
     kitsArmados,
     asignacionKits,
     asignacionContenido,
-    setsTerminados
+    setsTerminados,
+    salida,
+    entrada
   } = req.query;
 
   let query = "SELECT * FROM Eventos WHERE 1=1"; // Base de la consulta
@@ -622,11 +624,13 @@ app.get("/eventos", (req, res) => {
   // Añadir condiciones para los eventos
   let eventConditions = [];
   if (solicitudes) eventConditions.push("evento = 'solicitud'");
-  if (ingresoMaterial) eventConditions.push("evento = 'Ingreso material'");
+  if (ingresoMaterial) eventConditions.push("evento = 'Ingreso Material'");
   if (kitsArmados) eventConditions.push("evento = 'Kit Armado'");
   if (asignacionKits) eventConditions.push("evento = 'Asignación Kits'");
   if (asignacionContenido) eventConditions.push("evento = 'Asignación Contenido'");
   if (setsTerminados) eventConditions.push("evento = 'Set Terminado'");
+  if (salida) eventConditions.push("evento = 'SALIDA'");
+  if (entrada) eventConditions.push("evento = 'ENTRADA'");
 
   if (eventConditions.length > 0) {
     query += " AND (" + eventConditions.join(" OR ") + ")";
