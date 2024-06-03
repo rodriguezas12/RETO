@@ -664,19 +664,7 @@ app.post("/solicitar", (req, res) => {
 
       res.status(201).json({ message: "Pedido registrado correctamente y evento guardado" });
 
-      // Enviar evento vacío 20 segundos después
-      setTimeout(() => {
-        const eventoVacio = '';
-        const descripcionVacia = '';
-
-        db.query(insertEventosQuery, [nombreUsuario, eventoVacio, descripcionVacia], (err, results) => {
-          if (err) {
-            console.error("Error al insertar el evento vacío:", err);
-          } else {
-            console.log("Evento vacío insertado correctamente");
-          }
-        });
-      }, 20000);
+      
     });
   });
 });
