@@ -6,12 +6,66 @@ import Header from '../components/header';
 function Pick() {
   const [rfidText, setRfidText] = useState(""); // Estado para almacenar el texto ingresado
   const [epValue, setEpValue] = useState(""); // Estado para almacenar el valor del EP
-  const rfidTextareaRef = useRef(null); // Referencia para el textarea
 
-  // Efecto para enfocar el textarea al cargar la página
+  const textAreaRef = useRef(null); // Ref para el cuadro de texto
+
+  // Función para buscar el valor del EP
+  const searchEP = (text) => {
+    // Expresión regular para buscar el valor de EP
+    const regex = /EP:\s*([A-Z0-9]+)/;
+    const match = text.match(regex);
+    if (match) {
+      setEpValue(match[1]); // El valor del EP es el primer grupo capturado por la regex
+      updateInv(match[1]); // Llamar a la función para actualizar INV
+    } else {
+      setEpValue(""); // Si no se encuentra EP, limpiar el estado
+    }
+  };
+
+  // Función para enviar solicitud POST al backend para actualizar INV
+  const updateInv = (ep) => {
+    fetch("http://localhost:5000/actualizarINV", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ EP: ep }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.text();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("There was an error with the fetch operation:", error);
+      });
+  };
+
+  // Efecto para limpiar el cuadro de texto después de 5 segundos
   useEffect(() => {
-    rfidTextareaRef.current.focus();
+    const timer = setTimeout(() => {
+      setRfidText("");
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [epValue]); // Se ejecuta cada vez que cambia el valor de epValue
+
+  // Efecto para hacer clic automático en el cuadro de texto cada 6 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (textAreaRef.current) {
+        textAreaRef.current.focus();
+      }
+    }, 5100);
+
+    return () => clearInterval(interval);
   }, []);
+
+
 
   const handleRfidTextChange = (event) => {
     // Limitar a 35 caracteres
@@ -20,20 +74,7 @@ function Pick() {
 
     // Si alcanza los 35 caracteres, buscar EP automáticamente
     if (text.length === 35) {
-      handleSearchEP(text);
-    } else {
-      setEpValue(""); // Limpiar el valor del EP si se modifica el texto
-    }
-  };
-
-  const handleSearchEP = (text) => {
-    // Expresión regular para buscar el valor de EP
-    const regex = /EP:\s*([A-Z0-9]+)/;
-    const match = text.match(regex);
-    if (match) {
-      setEpValue(match[1]); // El valor del EP es el primer grupo capturado por la regex
-    } else {
-      setEpValue(""); // Si no se encuentra EP, limpiar el estado
+      searchEP(text);
     }
   };
 
@@ -52,14 +93,13 @@ function Pick() {
         <label htmlFor="rfidText">Ingresa el texto RFID (máx. 35 caracteres):</label>
         <textarea
           id="rfidText"
+          ref={textAreaRef}
           rows="4"
+          cols="50"
           maxLength="35"
           value={rfidText}
           onChange={handleRfidTextChange}
-          ref={rfidTextareaRef} // Asignar la referencia al textarea
-          className="transparent-textarea" // Agregar clase para hacerlo transparente
         />
-        {/* No se necesita un botón explícito para buscar EP */}
       </div>
       <div className="ep-value-display">
         <p>Último EP encontrado: {epValue}</p>
