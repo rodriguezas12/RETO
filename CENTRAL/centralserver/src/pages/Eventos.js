@@ -6,6 +6,7 @@ import "./Eventos.css";
 function Eventos() {
   const [data, setData] = useState([]);
   const [selectedStation, setSelectedStation] = useState("");
+  const [stationFilter, setStationFilter] = useState("");
   const [checkboxes, setCheckboxes] = useState({
     solicitudes: false,
     ingresoMaterial: false,
@@ -24,9 +25,9 @@ function Eventos() {
 
   const [filteredData, setFilteredData] = useState([]);
   const [selectedCheckboxCount, setSelectedCheckboxCount] = useState(0);
-  const [isKitsArmadosOrSetsTerminadosSelected, setIsKitsArmadosOrSetsTerminadosSelected] = useState(false);
   const [selectedCheckboxText, setSelectedCheckboxText] = useState("Kits Armados");
   const [visibleColumns, setVisibleColumns] = useState([]);
+  const [showStationDropdown, setShowStationDropdown] = useState(false);
 
   const stations = [
     "Estación 1",
@@ -54,7 +55,7 @@ function Eventos() {
       setData([]);
       setFilteredData([]);
       setSelectedCheckboxCount(0);
-      setIsKitsArmadosOrSetsTerminadosSelected(false);
+      setShowStationDropdown(false);
       setSelectedCheckboxText("Kits Armados");
       setVisibleColumns([]);
       return;
@@ -84,7 +85,11 @@ function Eventos() {
       setData(eventosData);
       setFilteredData(eventosData);
       setSelectedCheckboxCount(selectedCheckboxes.length);
-      setIsKitsArmadosOrSetsTerminadosSelected(checkboxes.kitsArmados || checkboxes.setsTerminados);
+
+      const onlyKitsOrSetsSelected = (checkboxes.kitsArmados || checkboxes.setsTerminados) &&
+        !(checkboxes.solicitudes || checkboxes.ingresoMaterial || checkboxes.asignacionKits || checkboxes.asignacionContenido || checkboxes.salida || checkboxes.entrada);
+
+      setShowStationDropdown(onlyKitsOrSetsSelected);
 
       if (checkboxes.ingresoMaterial) {
         setSelectedCheckboxText("Ingreso Material Total");
@@ -117,6 +122,13 @@ function Eventos() {
 
       if (selectedCheckboxes.length >= 2) {
         setVisibleColumns(prevColumns => ["Evento", ...prevColumns]);
+      }
+
+      // Apply station filter only when fetching new data and only if the condition is met
+      if (onlyKitsOrSetsSelected) {
+        setStationFilter(selectedStation);
+      } else {
+        setStationFilter("");
       }
 
       console.log("Consulta a Eventos exitosa");
@@ -169,9 +181,8 @@ function Eventos() {
   };
 
   const getFilteredDataByStation = () => {
-    // Verifica si los checkboxes de kitsArmados o setsTerminados están seleccionados
-    if ((checkboxes.kitsArmados || checkboxes.setsTerminados) && selectedStation && selectedStation !== "Seleccionar") {
-      return filteredData.filter(item => item.usuario === selectedStation);
+    if (stationFilter && stationFilter !== "Seleccionar") {
+      return filteredData.filter(item => item.usuario === stationFilter);
     }
     return filteredData;
   };
@@ -341,12 +352,16 @@ function Eventos() {
         <div className="eventos-container-conteo">
           <div className="eventos-contenedor-label1">
             <span className="eventos-elemento-label">{selectedCheckboxText}:</span>
-            <span className="eventos-elemento-valor">{filteredData.length}</span>
+            <span className="eventos-elemento-valor">
+              {stationFilter && stationFilter !== "Seleccionar"
+                ? getFilteredDataByStation().length
+                : filteredData.length}
+            </span>
           </div>
         </div>
       )}
 
-      {isKitsArmadosOrSetsTerminadosSelected && (
+      {showStationDropdown && (
         <div className="eventos-container-conteo">
           <div className="eventos-contenedor-label1">
             <span className="eventos-elemento-label">Seleccione la estación de interés:</span>
