@@ -6,10 +6,12 @@ import "./Pick.css";
 function Pick() {
   const [rfidText, setRfidText] = useState("");
   const [epValue, setEpValue] = useState("");
-  const [pedidoRealizado, setPedidoRealizado] = useState("");
+  const [pedidoRealizado, setPedidoRealizado] = useState([]);
   const [piezasPorVerificar, setPiezasPorVerificar] = useState([]);
   const [piezasVerificadas, setPiezasVerificadas] = useState([]);
   const [popupVisible, setPopupVisible] = useState(false);
+  const [postCount, setPostCount] = useState(0);
+  const [initialPedidoRealizado, setInitialPedidoRealizado] = useState([]);
 
   const textAreaRef = useRef(null);
 
@@ -43,9 +45,12 @@ function Pick() {
         .then((data) => {
           const pedido = data.pedidoRealizado;
           const kits = pedido.split(',').map(num => `Kit ${num}`);
-          setPedidoRealizado(kits.join(', '));
           setPiezasPorVerificar(kits);
+          setPedidoRealizado(kits);
           setPiezasVerificadas([]);
+          if (initialPedidoRealizado.length === 0) {
+            setInitialPedidoRealizado(kits);
+          }
         })
         .catch((error) => {
           console.error("There was an error with the fetch operation:", error);
@@ -53,39 +58,14 @@ function Pick() {
     };
 
     fetchUltimoPedido();
-
-    const pedidoInterval = setInterval(() => {
-      fetchUltimoPedido();
-    }, 2000); // Consulta cada 2 segundos
-
-    return () => clearInterval(pedidoInterval);
   }, []);
 
   useEffect(() => {
-    const updatePiezas = () => {
-      fetch("http://localhost:5000/ultimoPedido")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          const pedido = data.pedidoRealizado;
-          const pedidoVerificado = pedido.split(',').map(num => `Kit ${num}`);
-          const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
-          setPiezasPorVerificar(pedidoVerificado);
-          setPiezasVerificadas(prevState => [...prevState, ...kitsVerificados]);
-          if (pedidoVerificado.length === 0) {
-            setPopupVisible(true);
-          }
-        })
-        .catch((error) => {
-          console.error("There was an error with the fetch operation:", error);
-        });
-    };
-
-    const interval = setInterval(updatePiezas, 2000); // Consulta cada 2 segundos
+    const interval = setInterval(() => {
+      if (piezasPorVerificar.length > 0) {
+        updatePiezas();
+      }
+    }, 2000); // Consulta cada 2 segundos
 
     return () => clearInterval(interval);
   }, [piezasPorVerificar]);
@@ -118,9 +98,36 @@ function Pick() {
       .then((data) => {
         const pedidoVerificado = data.pedidoRealizado.split(',').map(num => `Kit ${num}`);
         const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
-        setPiezasPorVerificar(pedidoVerificado);
-        setPiezasVerificadas(prevState => [...prevState, ...kitsVerificados]);
+        setPiezasPorVerificar((prevState) => prevState.filter(kit => !kitsVerificados.includes(kit)));
+        setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
+
         if (data.descuentoPedido === "") {
+          setPopupVisible(true);
+        }
+
+        // Incrementa el contador de POST
+        setPostCount(prevCount => prevCount + 1);
+      })
+      .catch((error) => {
+        console.error("There was an error with the fetch operation:", error);
+      });
+  };
+
+  const updatePiezas = () => {
+    fetch("http://localhost:5000/ultimoPedido")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const pedido = data.pedidoRealizado;
+        const pedidoVerificado = pedido.split(',').map(num => `Kit ${num}`);
+        const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
+        setPiezasPorVerificar(pedidoVerificado);
+        setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
+        if (pedidoVerificado.length === 0) {
           setPopupVisible(true);
         }
       })
@@ -140,9 +147,11 @@ function Pick() {
 
   const closePopup = () => {
     setPopupVisible(false);
-    setPedidoRealizado("");
+    setPedidoRealizado([]);
     setPiezasPorVerificar([]);
     setPiezasVerificadas([]);
+    setPostCount(0);
+    setInitialPedidoRealizado([]);
   };
 
   return (
@@ -172,10 +181,7 @@ function Pick() {
         <p>Último EP encontrado: {epValue}</p>
       </div>
       <div className="status-container">
-        <div className="status-box">
-          <h3>Pedido realizado:</h3>
-          <p>{pedidoRealizado}</p>
-        </div>
+        
         <div className="status-box">
           <h3>Piezas por verificar:</h3>
           <p>{piezasPorVerificar.join(', ')}</p>
