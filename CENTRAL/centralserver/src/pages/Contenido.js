@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import Header from '../components/header'; // Ajusta la ruta según tu estructura
+import './Contenido.css'; // Archivo CSS para los estilos
 
 function Contenido() {
     const [data, setData] = useState([]);
@@ -94,6 +95,7 @@ function Contenido() {
             })
             .catch((error) => console.error('Error:', error));
     };
+
     return (
         <div>
             <Helmet>
