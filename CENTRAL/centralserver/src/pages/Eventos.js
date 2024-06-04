@@ -5,8 +5,6 @@ import "./Eventos.css";
 
 function Eventos() {
   const [data, setData] = useState([]);
-  const [kitArmado, setKitArmado] = useState(0);
-  const [ensamblados, setEnsablados] = useState(0);
   const [selectedStation, setSelectedStation] = useState("");
   const [checkboxes, setCheckboxes] = useState({
     solicitudes: false,
@@ -19,11 +17,16 @@ function Eventos() {
     entrada: false,
   });
   const [filters, setFilters] = useState({
-    fechaInicio: "",
-    fechaFin: "",
+    fecha: "",
     horaInicio: "",
     horaFin: "",
   });
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedCheckboxCount, setSelectedCheckboxCount] = useState(0);
+  const [isKitsArmadosOrSetsTerminadosSelected, setIsKitsArmadosOrSetsTerminadosSelected] = useState(false);
+  const [selectedCheckboxText, setSelectedCheckboxText] = useState("Kits Armados");
+  const [visibleColumns, setVisibleColumns] = useState([]);
 
   const stations = [
     "Estación 1",
@@ -36,11 +39,8 @@ function Eventos() {
   ];
 
   useEffect(() => {
-    // Aplica la clase eventos-body al body y html cuando el componente se monta
     document.body.classList.add("eventos-body");
     document.documentElement.classList.add("eventos-body");
-
-    // Limpia la clase eventos-body cuando el componente se desmonta
     return () => {
       document.body.classList.remove("eventos-body");
       document.documentElement.classList.remove("eventos-body");
@@ -48,26 +48,22 @@ function Eventos() {
   }, []);
 
   const fetchEventos = async () => {
-    if (
-      !checkboxes.solicitudes &&
-      !checkboxes.ingresoMaterial &&
-      !checkboxes.kitsArmados &&
-      !checkboxes.asignacionKits &&
-      !checkboxes.asignacionContenido &&
-      !checkboxes.setsTerminados &&
-      !checkboxes.salida &&
-      !checkboxes.entrada
-    ) {
-      // Si ningún checkbox está seleccionado, limpiar los datos
+    const selectedCheckboxes = Object.keys(checkboxes).filter(key => checkboxes[key]);
+
+    if (selectedCheckboxes.length === 0) {
       setData([]);
+      setFilteredData([]);
+      setSelectedCheckboxCount(0);
+      setIsKitsArmadosOrSetsTerminadosSelected(false);
+      setSelectedCheckboxText("Kits Armados");
+      setVisibleColumns([]);
       return;
     }
 
     try {
-      const { fechaInicio, fechaFin, horaInicio, horaFin } = filters;
+      const { fecha, horaInicio, horaFin } = filters;
       const query = new URLSearchParams({
-        fechaInteres: fechaInicio,
-        fechaFin,
+        fecha,
         horaInicial: horaInicio,
         horaFinal: horaFin,
         solicitudes: checkboxes.solicitudes ? "true" : "",
@@ -86,6 +82,43 @@ function Eventos() {
       }
       const eventosData = await response.json();
       setData(eventosData);
+      setFilteredData(eventosData);
+      setSelectedCheckboxCount(selectedCheckboxes.length);
+      setIsKitsArmadosOrSetsTerminadosSelected(checkboxes.kitsArmados || checkboxes.setsTerminados);
+
+      if (checkboxes.ingresoMaterial) {
+        setSelectedCheckboxText("Ingreso Material Total");
+        setVisibleColumns(["Descripcion", "Fecha", "Hora"]);
+      } else if (checkboxes.solicitudes) {
+        setSelectedCheckboxText("Solicitudes Totales");
+        setVisibleColumns(["Descripcion", "Fecha", "Hora"]);
+      } else if (checkboxes.kitsArmados) {
+        setSelectedCheckboxText("Kits Armados Totales");
+        setVisibleColumns(["Usuario", "Descripcion", "Fecha", "Hora"]);
+      } else if (checkboxes.asignacionKits) {
+        setSelectedCheckboxText("Asignación de Kits Totales");
+        setVisibleColumns(["Descripcion", "Fecha", "Hora"]);
+      } else if (checkboxes.asignacionContenido) {
+        setSelectedCheckboxText("Asignación de Contenido Total");
+        setVisibleColumns(["Descripcion", "Fecha", "Hora"]);
+      } else if (checkboxes.setsTerminados) {
+        setSelectedCheckboxText("Sets Terminados Totales");
+        setVisibleColumns(["Usuario", "Descripcion", "Fecha", "Hora"]);
+      } else if (checkboxes.salida) {
+        setSelectedCheckboxText("Salida Total");
+        setVisibleColumns(["Descripcion", "Fecha", "Hora"]);
+      } else if (checkboxes.entrada) {
+        setSelectedCheckboxText("Entrada Total");
+        setVisibleColumns(["Descripcion", "Fecha", "Hora"]);
+      } else {
+        setSelectedCheckboxText("Kits Armados");
+        setVisibleColumns([]);
+      }
+
+      if (selectedCheckboxes.length >= 2) {
+        setVisibleColumns(prevColumns => ["Evento", ...prevColumns]);
+      }
+
       console.log("Consulta a Eventos exitosa");
     } catch (error) {
       console.error("Error fetching data for Eventos:", error);
@@ -103,37 +136,63 @@ function Eventos() {
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === "fechaInicio") {
+    if (name === "fecha") {
       setFilters((prevFilters) => ({
         ...prevFilters,
-        fechaInicio: value,
-        fechaFin: "", // Reset fechaFin when fechaInicio changes
-        horaInicio: "", // Reset horaInicio when fechaInicio changes
-        horaFin: "", // Reset horaFin when fechaInicio changes
+        fecha: value,
+        horaInicio: "",
+        horaFin: "",
       }));
-    } else if (name === "fechaFin") {
-      if (new Date(value) >= new Date(filters.fechaInicio)) {
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          fechaFin: value,
-        }));
-      }
     } else if (name === "horaInicio") {
       setFilters((prevFilters) => ({
         ...prevFilters,
         horaInicio: value,
-        horaFin: "", // Reset horaFin when horaInicio changes
+        horaFin: "",
       }));
     } else if (name === "horaFin") {
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        horaFin: value,
-      }));
+      if (value >= filters.horaInicio) {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          horaFin: value,
+        }));
+      }
     }
   };
 
   const handleConsultaClick = () => {
     fetchEventos();
+  };
+
+  const handleStationChange = (event) => {
+    const { value } = event.target;
+    setSelectedStation(value);
+  };
+
+  const getFilteredDataByStation = () => {
+    // Verifica si los checkboxes de kitsArmados o setsTerminados están seleccionados
+    if ((checkboxes.kitsArmados || checkboxes.setsTerminados) && selectedStation && selectedStation !== "Seleccionar") {
+      return filteredData.filter(item => item.usuario === selectedStation);
+    }
+    return filteredData;
+  };
+
+  const renderTableHeaders = () => {
+    return visibleColumns.map((column, index) => (
+      <th key={index}>{column}</th>
+    ));
+  };
+
+  const renderTableRows = () => {
+    const filteredByStation = getFilteredDataByStation();
+    return filteredByStation.map((item, index) => (
+      <tr key={index}>
+        {visibleColumns.includes("Evento") && <td>{item.evento}</td>}
+        {visibleColumns.includes("Usuario") && <td>{item.usuario}</td>}
+        {visibleColumns.includes("Descripcion") && <td>{item.descripcion}</td>}
+        {visibleColumns.includes("Fecha") && <td>{item.fecha.split('T')[0]}</td>}
+        {visibleColumns.includes("Hora") && <td>{item.hora}</td>}
+      </tr>
+    ));
   };
 
   return (
@@ -153,7 +212,7 @@ function Eventos() {
 
       <div className="eventos-container">
         <div className="eventos-container-checkboxes">
-        <h2 className="eventos-titulo-evento">Seleccione evento de interés</h2>
+          <h2 className="eventos-titulo-evento">Seleccione evento de interés</h2>
           <div className="eventos-contenedor-label1">
             <label>
               <input
@@ -240,24 +299,12 @@ function Eventos() {
         <div className="eventos-container-filtros">
           <div className="eventos-contenedor-label1">
             <label>
-              Fecha de inicio:
+              Fecha:
               <input
                 type="date"
-                name="fechaInicio"
-                value={filters.fechaInicio}
+                name="fecha"
+                value={filters.fecha}
                 onChange={handleFilterChange}
-              />
-            </label>
-
-            <label>
-              Fecha de fin:
-              <input
-                type="date"
-                name="fechaFin"
-                value={filters.fechaFin}
-                onChange={handleFilterChange}
-                disabled={!filters.fechaInicio}
-                min={filters.fechaInicio}
               />
             </label>
 
@@ -268,7 +315,7 @@ function Eventos() {
                 name="horaInicio"
                 value={filters.horaInicio}
                 onChange={handleFilterChange}
-                disabled={!filters.fechaFin}
+                disabled={!filters.fecha}
               />
             </label>
 
@@ -280,67 +327,56 @@ function Eventos() {
                 value={filters.horaFin}
                 onChange={handleFilterChange}
                 disabled={!filters.horaInicio}
+                min={filters.horaInicio}
               />
             </label>
           </div>
-          <div class="eventos-container-boton-consulta">
-  <button class="eventos-bottom-time-estado" onClick={handleConsultaClick}>Consultar</button>
-</div>
-
+          <div className="eventos-container-boton-consulta">
+            <button className="eventos-bottom-time-estado" onClick={handleConsultaClick}>Consultar</button>
+          </div>
         </div>
       </div>
 
-      <div className="eventos-container-conteo">
-        <div className="eventos-contenedor-label1">
-          <span className="eventos-elemento-label">Kits Armados:</span>
-          <span className="eventos-elemento-valor">{kitArmado}</span>
+      {filteredData.length > 0 && selectedCheckboxCount === 1 && (
+        <div className="eventos-container-conteo">
+          <div className="eventos-contenedor-label1">
+            <span className="eventos-elemento-label">{selectedCheckboxText}:</span>
+            <span className="eventos-elemento-valor">{filteredData.length}</span>
+          </div>
         </div>
-        <div className="eventos-contenedor-label1">
-          <span className="eventos-elemento-label">Productos Ensamblados:</span>
-          <span className="eventos-elemento-valor">{ensamblados}</span>
-        </div>
-        <div className="eventos-contenedor-label1">
-          <span className="eventos-elemento-label">
-            Seleccione la estación de interés:
-          </span>
-          <select
-            className="eventos-elemento-valor"
-            value={selectedStation}
-            onChange={(e) => setSelectedStation(e.target.value)}
-          >
-            <option value="">Seleccionar</option>
-            {stations.map((station, index) => (
-              <option key={index} value={station}>
-                {station}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+      )}
 
-      {data.length > 0 && (
+      {isKitsArmadosOrSetsTerminadosSelected && (
+        <div className="eventos-container-conteo">
+          <div className="eventos-contenedor-label1">
+            <span className="eventos-elemento-label">Seleccione la estación de interés:</span>
+            <select
+              className="eventos-elemento-valor"
+              value={selectedStation}
+              onChange={handleStationChange}
+            >
+              <option value="Seleccionar">Seleccionar</option>
+              {stations.map((station, index) => (
+                <option key={index} value={`Estación ${index + 1}`}>
+                  Estación {index + 1}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
+
+      {filteredData.length > 0 && (
         <div className="eventos-tabla-container">
-           <h2 className="eventos-titulo-evento">REGISTRO DE EVENTOS:</h2>
+          <h2 className="eventos-titulo-evento">REGISTRO DE EVENTOS:</h2>
           <table className="eventos-tabla-eventos">
             <thead>
               <tr>
-                <th>Usuario</th>
-                <th>Evento</th>
-                <th>Descripción</th>
-                <th>Fecha</th>
-                <th>Hora</th>
+                {renderTableHeaders()}
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.usuario}</td>
-                  <td>{item.evento}</td>
-                  <td>{item.descripcion}</td>
-                  <td>{item.fecha.split('T')[0]}</td>
-                  <td>{item.hora}</td>
-                </tr>
-              ))}
+              {renderTableRows()}
             </tbody>
           </table>
         </div>
