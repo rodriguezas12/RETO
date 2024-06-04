@@ -479,7 +479,7 @@ db.query(createTableQuery, (err, result) => {
 
 // Aqui se solicita la tabla Contenido para la pagina contenido
 
-app.post("/contenido/:kits", (req, res) => {
+app.post("/contenido1/:kits", (req, res) => {
   const { kits } = req.params;
   const { Contenido } = req.body;
 
@@ -748,7 +748,6 @@ app.post("/guardarCambios", (req, res) => {
 
   // Define la consulta SQL para actualizar la columna Bahia en la tabla Datos
   const query = "UPDATE RETORFID.Datos SET Bahia = ? WHERE ID = ?";
-
   // Ejecuta la consulta SQL para cada actualización
   updates.forEach((update) => {
     const { id, bahia } = update;
@@ -844,7 +843,6 @@ app.post("/actualizarINV", (req, res) => {
         res.status(500).send("Error interno del servidor");
         return;
       }
-
       const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
       console.log(`Último pedido en la tabla Solicitud: ${ultimoPedido}`);
 
@@ -889,6 +887,78 @@ app.post("/actualizarINV", (req, res) => {
     });
   });
 });
+
+app.post("/ingresoabodega", (req, res) => {
+  const { EP } = req.body;
+
+  // Obtener la hora actual en formato TIMESTAMP
+  const currentDateTime = new Date().getTime();
+
+  // Variable para almacenar el número de kit encontrado
+  let kitNumber = null;
+
+  // Variable para almacenar el pedido descuentado
+  let descuentoPedido = null;
+
+  let todosDescuentos = [];
+
+  // Verificar si el EP está en la tabla Datos
+  db.query("SELECT Nombre FROM Datos WHERE Tag = ?", [EP], (err, results) => {
+    if (err) {
+      console.error("Error al verificar el EP:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+
+    if (results.length === 0) {
+      console.log(
+        `No se pudo encontrar el número del Kit en el nombre para EP: ${EP}`
+      );
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+
+    const nombre = results[0].Nombre; //Kit 2
+
+    // Extraer el número del Kit desde el nombre
+    const regex = /Kit (\d+)/;
+    const match = nombre.match(regex);
+    if (match) {
+      kitNumber = match[1]; // Aquí asignamos el número de kit encontrado
+      console.log(`Número del Kit del EP: ${kitNumber}`);
+    } else {
+      console.log(
+        `No se pudo encontrar el número del Kit en el nombre: ${nombre}`
+      );
+      res
+        .status(500)
+        .send(
+          `Error: No se pudo encontrar el número del Kit en el nombre: ${nombre}`
+        );
+      return;
+    }
+
+    // Actualizar INV y Hora_salida_bodega en la tabla Datos
+    db.query(
+      "UPDATE Datos SET INV = 'SI', Hora_entrada_bodega = ? WHERE Tag = ?",
+      [currentDateTime, EP],
+      (updateErr, updateResults) => {
+        if (updateErr) {
+          console.error(
+            "Error al actualizar INV y Hora_entrada_bodega:",
+            updateErr
+          );
+          res.status(500).send("Error interno del servidor");
+          return;
+        }
+        console.log(
+          `INV y Hora_entrada_bodega actualizados para EP: ${EP}, ${currentDateTime}`
+        );
+      }
+    );
+  });
+});
+
 
 
 
