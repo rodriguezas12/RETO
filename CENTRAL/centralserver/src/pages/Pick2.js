@@ -44,7 +44,7 @@ function Pick() {
     };
 
     const updateInv = (ep) => {
-        fetch("http://localhost:5000/actualizarINV", {
+        fetch("http://localhost:5000/ingresoabodega", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
