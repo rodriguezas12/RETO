@@ -764,6 +764,29 @@ app.post("/guardarCambios", (req, res) => {
   res.send({ status: "success", message: "Datos actualizados correctamente" });
 });
 
+
+
+
+// Obtener el último pedido realizado
+app.get("/ultimoPedido", (req, res) => {
+  // Consultar el último pedido en la tabla Solicitud
+  db.query("SELECT Pedido FROM Solicitud ORDER BY Pedido DESC LIMIT 1", (pedidoErr, pedidoResults) => {
+    if (pedidoErr) {
+      console.error(
+        "Error al verificar el Pedido en la tabla Solicitud:",
+        pedidoErr
+      );
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+
+    const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
+    res.json({ pedidoRealizado: ultimoPedido });
+  });
+});
+
+
+
 // Verificación salida pick
 app.post("/actualizarINV", (req, res) => {
   const { EP } = req.body;
@@ -773,6 +796,11 @@ app.post("/actualizarINV", (req, res) => {
 
   // Variable para almacenar el número de kit encontrado
   let kitNumber = null;
+
+  // Variable para almacenar el pedido descuentado
+  let descuentoPedido = null;
+
+  let todosDescuentos = [];
 
   // Verificar si el EP está en la tabla Datos
   db.query("SELECT Nombre FROM Datos WHERE Tag = ?", [EP], (err, results) => {
@@ -840,14 +868,14 @@ app.post("/actualizarINV", (req, res) => {
         return;
       }
 
-      const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[pedidoResults.length - 1].Pedido: "";
-
+      const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[pedidoResults.length - 1].Pedido : "";
+      
       console.log(`Último pedido en la tabla Solicitud: ${ultimoPedido}`);
 
       // Verificar si kitNumber está dentro de ultimoPedido
       if (ultimoPedido.includes(kitNumber)) {
         const pedidoArray = ultimoPedido.split(",");
-        const descuentoPedido = pedidoArray
+        descuentoPedido = pedidoArray
           .filter((item) => item !== kitNumber)
           .join(",");
         console.log(`Haz pickeado correctamente el Kit: ${descuentoPedido}`);
@@ -866,6 +894,35 @@ app.post("/actualizarINV", (req, res) => {
               return;
             }
             console.log("Nuevo pedido insertado en la tabla Solicitud");
+
+            // Agregar descuentoPedido a todosDescuentos
+            todosDescuentos.push(descuentoPedido);
+
+            // Si descuentoPedido es vacío, insertar evento en la tabla Eventos
+            if (descuentoPedido === "") {
+              const fecha = new Date().toISOString().slice(0, 10); // Fecha actual en formato YYYY-MM-DD
+              const hora = new Date().toLocaleTimeString(); // Hora actual en formato HH:MM:SS
+
+              const descripcion = `Se solicitaron los siguientes kits: ${ultimoPedido}`;
+              const evento = "Solicitud";
+
+              // Insertar evento en la tabla Eventos
+              // db.query(
+              //   "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)",
+              //   ["pistola", evento, descripcion, fecha, hora],
+              //   (eventoErr, eventoResults) => {
+              //     if (eventoErr) {
+              //       console.error(
+              //         "Error al insertar evento en la tabla Eventos:",
+              //         eventoErr
+              //       );
+              //       res.status(500).send("Error interno del servidor");
+              //       return;
+              //     }
+              //     console.log("Evento insertado en la tabla Eventos");
+              //   }
+              // );
+            }
           }
         );
       } else {
@@ -874,6 +931,13 @@ app.post("/actualizarINV", (req, res) => {
     });
   });
 });
+
+
+
+
+
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

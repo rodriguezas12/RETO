@@ -1,28 +1,75 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
-import Header from '../components/header';
+import Header from "../components/header";
 import "./Pick.css";
 
 function Pick() {
-  const [rfidText, setRfidText] = useState(""); // Estado para almacenar el texto ingresado
-  const [epValue, setEpValue] = useState(""); // Estado para almacenar el valor del EP
+  const [rfidText, setRfidText] = useState("");
+  const [epValue, setEpValue] = useState("");
+  const [pedidoRealizado, setPedidoRealizado] = useState("");
+  const [piezasPorVerificar, setPiezasPorVerificar] = useState(0);
+  const [piezasVerificadas, setPiezasVerificadas] = useState(0);
 
-  const textAreaRef = useRef(null); // Ref para el cuadro de texto
+  const textAreaRef = useRef(null);
 
-  // Función para buscar el valor del EP
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setRfidText("");
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [epValue]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (textAreaRef.current) {
+        textAreaRef.current.focus();
+      }
+    }, 6100);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    // Función para obtener el último pedido realizado
+    const fetchUltimoPedido = () => {
+      fetch("http://localhost:5000/ultimoPedido")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setPedidoRealizado(data.pedidoRealizado.toString());
+        })
+        .catch((error) => {
+          console.error("There was an error with the fetch operation:", error);
+        });
+    };
+
+    // Realizar el primer fetch al cargar el componente
+    fetchUltimoPedido();
+
+    // Configurar intervalo para hacer fetch cada 10 segundos
+    const pedidoInterval = setInterval(() => {
+      fetchUltimoPedido();
+    }, 10000);
+
+    return () => clearInterval(pedidoInterval);
+  }, []);
+
   const searchEP = (text) => {
-    // Expresión regular para buscar el valor de EP
     const regex = /EP:\s*([A-Z0-9]+)/;
     const match = text.match(regex);
     if (match) {
-      setEpValue(match[1]); // El valor del EP es el primer grupo capturado por la regex
-      updateInv(match[1]); // Llamar a la función para actualizar INV
+      setEpValue(match[1]);
+      updateInv(match[1]);
     } else {
-      setEpValue(""); // Si no se encuentra EP, limpiar el estado
+      setEpValue("");
     }
   };
 
-  // Función para enviar solicitud POST al backend para actualizar INV
   const updateInv = (ep) => {
     fetch("http://localhost:5000/actualizarINV", {
       method: "POST",
@@ -35,44 +82,24 @@ function Pick() {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        return response.text();
+        return response.json();
       })
       .then((data) => {
-        console.log(data);
+        setPiezasPorVerificar(data.piezasPorVerificar);
+        setPiezasVerificadas(data.piezasVerificadas);
+        if (data.pedidoRealizado) {
+          setPedidoRealizado(data.pedidoRealizado.toString());
+        }
       })
       .catch((error) => {
         console.error("There was an error with the fetch operation:", error);
       });
   };
 
-  // Efecto para limpiar el cuadro de texto después de 5 segundos
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setRfidText("");
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [epValue]); // Se ejecuta cada vez que cambia el valor de epValue
-
-  // Efecto para hacer clic automático en el cuadro de texto cada 6 segundos
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (textAreaRef.current) {
-        textAreaRef.current.focus();
-      }
-    }, 5100);
-
-    return () => clearInterval(interval);
-  }, []);
-
-
-
   const handleRfidTextChange = (event) => {
-    // Limitar a 36 caracteres
     const text = event.target.value.slice(0, 36);
     setRfidText(text);
 
-    // Si alcanza los 36 caracteres, buscar EP automáticamente
     if (text.length === 36) {
       searchEP(text);
     }
@@ -103,6 +130,20 @@ function Pick() {
       </div>
       <div className="ep-value-display">
         <p>Último EP encontrado: {epValue}</p>
+      </div>
+      <div className="status-container">
+        <div className="status-box">
+          <h3>Pedido realizado:</h3>
+          <p>{pedidoRealizado}</p>
+        </div>
+        <div className="status-box">
+          <h3>Piezas por verificar:</h3>
+          <p>{piezasPorVerificar}</p>
+        </div>
+        <div className="status-box">
+          <h3>Piezas verificadas:</h3>
+          <p>{piezasVerificadas}</p>
+        </div>
       </div>
     </div>
   );
