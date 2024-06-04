@@ -770,12 +770,9 @@ app.post("/guardarCambios", (req, res) => {
 // Obtener el último pedido realizado
 app.get("/ultimoPedido", (req, res) => {
   // Consultar el último pedido en la tabla Solicitud
-  db.query("SELECT Pedido FROM Solicitud ORDER BY Pedido DESC LIMIT 1", (pedidoErr, pedidoResults) => {
+  db.query("SELECT Pedido FROM Solicitud ORDER BY ID DESC LIMIT 1", (pedidoErr, pedidoResults) => {
     if (pedidoErr) {
-      console.error(
-        "Error al verificar el Pedido en la tabla Solicitud:",
-        pedidoErr
-      );
+      console.error("Error al verificar el Pedido en la tabla Solicitud:", pedidoErr);
       res.status(500).send("Error interno del servidor");
       return;
     }
@@ -784,8 +781,6 @@ app.get("/ultimoPedido", (req, res) => {
     res.json({ pedidoRealizado: ultimoPedido });
   });
 });
-
-
 
 // Verificación salida pick
 app.post("/actualizarINV", (req, res) => {
@@ -800,8 +795,6 @@ app.post("/actualizarINV", (req, res) => {
   // Variable para almacenar el pedido descuentado
   let descuentoPedido = null;
 
-  let todosDescuentos = [];
-
   // Verificar si el EP está en la tabla Datos
   db.query("SELECT Nombre FROM Datos WHERE Tag = ?", [EP], (err, results) => {
     if (err) {
@@ -811,14 +804,12 @@ app.post("/actualizarINV", (req, res) => {
     }
 
     if (results.length === 0) {
-      console.log(
-        `No se pudo encontrar el número del Kit en el nombre para EP: ${EP}`
-      );
+      console.log(`No se pudo encontrar el número del Kit en el nombre para EP: ${EP}`);
       res.status(500).send("Error interno del servidor");
       return;
     }
 
-    const nombre = results[0].Nombre; //Kit 2
+    const nombre = results[0].Nombre; // Kit 2
 
     // Extraer el número del Kit desde el nombre
     const regex = /Kit (\d+)/;
@@ -827,14 +818,8 @@ app.post("/actualizarINV", (req, res) => {
       kitNumber = match[1]; // Aquí asignamos el número de kit encontrado
       console.log(`Número del Kit del EP: ${kitNumber}`);
     } else {
-      console.log(
-        `No se pudo encontrar el número del Kit en el nombre: ${nombre}`
-      );
-      res
-        .status(500)
-        .send(
-          `Error: No se pudo encontrar el número del Kit en el nombre: ${nombre}`
-        );
+      console.log(`No se pudo encontrar el número del Kit en el nombre: ${nombre}`);
+      res.status(500).send(`Error: No se pudo encontrar el número del Kit en el nombre: ${nombre}`);
       return;
     }
 
@@ -844,41 +829,30 @@ app.post("/actualizarINV", (req, res) => {
       [currentDateTime, EP],
       (updateErr, updateResults) => {
         if (updateErr) {
-          console.error(
-            "Error al actualizar INV y Hora_salida_bodega:",
-            updateErr
-          );
+          console.error("Error al actualizar INV y Hora_salida_bodega:", updateErr);
           res.status(500).send("Error interno del servidor");
           return;
         }
-        console.log(
-          `INV y Hora_salida_bodega actualizados para EP: ${EP}, ${currentDateTime}`
-        );
+        console.log(`INV y Hora_salida_bodega actualizados para EP: ${EP}, ${currentDateTime}`);
       }
     );
 
     // Verificar el pedido actual en la tabla Solicitud
-    db.query("SELECT Pedido FROM Solicitud", (pedidoErr, pedidoResults) => {
+    db.query("SELECT Pedido FROM Solicitud ORDER BY ID DESC LIMIT 1", (pedidoErr, pedidoResults) => {
       if (pedidoErr) {
-        console.error(
-          "Error al verificar el Pedido en la tabla Solicitud:",
-          pedidoErr
-        );
+        console.error("Error al verificar el Pedido en la tabla Solicitud:", pedidoErr);
         res.status(500).send("Error interno del servidor");
         return;
       }
 
-      const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[pedidoResults.length - 1].Pedido : "";
-      
+      const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
       console.log(`Último pedido en la tabla Solicitud: ${ultimoPedido}`);
 
       // Verificar si kitNumber está dentro de ultimoPedido
       if (ultimoPedido.includes(kitNumber)) {
         const pedidoArray = ultimoPedido.split(",");
-        descuentoPedido = pedidoArray
-          .filter((item) => item !== kitNumber)
-          .join(",");
-        console.log(`Haz pickeado correctamente el Kit: ${descuentoPedido}`);
+        descuentoPedido = pedidoArray.filter((item) => item !== kitNumber).join(",");
+        console.log(`Haz pickeado correctamente el Kit: ${kitNumber}`);
 
         // Insertar el nuevo pedido en la tabla Solicitud
         db.query(
@@ -886,47 +860,31 @@ app.post("/actualizarINV", (req, res) => {
           [descuentoPedido],
           (insertErr, insertResults) => {
             if (insertErr) {
-              console.error(
-                "Error al insertar el nuevo pedido en la tabla Solicitud:",
-                insertErr
-              );
+              console.error("Error al insertar el nuevo pedido en la tabla Solicitud:", insertErr);
               res.status(500).send("Error interno del servidor");
               return;
             }
             console.log("Nuevo pedido insertado en la tabla Solicitud");
 
-            // Agregar descuentoPedido a todosDescuentos
-            todosDescuentos.push(descuentoPedido);
+            const piezasVerificadas = ultimoPedido.length - descuentoPedido.length;
+            const piezasPorVerificar = descuentoPedido.length;
 
-            // Si descuentoPedido es vacío, insertar evento en la tabla Eventos
-            if (descuentoPedido === "") {
-              const fecha = new Date().toISOString().slice(0, 10); // Fecha actual en formato YYYY-MM-DD
-              const hora = new Date().toLocaleTimeString(); // Hora actual en formato HH:MM:SS
-
-              const descripcion = `Se solicitaron los siguientes kits: ${ultimoPedido}`;
-              const evento = "Solicitud";
-
-              // Insertar evento en la tabla Eventos
-              // db.query(
-              //   "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)",
-              //   ["pistola", evento, descripcion, fecha, hora],
-              //   (eventoErr, eventoResults) => {
-              //     if (eventoErr) {
-              //       console.error(
-              //         "Error al insertar evento en la tabla Eventos:",
-              //         eventoErr
-              //       );
-              //       res.status(500).send("Error interno del servidor");
-              //       return;
-              //     }
-              //     console.log("Evento insertado en la tabla Eventos");
-              //   }
-              // );
-            }
+            res.json({
+              piezasPorVerificar: piezasPorVerificar,
+              piezasVerificadas: piezasVerificadas,
+              pedidoRealizado: ultimoPedido,
+              descuentoPedido: descuentoPedido
+            });
           }
         );
       } else {
         console.log(`No fue solicitado el Kit: ${kitNumber}`);
+        res.status(200).json({
+          piezasPorVerificar: 0,
+          piezasVerificadas: 0,
+          pedidoRealizado: ultimoPedido,
+          descuentoPedido: ultimoPedido
+        });
       }
     });
   });
