@@ -7,8 +7,9 @@ function Pick() {
   const [rfidText, setRfidText] = useState("");
   const [epValue, setEpValue] = useState("");
   const [pedidoRealizado, setPedidoRealizado] = useState("");
-  const [piezasPorVerificar, setPiezasPorVerificar] = useState(0);
-  const [piezasVerificadas, setPiezasVerificadas] = useState(0);
+  const [piezasPorVerificar, setPiezasPorVerificar] = useState([]);
+  const [piezasVerificadas, setPiezasVerificadas] = useState([]);
+  const [popupVisible, setPopupVisible] = useState(false);
 
   const textAreaRef = useRef(null);
 
@@ -31,7 +32,6 @@ function Pick() {
   }, []);
 
   useEffect(() => {
-    // Función para obtener el último pedido realizado
     const fetchUltimoPedido = () => {
       fetch("http://localhost:5000/ultimoPedido")
         .then((response) => {
@@ -41,23 +41,54 @@ function Pick() {
           return response.json();
         })
         .then((data) => {
-          setPedidoRealizado(data.pedidoRealizado.toString());
+          const pedido = data.pedidoRealizado;
+          const kits = pedido.split(',').map(num => `Kit ${num}`);
+          setPedidoRealizado(kits.join(', '));
+          setPiezasPorVerificar(kits);
+          setPiezasVerificadas([]);
         })
         .catch((error) => {
           console.error("There was an error with the fetch operation:", error);
         });
     };
 
-    // Realizar el primer fetch al cargar el componente
     fetchUltimoPedido();
 
-    // Configurar intervalo para hacer fetch cada 10 segundos
     const pedidoInterval = setInterval(() => {
       fetchUltimoPedido();
-    }, 10000);
+    }, 2000); // Consulta cada 2 segundos
 
     return () => clearInterval(pedidoInterval);
   }, []);
+
+  useEffect(() => {
+    const updatePiezas = () => {
+      fetch("http://localhost:5000/ultimoPedido")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const pedido = data.pedidoRealizado;
+          const pedidoVerificado = pedido.split(',').map(num => `Kit ${num}`);
+          const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
+          setPiezasPorVerificar(pedidoVerificado);
+          setPiezasVerificadas(prevState => [...prevState, ...kitsVerificados]);
+          if (pedidoVerificado.length === 0) {
+            setPopupVisible(true);
+          }
+        })
+        .catch((error) => {
+          console.error("There was an error with the fetch operation:", error);
+        });
+    };
+
+    const interval = setInterval(updatePiezas, 2000); // Consulta cada 2 segundos
+
+    return () => clearInterval(interval);
+  }, [piezasPorVerificar]);
 
   const searchEP = (text) => {
     const regex = /EP:\s*([A-Z0-9]+)/;
@@ -85,10 +116,12 @@ function Pick() {
         return response.json();
       })
       .then((data) => {
-        setPiezasPorVerificar(data.piezasPorVerificar);
-        setPiezasVerificadas(data.piezasVerificadas);
-        if (data.pedidoRealizado) {
-          setPedidoRealizado(data.pedidoRealizado.toString());
+        const pedidoVerificado = data.pedidoRealizado.split(',').map(num => `Kit ${num}`);
+        const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
+        setPiezasPorVerificar(pedidoVerificado);
+        setPiezasVerificadas(prevState => [...prevState, ...kitsVerificados]);
+        if (data.descuentoPedido === "") {
+          setPopupVisible(true);
         }
       })
       .catch((error) => {
@@ -103,6 +136,13 @@ function Pick() {
     if (text.length === 36) {
       searchEP(text);
     }
+  };
+
+  const closePopup = () => {
+    setPopupVisible(false);
+    setPedidoRealizado("");
+    setPiezasPorVerificar([]);
+    setPiezasVerificadas([]);
   };
 
   return (
@@ -138,13 +178,21 @@ function Pick() {
         </div>
         <div className="status-box">
           <h3>Piezas por verificar:</h3>
-          <p>{piezasPorVerificar}</p>
+          <p>{piezasPorVerificar.join(', ')}</p>
         </div>
         <div className="status-box">
           <h3>Piezas verificadas:</h3>
-          <p>{piezasVerificadas}</p>
+          <p>{piezasVerificadas.join(', ')}</p>
         </div>
       </div>
+      {popupVisible && (
+        <div className="popup">
+          <div className="popup-content">
+            <h2>PICK TO LIGHT COMPLETO</h2>
+            <button onClick={closePopup}>Cerrar</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
