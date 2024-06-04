@@ -48,7 +48,7 @@ function Contenido() {
         setData(updatedData);
         setEditIndex(null);
 
-        fetch(`http://localhost:5000/contenido/${data[index].Kits}`, {
+        fetch(`http://localhost:5000/contenido1/${data[index].Kits}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ function Contenido() {
         const newRow = { Kits: `Kit  ${newKitNumber}`, Contenido: '' };
         setData([...data, newRow]);
 
-        fetch("http://localhost:5000/contenido", {
+        fetch("http://localhost:5000/contenido1", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

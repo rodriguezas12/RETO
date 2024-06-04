@@ -479,7 +479,7 @@ db.query(createTableQuery, (err, result) => {
 
 // Aqui se solicita la tabla Contenido para la pagina contenido
 
-app.post("/contenido/:kits", (req, res) => {
+app.post("/contenido1/:kits", (req, res) => {
   const { kits } = req.params;
   const { Contenido } = req.body;
 
@@ -843,7 +843,6 @@ app.post("/actualizarINV", (req, res) => {
         res.status(500).send("Error interno del servidor");
         return;
       }
-
       const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
       console.log(`Último pedido en la tabla Solicitud: ${ultimoPedido}`);
 
