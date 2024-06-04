@@ -107,3 +107,7 @@ td {
         /* Ajustar el tamaño de la fuente */
     }
 }
+.table-contenido {
+    max-height: 400px; /* Altura máxima del contenedor */
+    overflow-y: auto; /* Scroll vertical cuando sea necesario */
+}
