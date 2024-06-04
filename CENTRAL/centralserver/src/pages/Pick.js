@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
-import "./Pick.css";
 import Header from '../components/header';
+import "./Pick.css";
 
 function Pick() {
   const [rfidText, setRfidText] = useState(""); // Estado para almacenar el texto ingresado
@@ -68,12 +68,12 @@ function Pick() {
 
 
   const handleRfidTextChange = (event) => {
-    // Limitar a 35 caracteres
-    const text = event.target.value.slice(0, 35);
+    // Limitar a 36 caracteres
+    const text = event.target.value.slice(0, 36);
     setRfidText(text);
 
-    // Si alcanza los 35 caracteres, buscar EP automáticamente
-    if (text.length === 35) {
+    // Si alcanza los 36 caracteres, buscar EP automáticamente
+    if (text.length === 36) {
       searchEP(text);
     }
   };
@@ -90,13 +90,13 @@ function Pick() {
       </Helmet>
       <Header titulo="VERIFICACIÓN PICK TO LIGHT" />
       <div className="input-container">
-        <label htmlFor="rfidText">Ingresa el texto RFID (máx. 35 caracteres):</label>
+        <label htmlFor="rfidText">Ingresa el texto RFID (máx. 36 caracteres):</label>
         <textarea
           id="rfidText"
           ref={textAreaRef}
           rows="4"
           cols="50"
-          maxLength="35"
+          maxLength="36"
           value={rfidText}
           onChange={handleRfidTextChange}
         />
