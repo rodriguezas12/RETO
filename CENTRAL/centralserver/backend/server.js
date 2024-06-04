@@ -764,6 +764,29 @@ app.post("/guardarCambios", (req, res) => {
   res.send({ status: "success", message: "Datos actualizados correctamente" });
 });
 
+
+
+
+// Obtener el último pedido realizado
+app.get("/ultimoPedido", (req, res) => {
+  // Consultar el último pedido en la tabla Solicitud
+  db.query("SELECT Pedido FROM Solicitud ORDER BY Pedido DESC LIMIT 1", (pedidoErr, pedidoResults) => {
+    if (pedidoErr) {
+      console.error(
+        "Error al verificar el Pedido en la tabla Solicitud:",
+        pedidoErr
+      );
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+
+    const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
+    res.json({ pedidoRealizado: ultimoPedido });
+  });
+});
+
+
+
 // Verificación salida pick
 app.post("/actualizarINV", (req, res) => {
   const { EP } = req.body;
@@ -910,23 +933,8 @@ app.post("/actualizarINV", (req, res) => {
 });
 
 
-// Obtener el último pedido realizado
-app.get("/ultimoPedido", (req, res) => {
-  // Consultar el último pedido en la tabla Solicitud
-  db.query("SELECT Pedido FROM Solicitud", (pedidoErr3, pedidoResultados) => {
-    if (pedidoErr3) {
-      console.error(
-        "Error al verificar el Pedido en la tabla Solicitud:",
-        pedidoErr3
-      );
-      res.status(500).send("Error interno del servidor");
-      return;
-    }
 
-    const ultimoPedido = pedidoResultados.length > 0 ? pedidoResultados[0].Pedido : "";
-    res.json({ pedidoRealizado: ultimoPedido });
-  });
-});
+
 
 
 
