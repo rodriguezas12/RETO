@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Helmet } from 'react-helmet';
 import Header from "../components/header";
 import "./IngresoMaterial.css";
+import { Link } from "react-router-dom";
 
 
 
@@ -104,8 +105,10 @@ function Ingresomaterial() {
             <option value="2">Estación 2</option>
             <option value="3">Estación 3</option>
           </select>
-          <button className="boton-ingreso"
-            onClick={handleSaveChanges}>Guardar Cambios</button>
+          <Link to="/pick2">
+            <button className="boton-ingreso"
+              onClick={handleSaveChanges}>Guardar Cambios</button>
+          </Link>
         </div>
       </div>
       <div className="container-ingreso">
@@ -132,4 +135,3 @@ function Ingresomaterial() {
   );
 }
 export default Ingresomaterial;
-  

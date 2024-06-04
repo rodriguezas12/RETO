@@ -11,7 +11,9 @@ import Register from "./pages/Register";
 import Solicitud from "./pages/Solicitud";
 import Asignacion from "./pages/Asignacion";
 import Contenido from "./pages/Contenido";
-import Pick from "./pages/Pick"; 
+import Pick from "./pages/Pick"
+
+import Pick2 from "./pages/Pick2";
 
 function PrivateRoute({ element, isAuthenticated }) {
   return isAuthenticated ? element : <Navigate to="/" replace />;
@@ -84,7 +86,8 @@ function App() {
         />
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/asignacion" element={<Asignacion />} />
-        <Route path="/pick" element={<Pick />} /> 
+        <Route path="/pick" element={<Pick />} />
+        <Route path="/pick2" element={<Pick2 />} />
         <Route path="*" element={<Nopage />} />
       </Routes>
     </BrowserRouter>
