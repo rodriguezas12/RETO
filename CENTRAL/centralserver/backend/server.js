@@ -16,8 +16,6 @@ const db = mysql.createConnection({
   database: "RETORFID",
 });
 
-
-
 db.connect((err) => {
   if (err) {
     console.error("Error de conexión a la base de datos:", err);
@@ -161,20 +159,18 @@ app.post("/contenido", (req, res) => {
   });
 });
 
-
-
 app.post("/posicion", (req, res) => {
   const {
-    "Col1": col1,
-    "Col2": col2,
-    "Col3": col3,
-    "Col4": col4,
-    "Col5": col5,
-    "Col6": col6,
-    "Col7": col7,
-    "Col8": col8,
-    "Col9": col9,
-    "Col10": col10,
+    Col1: col1,
+    Col2: col2,
+    Col3: col3,
+    Col4: col4,
+    Col5: col5,
+    Col6: col6,
+    Col7: col7,
+    Col8: col8,
+    Col9: col9,
+    Col10: col10,
   } = req.body;
 
   // Crear la tabla si no existe
@@ -202,16 +198,21 @@ app.post("/posicion", (req, res) => {
     }
 
     // Insertar datos en la tabla una vez creada
-    const insertQuery = "INSERT INTO M1 (`Col1`, `Col2`, `Col3`, `Col4`, `Col5`, `Col6`, `Col7`, `Col8`, `Col9`, `Col10`) VALUES (?,?,?,?,?,?,?,?,?,?)";
-    db.query(insertQuery, [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10], (err, results) => {
-      if (err) {
-        console.error("Error al insertar el registro:", err);
-        res.status(500).send("Error interno del servidor");
-        return;
+    const insertQuery =
+      "INSERT INTO M1 (`Col1`, `Col2`, `Col3`, `Col4`, `Col5`, `Col6`, `Col7`, `Col8`, `Col9`, `Col10`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    db.query(
+      insertQuery,
+      [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10],
+      (err, results) => {
+        if (err) {
+          console.error("Error al insertar el registro:", err);
+          res.status(500).send("Error interno del servidor");
+          return;
+        }
+        console.log("Registro insertado correctamente");
+        res.status(201).send("Registro insertado correctamente");
       }
-      console.log("Registro insertado correctamente");
-      res.status(201).send("Registro insertado correctamente");
-    });
+    );
   });
 });
 
@@ -233,10 +234,10 @@ app.get("/inventario_rack", (req, res) => {
   });
 });
 
-
 // inventario llamado de tabla a sql
-app.get('/michi', (req, res) => {
-  db.query(`SELECT 
+app.get("/michi", (req, res) => {
+  db.query(
+    `SELECT 
               ID,
               Tag,
               Nombre,
@@ -246,19 +247,20 @@ app.get('/michi', (req, res) => {
               INV,
               DATE_FORMAT(Hora_entrada_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_bodega,
               DATE_FORMAT(Hora_salida_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_salida_bodega 
-            FROM RETORFID.Datos`, (err, results) => {
-    if (err) {
-      console.error("Error al obtener los datos:", err);
-      res.status(500).send("Error en el servidor");
-      return;
+            FROM RETORFID.Datos`,
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener los datos:", err);
+        res.status(500).send("Error en el servidor");
+        return;
+      }
+      res.json(results);
     }
-    res.json(results);
-  });
+  );
 });
 
-
-app.get('/contabilidad-kits', (req, res) => {
-  db.query('SELECT * FROM Contabilidad_Kits', (err, results) => {
+app.get("/contabilidad-kits", (req, res) => {
+  db.query("SELECT * FROM Contabilidad_Kits", (err, results) => {
     if (err) {
       console.error("Error al obtener los datos de Contabilidad_Kits:", err);
       res.status(500).send("Error en el servidor");
@@ -269,53 +271,56 @@ app.get('/contabilidad-kits', (req, res) => {
   });
 });
 
-
-
 //Estaciones ^-^// Cambiar la ruta en el servidor para que espere el parámetro en la URL
 app.get("/estaciones/:numeroEstacion", (req, res) => {
   const { numeroEstacion } = req.params;
 
-  if (!numeroEstacion || isNaN(numeroEstacion) || numeroEstacion < 1 || numeroEstacion > 7) {
+  if (
+    !numeroEstacion ||
+    isNaN(numeroEstacion) ||
+    numeroEstacion < 1 ||
+    numeroEstacion > 7
+  ) {
     res.status(400).send("Número de estación inválido");
     return;
   }
 
   const nombreTabla = `Estación_${numeroEstacion}`;
 
+  db.query(`SELECT * FROM ${nombreTabla}`, (err, results) => {
+    if (err) {
+      console.error(`Error al leer los datos de ${nombreTabla}:`, err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+    res.json(results);
+  });
+});
+
+// Endpoint para enviar datos a la base de datos al detener el contador
+app.post("/sets", (req, res) => {
+  const { usuario, evento, descripcion, fecha, hora } = req.body;
+
+  const query =
+    "INSERT INTO RETORFID.Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)";
   db.query(
-    `SELECT * FROM ${nombreTabla}`,
-    (err, results) => {
+    query,
+    [usuario, evento, descripcion, fecha, hora],
+    (err, result) => {
       if (err) {
-        console.error(`Error al leer los datos de ${nombreTabla}:`, err);
-        res.status(500).send("Error interno del servidor");
+        console.error("Error al insertar los datos en la base de datos:", err);
+        res.status(500).send("Error en el servidor");
         return;
       }
-      res.json(results);
+      res.send("Datos insertados correctamente en la tabla Eventos");
     }
   );
 });
 
-// Endpoint para enviar datos a la base de datos al detener el contador
-app.post('/sets', (req, res) => {
-  const { usuario, evento, descripcion, fecha, hora } = req.body;
-
-  const query = 'INSERT INTO RETORFID.Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)';
-  db.query(query, [usuario, evento, descripcion, fecha, hora], (err, result) => {
-    if (err) {
-      console.error('Error al insertar los datos en la base de datos:', err);
-      res.status(500).send('Error en el servidor');
-      return;
-    }
-    res.send('Datos insertados correctamente en la tabla Eventos');
-  });
-});
-
-
-
-
-app.get('/said', (req, res) => {
+app.get("/said", (req, res) => {
   // Consulta para obtener las últimas 3 filas ordenadas por una columna específica
-  db.query(`
+  db.query(
+    `
   SELECT * FROM (
     SELECT *,
     ROW_NUMBER() OVER (ORDER BY ID DESC) AS rn
@@ -324,35 +329,34 @@ app.get('/said', (req, res) => {
   WHERE rn <= 3
   ORDER BY rn DESC;  
   
-  `, (err, results) => {
-    if (err) {
-      console.error("Error al obtener los datos de M1:", err);
-      res.status(500).send("Error en el servidor");
-      return;
+  `,
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener los datos de M1:", err);
+        res.status(500).send("Error en el servidor");
+        return;
+      }
+      res.json(results);
     }
-    res.json(results);
-  });
+  );
 });
 
 // ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
 // Obtener tags de la estación 1
 app.get("/tag", (req, res) => {
-  db.query(
-    "SELECT Tag FROM Estación_1",
-    (err, results) => {
-      if (err) {
-        console.error("Error al obtener los tags:", err);
-        res.status(500).send("Error interno del servidor");
-        return;
-      }
-      if (results.length > 0) {
-        const tags = results.map((result) => result.Tag); // Extraemos solo los tags de los resultados
-        res.json(tags);
-      } else {
-        res.status(404).send("No se encontraron tags");
-      }
+  db.query("SELECT Tag FROM Estación_1", (err, results) => {
+    if (err) {
+      console.error("Error al obtener los tags:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
     }
-  );
+    if (results.length > 0) {
+      const tags = results.map((result) => result.Tag); // Extraemos solo los tags de los resultados
+      res.json(tags);
+    } else {
+      res.status(404).send("No se encontraron tags");
+    }
+  });
 });
 
 // Obtener el nombre del kit de un tag específico
@@ -388,7 +392,10 @@ app.post("/nombrekit/:tag", (req, res) => {
     [nombreKit, tag],
     (err, results) => {
       if (err) {
-        console.error("Error al actualizar el nombre del kit en Estación_1:", err);
+        console.error(
+          "Error al actualizar el nombre del kit en Estación_1:",
+          err
+        );
         res.status(500).send("Error interno del servidor");
         return;
       }
@@ -399,7 +406,10 @@ app.post("/nombrekit/:tag", (req, res) => {
         [nombreKit, tag],
         (err, results) => {
           if (err) {
-            console.error("Error al actualizar el nombre del kit en Datos:", err);
+            console.error(
+              "Error al actualizar el nombre del kit en Datos:",
+              err
+            );
             res.status(500).send("Error interno del servidor");
             return;
           }
@@ -415,22 +425,18 @@ app.post("/nombrekit/:tag", (req, res) => {
 app.get("/idkit/:tag", (req, res) => {
   const { tag } = req.params;
 
-  db.query(
-    "SELECT Id FROM Estación_1 WHERE Tag = ?",
-    [tag],
-    (err, results) => {
-      if (err) {
-        console.error("Error al obtener el ID del kit:", err);
-        res.status(500).send("Error interno del servidor");
-        return;
-      }
-      if (results.length > 0) {
-        res.json(results[0].Id); // Devolvemos el ID del kit si existe
-      } else {
-        res.json(""); // Devolvemos un ID vacío si no existe
-      }
+  db.query("SELECT Id FROM Estación_1 WHERE Tag = ?", [tag], (err, results) => {
+    if (err) {
+      console.error("Error al obtener el ID del kit:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
     }
-  );
+    if (results.length > 0) {
+      res.json(results[0].Id); // Devolvemos el ID del kit si existe
+    } else {
+      res.json(""); // Devolvemos un ID vacío si no existe
+    }
+  });
 });
 
 // Actualizar el ID del kit de un tag específico
@@ -480,57 +486,54 @@ const createTableQuery = `
 
 db.query(createTableQuery, (err, result) => {
   if (err) {
-    console.error('Error al crear la tabla Contenido:', err);
+    console.error("Error al crear la tabla Contenido:", err);
     return;
   }
-  console.log('Tabla Contenido creada o ya existe');
+  console.log("Tabla Contenido creada o ya existe");
 });
-
 
 // Aqui se solicita la tabla Contenido para la pagina contenido
 
-app.post('/contenido/:kits', (req, res) => {
+app.post("/contenido/:kits", (req, res) => {
   const { kits } = req.params;
   const { Contenido } = req.body;
 
-  const query = 'UPDATE RETORFID.Contenido SET Contenido = ? WHERE Kits = ?';
+  const query = "UPDATE RETORFID.Contenido SET Contenido = ? WHERE Kits = ?";
   db.query(query, [Contenido, kits], (err, result) => {
     if (err) {
-      console.error('Error al actualizar los datos:', err);
-      res.status(500).send('Error en el servidor');
+      console.error("Error al actualizar los datos:", err);
+      res.status(500).send("Error en el servidor");
       return;
     }
     res.send({ Kits: kits, Contenido });
   });
 });
 
-app.post('/contenido1', (req, res) => {
+app.post("/contenido1", (req, res) => {
   const { Kits, Contenido } = req.body;
 
-  const query = 'INSERT INTO RETORFID.Contenido (Kits, Contenido) VALUES (?, ?)';
+  const query =
+    "INSERT INTO RETORFID.Contenido (Kits, Contenido) VALUES (?, ?)";
   db.query(query, [Kits, Contenido], (err, result) => {
     if (err) {
-      console.error('Error al insertar los datos:', err);
-      res.status(500).send('Error en el servidor');
+      console.error("Error al insertar los datos:", err);
+      res.status(500).send("Error en el servidor");
       return;
     }
     res.send({ Kits, Contenido });
   });
 });
 
-
-
-app.get('/contenido', (req, res) => {
-  db.query('SELECT Kits, Contenido FROM RETORFID.Contenido', (err, results) => {
+app.get("/contenido", (req, res) => {
+  db.query("SELECT Kits, Contenido FROM RETORFID.Contenido", (err, results) => {
     if (err) {
-      console.error('Error al obtener los datos:', err);
-      res.status(500).send('Error en el servidor');
+      console.error("Error al obtener los datos:", err);
+      res.status(500).send("Error en el servidor");
       return;
     }
     res.json(results);
   });
 });
-
 
 app.get("/kits_info", (req, res) => {
   const contenidoQuery = "SELECT COUNT(*) AS count FROM Contenido";
@@ -565,15 +568,11 @@ app.get("/kits_info", (req, res) => {
 
       res.json({
         contenidoCount: contenidoResults[0].count,
-        disponibles: disponibles
+        disponibles: disponibles,
       });
     });
   });
 });
-
-
-
-
 
 app.get("/solicitud", (req, res) => {
   db.query("SELECT * FROM Solicitud", (err, results) => {
@@ -589,19 +588,23 @@ app.get("/solicitud", (req, res) => {
 app.post("/eventosIngreso", (req, res) => {
   const { usuario, evento, descripcion, fecha, hora } = req.body;
 
-  const insertEventoQuery = "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)";
+  const insertEventoQuery =
+    "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)";
 
-  db.query(insertEventoQuery, [usuario, evento, descripcion, fecha, hora], (err, results) => {
-    if (err) {
-      console.error("Error al insertar el evento:", err);
-      res.status(500).send("Error interno del servidor");
-      return;
+  db.query(
+    insertEventoQuery,
+    [usuario, evento, descripcion, fecha, hora],
+    (err, results) => {
+      if (err) {
+        console.error("Error al insertar el evento:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      console.log("Evento insertado correctamente");
+      res.status(201).send("Evento insertado correctamente");
     }
-    console.log("Evento insertado correctamente");
-    res.status(201).send("Evento insertado correctamente");
-  });
+  );
 });
-
 
 app.get("/eventos", (req, res) => {
   const {
@@ -615,7 +618,7 @@ app.get("/eventos", (req, res) => {
     asignacionContenido,
     setsTerminados,
     salida,
-    entrada
+    entrada,
   } = req.query;
 
   let query = "SELECT * FROM Eventos WHERE 1=1"; // Base de la consulta
@@ -627,7 +630,8 @@ app.get("/eventos", (req, res) => {
   if (ingresoMaterial) eventConditions.push("evento = 'Ingreso Material'");
   if (kitsArmados) eventConditions.push("evento = 'Kit Armado'");
   if (asignacionKits) eventConditions.push("evento = 'Asignación Kits'");
-  if (asignacionContenido) eventConditions.push("evento = 'Asignación Contenido'");
+  if (asignacionContenido)
+    eventConditions.push("evento = 'Asignación Contenido'");
   if (setsTerminados) eventConditions.push("evento = 'Set Terminado'");
   if (salida) eventConditions.push("evento = 'SALIDA'");
   if (entrada) eventConditions.push("evento = 'ENTRADA'");
@@ -658,10 +662,6 @@ app.get("/eventos", (req, res) => {
     res.json(results);
   });
 });
-
-
-
-
 
 app.get("/Datos", (req, res) => {
   db.query("SELECT * FROM Datos", (err, results) => {
@@ -707,11 +707,12 @@ app.post("/solicitar", (req, res) => {
   `;
 
   const insertSolicitudQuery = "INSERT INTO Solicitud (Pedido) VALUES (?)";
-  const insertEventosQuery = "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)";
+  const insertEventosQuery =
+    "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)";
 
   const now = new Date();
-  const fecha = now.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-  const hora = now.toTimeString().split(' ')[0]; // Formato HH:MM:SS
+  const fecha = now.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+  const hora = now.toTimeString().split(" ")[0]; // Formato HH:MM:SS
 
   db.query(createSolicitudTableQuery, (err, results) => {
     if (err) {
@@ -734,118 +735,246 @@ app.post("/solicitar", (req, res) => {
           return;
         }
 
-        const evento = 'solicitud';
+        const evento = "solicitud";
         const descripcion = `Se solicitaron los siguientes kits: ${nuevoPedido}`;
 
-        db.query(insertEventosQuery, [nombreUsuario, evento, descripcion, fecha, hora], (err, results) => {
-          if (err) {
-            console.error("Error al insertar el evento:", err);
-            res.status(500).send("Error interno del servidor");
-            return;
+        db.query(
+          insertEventosQuery,
+          [nombreUsuario, evento, descripcion, fecha, hora],
+          (err, results) => {
+            if (err) {
+              console.error("Error al insertar el evento:", err);
+              res.status(500).send("Error interno del servidor");
+              return;
+            }
+
+            res.status(201).json({
+              message: "Pedido registrado correctamente y evento guardado",
+            });
+
+            // Enviar solicitud y evento vacíos 20 segundos después
+            setTimeout(() => {
+              const eventoVacio = "";
+              const descripcionVacia = "";
+              const emptyFecha = new Date().toISOString().split("T")[0]; // Fecha actual
+              const emptyHora = new Date().toTimeString().split(" ")[0]; // Hora actual
+
+              // Insertar evento vacío
+              db.query(
+                insertEventosQuery,
+                [
+                  nombreUsuario,
+                  eventoVacio,
+                  descripcionVacia,
+                  emptyFecha,
+                  emptyHora,
+                ],
+                (err, results) => {
+                  if (err) {
+                    console.error("Error al insertar el evento vacío:", err);
+                  } else {
+                    console.log("Evento vacío insertado correctamente");
+                  }
+                }
+              );
+
+              // Insertar solicitud vacía
+              db.query(insertSolicitudQuery, [""], (err, results) => {
+                if (err) {
+                  console.error("Error al insertar la solicitud vacía:", err);
+                } else {
+                  console.log("Solicitud vacía insertada correctamente");
+                }
+              });
+            }, 20000);
           }
-
-          res.status(201).json({ message: "Pedido registrado correctamente y evento guardado" });
-
-          // Enviar solicitud y evento vacíos 20 segundos después
-          setTimeout(() => {
-            const eventoVacio = '';
-            const descripcionVacia = '';
-            const emptyFecha = new Date().toISOString().split('T')[0]; // Fecha actual
-            const emptyHora = new Date().toTimeString().split(' ')[0]; // Hora actual
-
-            // Insertar evento vacío
-            db.query(insertEventosQuery, [nombreUsuario, eventoVacio, descripcionVacia, emptyFecha, emptyHora], (err, results) => {
-              if (err) {
-                console.error("Error al insertar el evento vacío:", err);
-              } else {
-                console.log("Evento vacío insertado correctamente");
-              }
-            });
-
-            // Insertar solicitud vacía
-            db.query(insertSolicitudQuery, [''], (err, results) => {
-              if (err) {
-                console.error("Error al insertar la solicitud vacía:", err);
-              } else {
-                console.log("Solicitud vacía insertada correctamente");
-              }
-            });
-          }, 20000);
-        });
+        );
       });
     });
   });
 });
 // Desde aqui se implementa ingreso de material
-app.post('/guardarCambios', (req, res) => {
+app.post("/guardarCambios", (req, res) => {
   const updates = req.body; // Los datos enviados desde el frontend
 
   // Define la consulta SQL para actualizar la columna Bahia en la tabla Datos
-  const query = 'UPDATE RETORFID.Datos SET Bahia = ? WHERE ID = ?';
+  const query = "UPDATE RETORFID.Datos SET Bahia = ? WHERE ID = ?";
 
   // Ejecuta la consulta SQL para cada actualización
-  updates.forEach(update => {
+  updates.forEach((update) => {
     const { id, bahia } = update;
     db.query(query, [bahia, id], (err, result) => {
       if (err) {
-        console.error('Error al actualizar los datos:', err);
-        return res.status(500).send('Error en el servidor');
+        console.error("Error al actualizar los datos:", err);
+        return res.status(500).send("Error en el servidor");
       }
     });
   });
 
   // Envía una respuesta de éxito una vez que todas las consultas se han ejecutado
-  res.send({ status: 'success', message: 'Datos actualizados correctamente' });
+  res.send({ status: "success", message: "Datos actualizados correctamente" });
 });
-
 
 app.post("/actualizarINV", (req, res) => {
   const { EP } = req.body;
 
   // Obtener la hora actual en formato TIMESTAMP
-  const currentDateTime = new Date().getTime()
+  const currentDateTime = new Date().getTime();
 
   // Verificar si el EP está en la tabla Datos
-  db.query(
-    "SELECT * FROM Datos WHERE Tag = ?",
-    [EP],
-    (err, results) => {
-      if (err) {
-        console.error("Error al verificar el EP:", err);
+  db.query("SELECT * FROM Datos WHERE Tag = ?", [EP], (err, results) => {
+    if (err) {
+      console.error("Error al verificar el EP:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+
+    if (results.length > 0) {
+      // Si el EP existe, actualizar INV a 'NO' y Hora_salida_lab a la hora actual
+      db.query(
+        "UPDATE Datos SET INV = 'NO', Hora_salida_bodega = ? WHERE Tag = ?",
+        [currentDateTime, EP],
+        (updateErr, updateResults) => {
+          if (updateErr) {
+            console.error(
+              "Error al actualizar INV y Hora_salida_lab:",
+              updateErr
+            );
+            res.status(500).send("Error interno del servidor");
+            return;
+          }
+
+          console.log(
+            `INV y Hora_salida_lab actualizados para EP: ${EP}, ${currentDateTime}`
+          );
+          res
+            .status(200)
+            .send(
+              `INV y Hora_salida_lab actualizados correctamente para EP: ${EP}`
+            );
+        }
+      );
+    } else {
+      // Si el EP no existe, enviar mensaje de EP no encontrado
+      console.log(`EP no encontrado en la base de datos: ${EP}`);
+      res.status(404).send(`EP no encontrado en la base de datos: ${EP}`);
+    }
+  });
+});
+
+// Verificación salida pick
+app.post("/actualizarINV", (req, res) => {
+  const { EP } = req.body;
+
+  // Obtener la hora actual en formato TIMESTAMP
+  const currentDateTime = new Date().getTime();
+
+  // Variable para almacenar el número de kit encontrado
+  let kitNumber = null;
+
+  // Verificar si el EP está en la tabla Datos
+  db.query("SELECT Nombre FROM Datos WHERE Tag = ?", [EP], (err, results) => {
+    if (err) {
+      console.error("Error al verificar el EP:", err);
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+
+    if (results.length === 0) {
+      console.log(
+        `No se pudo encontrar el número del Kit en el nombre para EP: ${EP}`
+      );
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+
+    const nombre = results[0].Nombre; //Kit 2
+
+    // Extraer el número del Kit desde el nombre
+    const regex = /Kit (\d+)/;
+    const match = nombre.match(regex);
+    if (match) {
+      kitNumber = match[1]; // Aquí asignamos el número de kit encontrado
+      console.log(`Número del Kit del EP: ${kitNumber}`);
+    } else {
+      console.log(
+        `No se pudo encontrar el número del Kit en el nombre: ${nombre}`
+      );
+      res
+        .status(500)
+        .send(
+          `Error: No se pudo encontrar el número del Kit en el nombre: ${nombre}`
+        );
+      return;
+    }
+
+    // Actualizar INV y Hora_salida_bodega en la tabla Datos
+    db.query(
+      "UPDATE Datos SET INV = 'NO', Hora_salida_bodega = ? WHERE Tag = ?",
+      [currentDateTime, EP],
+      (updateErr, updateResults) => {
+        if (updateErr) {
+          console.error(
+            "Error al actualizar INV y Hora_salida_bodega:",
+            updateErr
+          );
+          res.status(500).send("Error interno del servidor");
+          return;
+        }
+        console.log(
+          `INV y Hora_salida_bodega actualizados para EP: ${EP}, ${currentDateTime}`
+        );
+      }
+    );
+
+    // Verificar el pedido actual en la tabla Solicitud
+    db.query("SELECT Pedido FROM Solicitud", (pedidoErr, pedidoResults) => {
+      if (pedidoErr) {
+        console.error(
+          "Error al verificar el Pedido en la tabla Solicitud:",
+          pedidoErr
+        );
         res.status(500).send("Error interno del servidor");
         return;
       }
 
-      if (results.length > 0) {
-        // Si el EP existe, actualizar INV a 'NO' y Hora_salida_lab a la hora actual
+      const ultimoPedido =
+        pedidoResults.length > 0
+          ? pedidoResults[pedidoResults.length - 1].Pedido
+          : "";
+
+      console.log(`Último pedido en la tabla Solicitud: ${ultimoPedido}`);
+
+      // Verificar si kitNumber está dentro de ultimoPedido
+      if (ultimoPedido.includes(kitNumber)) {
+        const pedidoArray = ultimoPedido.split(",");
+        const descuentoPedido = pedidoArray
+          .filter((item) => item !== kitNumber)
+          .join(",");
+        console.log(`Haz pickeado correctamente el Kit: ${descuentoPedido}`);
+
+        // Insertar el nuevo pedido en la tabla Solicitud
         db.query(
-          "UPDATE Datos SET INV = 'NO', Hora_salida_bodega = ? WHERE Tag = ?",
-          [currentDateTime, EP],
-          (updateErr, updateResults) => {
-            if (updateErr) {
-              console.error("Error al actualizar INV y Hora_salida_lab:", updateErr);
+          "INSERT INTO Solicitud (Pedido) VALUES (?)",
+          [descuentoPedido],
+          (insertErr, insertResults) => {
+            if (insertErr) {
+              console.error(
+                "Error al insertar el nuevo pedido en la tabla Solicitud:",
+                insertErr
+              );
               res.status(500).send("Error interno del servidor");
               return;
             }
-
-            console.log(`INV y Hora_salida_lab actualizados para EP: ${EP}, ${currentDateTime}`);
-            res.status(200).send(`INV y Hora_salida_lab actualizados correctamente para EP: ${EP}`);
+            console.log("Nuevo pedido insertado en la tabla Solicitud");
           }
         );
       } else {
-        // Si el EP no existe, enviar mensaje de EP no encontrado
-        console.log(`EP no encontrado en la base de datos: ${EP}`);
-        res.status(404).send(`EP no encontrado en la base de datos: ${EP}`);
+        console.log(`No fue solicitado el Kit: ${kitNumber}`);
       }
-    }
-  );
+    });
+  });
 });
-
-
-
-
-
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
