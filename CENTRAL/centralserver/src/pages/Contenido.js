@@ -73,8 +73,7 @@ function Contenido() {
 
     const handleAddRow = () => {
         const newKitNumber = data.length + 1;
-        const newRow = { Kits: `Kit  ${newKitNumber}`, Contenido: '' };
-        setData([...data, newRow]);
+        const newRow = { Kits: `Kit ${newKitNumber}`, Contenido: '' };
 
         fetch("http://localhost:5000/contenido1", {
             method: 'POST',
@@ -90,11 +89,11 @@ function Contenido() {
                 return response.json();
             })
             .then((newItem) => {
+                // Actualiza el estado de data con el nuevo elemento
                 setData((prevData) => [...prevData, newItem]);
             })
             .catch((error) => console.error('Error:', error));
     };
-
     return (
         <div>
             <Helmet>
@@ -108,7 +107,7 @@ function Contenido() {
             <Header titulo="Asignación de contenido" />
             <div className="container-inventario">
                 <button onClick={handleAddRow}>Añadir Fila</button>
-                <div className="table-container">
+                <div className="table-contenido">
                     <table>
                         <thead>
                             <tr>
