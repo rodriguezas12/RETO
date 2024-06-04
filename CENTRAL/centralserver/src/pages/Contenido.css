@@ -1,5 +1,5 @@
 /* Estilo del contenedor de inventario */
-.container-inventario {
+.container-contenido {
     margin: 20px auto;
     /* Margen superior e inferior de 20px y centrado horizontal */
     width: 90%;
@@ -11,6 +11,8 @@
     padding: 10px;
     /* Espaciado interno del contenedor */
 }
+
+
 
 /* Estilo de la tabla */
 table {
@@ -104,4 +106,8 @@ td {
         font-size: 16px;
         /* Ajustar el tamaño de la fuente */
     }
+}
+.table-contenido {
+    max-height: 400px; /* Altura máxima del contenedor */
+    overflow-y: auto; /* Scroll vertical cuando sea necesario */
 }

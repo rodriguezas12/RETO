@@ -85,7 +85,7 @@ export default function Picking() {
   };
 
   return (
-    <div style={{ overflowY: "auto" }}>
+    <div className="picking-container">
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -117,9 +117,9 @@ export default function Picking() {
         })}
       </div>
       <div style={{ textAlign: "center", marginTop: "20px" }}>
-      <Link to="/pick">
-        <button onClick={enviarPedido}>Enviar</button>
-          </Link>
+        <Link to="/pick">
+          <button onClick={enviarPedido}>Enviar</button>
+        </Link>
       </div>
     </div>
   );

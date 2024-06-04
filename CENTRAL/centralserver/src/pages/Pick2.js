@@ -44,7 +44,7 @@ function Pick() {
     };
 
     const updateInv = (ep) => {
-        fetch("http://localhost:5000/actualizarINV", {
+        fetch("http://localhost:5000/ingresoabodega", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -78,7 +78,7 @@ function Pick() {
                     rel="stylesheet"
                 />
             </Helmet>
-            <Header titulo="VERIFICACIÓN " />
+            <Header titulo="Verificación de ingreso de material " />
             <div className="input-container">
                 <label htmlFor="rfidText">Ingresa el texto RFID (máx. 36 caracteres):</label>
                 <textarea

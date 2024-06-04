@@ -1,37 +1,33 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
-import Header from '../components/header';
-import "./Asignacion.css";
+import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
+import Header from '../components/header'; // Ajusta la ruta según tu estructura
+import './Contenido.css'; // Archivo CSS para los estilos
 
-const Contenido = () => {
-  const [tags, setTags] = useState([]);
-  const [nombresKits, setNombresKits] = useState({});
-  const [idsKits, setIdsKits] = useState({});
+function Contenido() {
+    const [data, setData] = useState([]);
+    const [editIndex, setEditIndex] = useState(null);
+    const [editFormData, setEditFormData] = useState({ Contenido: '' });
 
-  useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/tag");
+    useEffect(() => {
+        const fetchData = () => {
+            fetch("http://localhost:5000/contenido")
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("No se pudo obtener la respuesta del servidor");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    setData(data);
+                })
+                .catch((error) => console.error("Error:", error));
+        };
 
-        if (response.data.length > 0) {
-          const initialNombresKits = {};
-          const initialIdsKits = {};
-          for (const tag of response.data) {
-            initialNombresKits[tag] = await fetchNombreKit(tag); // Obtener nombres de kits
-            initialIdsKits[tag] = await fetchIdKit(tag); // Obtener IDs de kits
-          }
-          setTags(response.data);
-          setNombresKits(initialNombresKits);
-          setIdsKits(initialIdsKits);
-        } else {
-          setTags(["No hay tags disponibles"]);
-        }
-      } catch (error) {
-        console.error("Error al obtener los tags:", error);
-        setTags(["Error al obtener los tags"]);
-      }
-    };
+        fetchData();
+        const intervalId = setInterval(fetchData, 1000);
+
+        return () => clearInterval(intervalId);
+    }, []);
 
     const fetchNombreKit = async (tag) => {
       try {
@@ -45,126 +41,113 @@ const Contenido = () => {
       }
     };
 
-    const fetchIdKit = async (tag) => {
-      try {
-        const idKitResponse = await axios.get(
-          `http://localhost:5000/idkit/${tag}`
+    const handleSaveClick = (index) => {
+        const updatedData = data.map((item, i) =>
+            i === index ? { ...item, Contenido: editFormData.Contenido } : item
         );
-        return idKitResponse.data || "";
-      } catch (error) {
-        console.error(`Error al obtener el ID del kit para el tag ${tag}:`, error);
-        return "";
-      }
+        setData(updatedData);
+        setEditIndex(null);
+
+        fetch(`http://localhost:5000/contenido/${data[index].Kits}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ Contenido: editFormData.Contenido }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Error al actualizar los datos');
+                }
+                return response.json();
+            })
+            .then((updatedItem) => {
+                setData((prevData) =>
+                    prevData.map((item) =>
+                        item.Kits === updatedItem.Kits ? updatedItem : item
+                    )
+                );
+            })
+            .catch((error) => console.error('Error:', error));
     };
 
-    fetchTags();
+    const handleAddRow = () => {
+        const newKitNumber = data.length + 1;
+        const newRow = { Kits: `Kit  ${newKitNumber}`, Contenido: '' };
+        setData([...data, newRow]);
 
-    const interval = setInterval(fetchTags, 20000);
+        fetch("http://localhost:5000/contenido", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newRow),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Error al agregar los datos');
+                }
+                return response.json();
+            })
+            .then((newItem) => {
+                setData((prevData) => [...prevData, newItem]);
+            })
+            .catch((error) => console.error('Error:', error));
+    };
 
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleNombreKitChange = (event, tag) => {
-    setNombresKits({ ...nombresKits, [tag]: event.target.value });
-  };
-
-  const handleGuardarNombreKit = async (tag) => {
-    try {
-      await axios.post(`http://localhost:5000/nombrekit/${tag}`, {
-        nombreKit: nombresKits[tag],
-      });
-      console.log(`Nombre de kit para el tag ${tag} guardado correctamente`);
-      setNombresKits({ ...nombresKits, [tag]: nombresKits[tag] });
-    } catch (error) {
-      console.error(`Error al guardar el nombre del kit para el tag ${tag}:`, error);
-    }
-  };
-
-  const handleIdKitChange = (event, tag) => {
-    setIdsKits({ ...idsKits, [tag]: event.target.value });
-  };
-
-  const handleGuardarIdKit = async (tag) => {
-    try {
-      await axios.post(`http://localhost:5000/idkit/${tag}`, {
-        idKit: idsKits[tag],
-      });
-      console.log(`ID de kit para el tag ${tag} guardado correctamente`);
-      setIdsKits({ ...idsKits, [tag]: idsKits[tag] });
-    } catch (error) {
-      console.error(`Error al guardar el ID del kit para el tag ${tag}:`, error);
-    }
-  };
-
-  return (
-    <div>
-      <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
-          rel="stylesheet"
-        />
-      </Helmet>
-      <Header titulo="Asignación Kits" />
-
-      <div className="contenedor">
-        {/* Sección para TAG LEIDO */}
-        <div className="column">
-          <div style={{ textAlign: "center", marginBottom: "10px" }}>KITS LEÍDOS</div>
-          {tags.length > 0 ? (
-            tags.map((tag, index) => (
-              <div key={index}>
-                <span>{tag}</span>
-              </div>
-            ))
-          ) : (
-            <span>{tags[0]}</span>
-          )}
-        </div>
-
-        {/* Sección para Nombre del Kit */}
-        <div className="column">
-          <div style={{ textAlign: "center", marginBottom: "10px" }}>NOMBRE DEL KIT</div>
-          {tags.length > 0 ? (
-            tags.map((tag, index) => (
-              <div key={index}>
-                <input
-                  type="text"
-                  value={nombresKits[tag]}
-                  onChange={(event) => handleNombreKitChange(event, tag)}
-                  placeholder="Escribir nombre de kit"
+    return (
+        <div>
+            <Helmet>
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+                    rel="stylesheet"
                 />
-                <button onClick={() => handleGuardarNombreKit(tag)}>Guardar</button>
-              </div>
-            ))
-          ) : (
-            <span>{tags[0]}</span>
-          )}
+            </Helmet>
+            <Header titulo="Asignación de contenido" />
+            <div className="container-inventario">
+                <button onClick={handleAddRow}>Añadir Fila</button>
+                <div className="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kits</th>
+                                <th>Contenido</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.Kits}</td>
+                                    <td>
+                                        {editIndex === index ? (
+                                            <input
+                                                type="text"
+                                                name="Contenido"
+                                                value={editFormData.Contenido}
+                                                onChange={handleEditFormChange}
+                                            />
+                                        ) : (
+                                            item.Contenido
+                                        )}
+                                    </td>
+                                    <td>
+                                        {editIndex === index ? (
+                                            <button onClick={() => handleSaveClick(index)}>Guardar</button>
+                                        ) : (
+                                            <button onClick={() => handleEditClick(index, item)}>Editar</button>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
-        {/* Sección para ID DEL KIT */}
-        <div className="column">
-          <div style={{ textAlign: "center", marginBottom: "10px" }}>ID DEL KIT</div>
-          {tags.length > 0 ? (
-            tags.map((tag, index) => (
-              <div key={index}>
-                <input
-                  type="text"
-                  value={idsKits[tag]}
-                  onChange={(event) => handleIdKitChange(event, tag)}
-                  placeholder="Escribir ID de kit"
-                />
-                <button onClick={() => handleGuardarIdKit(tag)}>Guardar</button>
-              </div>
-            ))
-          ) : (
-            <span>{tags[0]}</span>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
+    );
+}
 
 export default Contenido;
