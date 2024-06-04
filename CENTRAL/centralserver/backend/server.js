@@ -748,7 +748,6 @@ app.post("/guardarCambios", (req, res) => {
 
   // Define la consulta SQL para actualizar la columna Bahia en la tabla Datos
   const query = "UPDATE RETORFID.Datos SET Bahia = ? WHERE ID = ?";
-
   // Ejecuta la consulta SQL para cada actualización
   updates.forEach((update) => {
     const { id, bahia } = update;

@@ -78,7 +78,7 @@ function Pick() {
                     rel="stylesheet"
                 />
             </Helmet>
-            <Header titulo="VERIFICACIÓN " />
+            <Header titulo="Verificación de ingreso de material " />
             <div className="input-container">
                 <label htmlFor="rfidText">Ingresa el texto RFID (máx. 36 caracteres):</label>
                 <textarea
