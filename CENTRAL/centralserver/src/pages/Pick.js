@@ -6,6 +6,9 @@ import "./Pick.css";
 function Pick() {
   const [rfidText, setRfidText] = useState(""); // Estado para almacenar el texto ingresado
   const [epValue, setEpValue] = useState(""); // Estado para almacenar el valor del EP
+  const [pedidoRealizado, setPedidoRealizado] = useState(""); // Estado para el pedido realizado
+  const [piezasPorVerificar, setPiezasPorVerificar] = useState(0); // Estado para piezas por verificar
+  const [piezasVerificadas, setPiezasVerificadas] = useState(0); // Estado para piezas verificadas
 
   const textAreaRef = useRef(null); // Ref para el cuadro de texto
 
@@ -35,10 +38,19 @@ function Pick() {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        return response.text();
+        return response.json();
       })
       .then((data) => {
         console.log(data);
+
+        // Actualizar los estados de piezas por verificar y verificadas
+        setPiezasPorVerificar(data.piezasPorVerificar);
+        setPiezasVerificadas(data.piezasVerificadas);
+
+        // Actualizar el estado de pedido realizado
+        if (data.pedidoRealizado) {
+          setPedidoRealizado(data.pedidoRealizado);
+        }
       })
       .catch((error) => {
         console.error("There was an error with the fetch operation:", error);
@@ -60,12 +72,10 @@ function Pick() {
       if (textAreaRef.current) {
         textAreaRef.current.focus();
       }
-    }, 5100);
+    }, 6100); // Incrementé a 6100 para asegurar que se enfoque después de 6 segundos
 
     return () => clearInterval(interval);
   }, []);
-
-
 
   const handleRfidTextChange = (event) => {
     // Limitar a 36 caracteres
@@ -103,6 +113,20 @@ function Pick() {
       </div>
       <div className="ep-value-display">
         <p>Último EP encontrado: {epValue}</p>
+      </div>
+      <div className="status-container">
+        <div className="status-box">
+          <h3>Pedido realizado:</h3>
+          <p>{pedidoRealizado}</p>
+        </div>
+        <div className="status-box">
+          <h3>Piezas por verificar:</h3>
+          <p>{piezasPorVerificar}</p>
+        </div>
+        <div className="status-box">
+          <h3>Piezas verificadas:</h3>
+          <p>{piezasVerificadas}</p>
+        </div>
       </div>
     </div>
   );
