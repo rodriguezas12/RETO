@@ -138,24 +138,9 @@ app.post("/contenido", (req, res) => {
         res.status(500).send("Error interno del servidor");
         return;
       }
-
-      // Retraso de 10 segundos antes de realizar la segunda inserción
-      setTimeout(() => {
-        // Segunda inserción inmediata de un pedido vacío
-        db.query(insertQuery, [""], (err, results) => {
-          if (err) {
-            console.error("Error al insertar el registro vacío:", err);
-          } else {
-            console.log(
-              "Pedido vacío insertado correctamente después de 10 segundos"
-            );
-          }
-        });
-      }, 20000); //  20 segundos
-
-      // Enviar respuesta después de la primera inserción (considerando que el segundo insert no afecta al cliente)
-      res.status(201).send("Registro insertado correctamente");
     });
+    // Enviar respuesta después de la primera inserción (considerando que el segundo insert no afecta al cliente)
+    res.status(201).send("Registro insertado correctamente");
   });
 });
 
@@ -751,42 +736,6 @@ app.post("/solicitar", (req, res) => {
             res.status(201).json({
               message: "Pedido registrado correctamente y evento guardado",
             });
-
-            // Enviar solicitud y evento vacíos 20 segundos después
-            setTimeout(() => {
-              const eventoVacio = "";
-              const descripcionVacia = "";
-              const emptyFecha = new Date().toISOString().split("T")[0]; // Fecha actual
-              const emptyHora = new Date().toTimeString().split(" ")[0]; // Hora actual
-
-              // Insertar evento vacío
-              db.query(
-                insertEventosQuery,
-                [
-                  nombreUsuario,
-                  eventoVacio,
-                  descripcionVacia,
-                  emptyFecha,
-                  emptyHora,
-                ],
-                (err, results) => {
-                  if (err) {
-                    console.error("Error al insertar el evento vacío:", err);
-                  } else {
-                    console.log("Evento vacío insertado correctamente");
-                  }
-                }
-              );
-
-              // Insertar solicitud vacía
-              db.query(insertSolicitudQuery, [""], (err, results) => {
-                if (err) {
-                  console.error("Error al insertar la solicitud vacía:", err);
-                } else {
-                  console.log("Solicitud vacía insertada correctamente");
-                }
-              });
-            }, 20000);
           }
         );
       });
@@ -813,53 +762,6 @@ app.post("/guardarCambios", (req, res) => {
 
   // Envía una respuesta de éxito una vez que todas las consultas se han ejecutado
   res.send({ status: "success", message: "Datos actualizados correctamente" });
-});
-
-app.post("/actualizarINV", (req, res) => {
-  const { EP } = req.body;
-
-  // Obtener la hora actual en formato TIMESTAMP
-  const currentDateTime = new Date().getTime();
-
-  // Verificar si el EP está en la tabla Datos
-  db.query("SELECT * FROM Datos WHERE Tag = ?", [EP], (err, results) => {
-    if (err) {
-      console.error("Error al verificar el EP:", err);
-      res.status(500).send("Error interno del servidor");
-      return;
-    }
-
-    if (results.length > 0) {
-      // Si el EP existe, actualizar INV a 'NO' y Hora_salida_lab a la hora actual
-      db.query(
-        "UPDATE Datos SET INV = 'NO', Hora_salida_bodega = ? WHERE Tag = ?",
-        [currentDateTime, EP],
-        (updateErr, updateResults) => {
-          if (updateErr) {
-            console.error(
-              "Error al actualizar INV y Hora_salida_lab:",
-              updateErr
-            );
-            res.status(500).send("Error interno del servidor");
-            return;
-          }
-
-          console.log(
-            `INV y Hora_salida_lab actualizados para EP: ${EP}, ${currentDateTime}`
-          );
-          res
-            .status(200)
-            .send(
-              `INV y Hora_salida_lab actualizados correctamente para EP: ${EP}`
-            );
-        }
-      );
-    } else {
-      // Si el EP no existe, enviar mensaje de EP no encontrado
-      console.log(`EP no encontrado en la base de datos: ${EP}`);
-      res.status(404).send(`EP no encontrado en la base de datos: ${EP}`);
-    }
-  });
 });
 
 // Verificación salida pick
@@ -938,10 +840,7 @@ app.post("/actualizarINV", (req, res) => {
         return;
       }
 
-      const ultimoPedido =
-        pedidoResults.length > 0
-          ? pedidoResults[pedidoResults.length - 1].Pedido
-          : "";
+      const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[pedidoResults.length - 1].Pedido: "";
 
       console.log(`Último pedido en la tabla Solicitud: ${ultimoPedido}`);
 
