@@ -320,7 +320,7 @@ app.post("/sets", (req, res) => {
 });
 
 app.get("/said", (req, res) => {
-  // Consulta para obtener las últimas 3 filas ordenadas por una columna específica
+  // Consulta para obtener las últimas 3 filas ordenadas por una col específica
   db.query(
     `
   SELECT * FROM (
@@ -763,7 +763,7 @@ app.post("/solicitar", (req, res) => {
 app.post("/guardarCambios", (req, res) => {
   const updates = req.body; // Los datos enviados desde el frontend
 
-  // Define la consulta SQL para actualizar la columna Bahia en la tabla Datos
+  // Define la consulta SQL para actualizar la col Bahia en la tabla Datos
   const query = "UPDATE RETORFID.Datos SET Bahia = ? WHERE ID = ?";
   // Ejecuta la consulta SQL para cada actualización
   updates.forEach((update) => {
@@ -970,7 +970,7 @@ app.post("/modos", (req, res) => {
       .json({ error: "Número de estación fuera de rango válido (1-7)" });
   }
 
-  // Nombre de la columna basado en stationNumber
+  // Nombre de la col basado en stationNumber
   const columnName = `Estación_${stationNumber}`;
 
   // Obtener el id de la primera fila
@@ -1019,17 +1019,17 @@ app.post("/modos", (req, res) => {
 app.post("/tableM1", (req, res) => {
   const createTableM1Query = `
   CREATE TABLE IF NOT EXISTS M1 (
-  fila INT AUTO_INCREMENT PRIMARY KEY,
-  Columna1 VARCHAR(100) NOT NULL,
-  Columna2 VARCHAR(100) NOT NULL,
-  Columna3 VARCHAR(100) NOT NULL,
-  Columna4 VARCHAR(100) NOT NULL,
-  Columna5 VARCHAR(100) NOT NULL,
-  Columna6 VARCHAR(100) NOT NULL,
-  Columna7 VARCHAR(100) NOT NULL,
-  Columna8 VARCHAR(100) NOT NULL,
-  Columna9 VARCHAR(100) NOT NULL,
-  Columna10 VARCHAR(100) NOT NULL,
+  Fila INT AUTO_INCREMENT PRIMARY KEY,
+  Col1 VARCHAR(100) NOT NULL,
+  Col2 VARCHAR(100) NOT NULL,
+  Col3 VARCHAR(100) NOT NULL,
+  Col4 VARCHAR(100) NOT NULL,
+  Col5 VARCHAR(100) NOT NULL,
+  Col6 VARCHAR(100) NOT NULL,
+  Col7 VARCHAR(100) NOT NULL,
+  Col8 VARCHAR(100) NOT NULL,
+  Col9 VARCHAR(100) NOT NULL,
+  Col10 VARCHAR(100) NOT NULL,
   UNIQUE KEY unique_fila (fila)
     )
   `;
@@ -1040,6 +1040,19 @@ app.post("/tableM1", (req, res) => {
       return res.status(500).json({ error: "Error al crear la tabla M1" });
     }
     res.status(200).json({ message: "Tabla M1 creada o ya existe" });
+  });
+});
+
+// Endpoint para obtener los datos de las columnas Nombre y Bahia de la tabla DATOS
+app.get("/getm1", (req, res) => {
+  const getDatosQuery = "SELECT Nombre, Bahia FROM Datos";
+
+  db.query(getDatosQuery, (err, results) => {
+    if (err) {
+      console.error("Error al obtener los datos de la tabla Datos:", err);
+      return res.status(500).json({ error: "Error al obtener los datos de la tabla DATOS" });
+    }
+    res.status(200).json(results);
   });
 });
 
