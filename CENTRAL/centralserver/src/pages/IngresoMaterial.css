@@ -34,7 +34,7 @@
 
 .container-estacion {
   border-radius: 10px;
-  background-color: #be7530;
+  background-color: #ecd4b6;
   font-weight: bold;
   padding: 8px;
   font-family: "Nunito", sans-serif;
@@ -69,6 +69,7 @@
 .header-item {
   flex: 1;
   padding: 10px;
+  font-family: "Nunito";
 }
 
 /* Estilo de las filas */

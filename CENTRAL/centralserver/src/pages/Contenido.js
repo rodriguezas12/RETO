@@ -108,7 +108,7 @@ function Contenido() {
             </Helmet>
             <Header titulo="Asignación de contenido" />
             <div className="container-inventario">
-                <button onClick={handleAddRow}>Añadir Fila</button>
+                <button className='botton ' onClick={handleAddRow}>Añadir Fila</button>
                 <div className="table-contenido">
                     <table>
                         <thead>
@@ -136,9 +136,9 @@ function Contenido() {
                                     </td>
                                     <td>
                                         {editIndex === index ? (
-                                            <button onClick={() => handleSaveClick(index)}>Guardar</button>
+                                            <button className='botton ' onClick={() => handleSaveClick(index)}>Guardar</button>
                                         ) : (
-                                            <button onClick={() => handleEditClick(index, item)}>Editar</button>
+                                            <button className='botton ' onClick={() => handleEditClick(index, item)}>Editar</button>
                                         )}
                                     </td>
                                 </tr>
