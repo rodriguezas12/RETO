@@ -892,10 +892,6 @@ app.post("/actualizarINV", (req, res) => {
               }
               console.log("Nuevo pedido insertado en la tabla Solicitud");
 
-              const piezasVerificadas =
-                ultimoPedido.length - descuentoPedido.length;
-              const piezasPorVerificar = descuentoPedido.length;
-
               res.json({
                 piezasPorVerificar: pedidoArray
                   .filter((item) => item !== kitNumber)
