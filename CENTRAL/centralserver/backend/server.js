@@ -1065,7 +1065,13 @@ app.post("/saveM1", async (req, res) => {
   if (
     !matrizOrdenada ||
     !Array.isArray(matrizOrdenada) ||
-    matrizOrdenada.length !== 3
+    matrizOrdenada.length !== 3 ||
+    !Array.isArray(matrizOrdenada[0]) ||
+    matrizOrdenada[0].length !== 10 ||
+    !Array.isArray(matrizOrdenada[1]) ||
+    matrizOrdenada[1].length !== 10 ||
+    !Array.isArray(matrizOrdenada[2]) ||
+    matrizOrdenada[2].length !== 10
   ) {
     return res.status(400).json({ error: "Matriz ordenada inválida" });
   }
@@ -1086,8 +1092,8 @@ app.post("/saveM1", async (req, res) => {
       Col10 = ?
     WHERE id = ?;`;
 
-  // Preparar los valores para la consulta de actualización
-  const values = [
+  // Preparar los valores para la consulta de actualización de la primera fila
+  const values1 = [
     matrizOrdenada[0][0] || null,
     matrizOrdenada[0][1] || null,
     matrizOrdenada[0][2] || null,
@@ -1098,20 +1104,78 @@ app.post("/saveM1", async (req, res) => {
     matrizOrdenada[0][7] || null,
     matrizOrdenada[0][8] || null,
     matrizOrdenada[0][9] || null,
-    1, // Reemplaza con el valor de 'id' correspondiente a la fila que deseas actualizar
+    1, // Reemplaza con el valor de 'id' correspondiente a la primera fila que deseas actualizar
   ];
 
-  // Ejecutar la consulta de actualización en la base de datos
-  db.query(updateQuery, values, (err, result) => {
-    if (err) {
-      console.error("Error al actualizar datos en la tabla M1:", err);
-      return res
-        .status(500)
-        .json({ error: "Error al guardar la matriz en la base de datos" });
-    }
+  // Preparar los valores para la consulta de actualización de la segunda fila
+  const values2 = [
+    matrizOrdenada[1][0] || null,
+    matrizOrdenada[1][1] || null,
+    matrizOrdenada[1][2] || null,
+    matrizOrdenada[1][3] || null,
+    matrizOrdenada[1][4] || null,
+    matrizOrdenada[1][5] || null,
+    matrizOrdenada[1][6] || null,
+    matrizOrdenada[1][7] || null,
+    matrizOrdenada[1][8] || null,
+    matrizOrdenada[1][9] || null,
+    2, // Reemplaza con el valor de 'id' correspondiente a la segunda fila que deseas actualizar
+  ];
+
+  // Preparar los valores para la consulta de actualización de la tercera fila
+  const values3 = [
+    matrizOrdenada[2][0] || null,
+    matrizOrdenada[2][1] || null,
+    matrizOrdenada[2][2] || null,
+    matrizOrdenada[2][3] || null,
+    matrizOrdenada[2][4] || null,
+    matrizOrdenada[2][5] || null,
+    matrizOrdenada[2][6] || null,
+    matrizOrdenada[2][7] || null,
+    matrizOrdenada[2][8] || null,
+    matrizOrdenada[2][9] || null,
+    3, // Reemplaza con el valor de 'id' correspondiente a la tercera fila que deseas actualizar
+  ];
+
+  // Ejecutar las tres consultas de actualización en la base de datos en paralelo
+  try {
+    await Promise.all([
+      new Promise((resolve, reject) => {
+        db.query(updateQuery, values1, (err, result) => {
+          if (err) {
+            console.error("Error al actualizar datos en la tabla M1 (fila 1):", err);
+            return reject(err);
+          }
+          resolve(result);
+        });
+      }),
+      new Promise((resolve, reject) => {
+        db.query(updateQuery, values2, (err, result) => {
+          if (err) {
+            console.error("Error al actualizar datos en la tabla M1 (fila 2):", err);
+            return reject(err);
+          }
+          resolve(result);
+        });
+      }),
+      new Promise((resolve, reject) => {
+        db.query(updateQuery, values3, (err, result) => {
+          if (err) {
+            console.error("Error al actualizar datos en la tabla M1 (fila 3):", err);
+            return reject(err);
+          }
+          resolve(result);
+        });
+      }),
+    ]);
+
     res.status(200).json({ message: "Matriz actualizada exitosamente" });
-  });
+  } catch (error) {
+    console.error("Error al guardar la matriz en la base de datos:", error);
+    res.status(500).json({ error: "Error al guardar la matriz en la base de datos" });
+  }
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

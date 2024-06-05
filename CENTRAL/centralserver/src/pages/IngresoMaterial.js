@@ -80,6 +80,7 @@ function Ingresomaterial() {
           throw new Error("Error al guardar la matriz en la base de datos");
         }
         console.log("Matriz guardada exitosamente");
+
       } catch (error) {
         console.error("Error al guardar la matriz en la base de datos:", error);
       }
