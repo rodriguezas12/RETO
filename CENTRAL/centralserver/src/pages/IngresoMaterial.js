@@ -21,22 +21,54 @@ function Ingresomaterial() {
         const results = await response.json();
 
         // Matriz para guardar los datos transformados
-        const matriz = [[], []];
+        const matrizOriginal = [[], []];
 
-        // Función para extraer solo el número del texto
-        const extractNumber = text => {
-          const match = text.match(/\d+/); // Busca el primer número en el texto
-          return match ? match[0] : text; // Si encuentra un número, lo devuelve, de lo contrario devuelve el texto original
+        // Función para extraer solo el número del texto si es una cadena
+        const extractNumber = (text) => {
+          if (typeof text === "string") {
+            const match = text.match(/\d+/); // Busca el primer número en el texto
+            return match ? match[0] : text; // Si encuentra un número, lo devuelve, de lo contrario devuelve el texto original
+          }
+          return text; // Si no es una cadena, devuelve el valor original
         };
 
         // Recorrer los resultados y transformar los valores
-        results.forEach(row => {
-          matriz[0].push(extractNumber(row.Nombre));
-          matriz[1].push(extractNumber(row.Bahia));
+        results.forEach((row) => {
+          matrizOriginal[0].push(extractNumber(row.Nombre));
+          matrizOriginal[1].push(extractNumber(row.Bahia));
         });
 
-        console.log(matriz);
+        console.log(matrizOriginal);
 
+        // Función para ordenar los datos en una nueva matriz 3x10
+        const ordenarMatriz = (matriz) => {
+          const nuevaMatriz = Array.from({ length: 3 }, () =>
+            Array(10).fill("")
+          );
+
+          // Recorrer la matriz original y colocar los datos en la nueva matriz
+          for (let i = 0; i < matriz[0].length; i++) {
+            const nombre = matriz[0][i];
+            const bahia = matriz[1][i] - 1; // Ajustar bahía para índice 0
+
+            // Calcular la posición en la nueva matriz
+            const fila = Math.floor(bahia / 10);
+            const columna = bahia % 10;
+
+            // Concatenar los valores con comas si ya existe un valor en esa posición
+            if (nuevaMatriz[fila][columna]) {
+              nuevaMatriz[fila][columna] += `,${nombre}`;
+            } else {
+              nuevaMatriz[fila][columna] = nombre;
+            }
+          }
+
+          return nuevaMatriz;
+        };
+
+        // Llamar a la función para ordenar la matriz
+        const matrizOrdenada = ordenarMatriz(matrizOriginal);
+        console.log("Matriz ordenada:", matrizOrdenada);
       } catch (error) {
         console.error("Error al generar la matriz M1:", error);
       }
@@ -44,12 +76,7 @@ function Ingresomaterial() {
 
     // Llamar a la función para generar la matriz
     GenerarM1();
-
   }, []); // Se ejecutará solo una vez cuando el componente se monte
-
-
-
-
 
   useEffect(() => {
     createTable();
@@ -71,7 +98,6 @@ function Ingresomaterial() {
     }
   }, [selectedStation, isEditing]);
 
-  
   // Crear la tabla cuando el componente se monte
   const createTable = async () => {
     try {
