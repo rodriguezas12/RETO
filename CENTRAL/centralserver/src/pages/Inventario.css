@@ -111,3 +111,27 @@ td {
     /* Ajustar el tamaño de la fuente */
   }
 }
+
+.inventario-container {
+  overflow-y: auto;
+  max-height: 80vh; /* Altura máxima del contenedor */
+}
+
+.container-inventario {
+  margin: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+
