@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import logo from "../Media/logo.png";
 import "./Menu.css";
 
-const Home = () => {
-  return (
+const Menu = () => {
+    return (
     <>
       <Helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -49,4 +49,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Menu;
