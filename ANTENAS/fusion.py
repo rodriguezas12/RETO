@@ -658,8 +658,11 @@ while True:
     try:
         
         for tag_registrado in tags_registrados: #REGISTRO HORA DE SALIDA
-            cursor.execute("SELECT Tag FROM Estación_1")
-            tags_registrados = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            try:
+                cursor.execute("SELECT Tag FROM Estación_1")
+                tags_registrados = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            except Exception as e:
+                tags_registrados = []
             index=tags_registrados.index(tag_registrado)+1
             print("index= ",index)
             print("lista_ceros: ",lista_ceros_1)
@@ -748,8 +751,12 @@ while True:
     Estación=2
     try:
         for tag_registrado in tags_registrados2: #REGISTRO HORA DE SALIDA
-            cursor.execute("SELECT Tag FROM Estación_2")
-            tags_registrados2 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            try:
+                cursor.execute("SELECT Tag FROM Estación_2")
+                tags_registrados2 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            except Exception as e:
+                tags_registrados2 = []
+            
             index=tags_registrados2.index(tag_registrado)+1
             print("index= ",index)
             print("lista_ceros: ",lista_ceros_2)
@@ -836,8 +843,11 @@ while True:
     Estación=3
     try:
         for tag_registrado in tags_registrados3: #REGISTRO HORA DE SALIDA
-            cursor.execute("SELECT Tag FROM Estación_3")
-            tags_registrados3 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            try:
+                cursor.execute("SELECT Tag FROM Estación_3")
+                tags_registrados3 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            except Exception as e:
+                tags_registrados3 = []        
             index=tags_registrados3.index(tag_registrado)+1
             print("index= ",index)
             print("lista_ceros: ",lista_ceros_3)
@@ -929,8 +939,11 @@ while True:
     Estación=4
     try:
         for tag_registrado in tags_registrados_4: #REGISTRO HORA DE SALIDA
-            cursor.execute("SELECT Tag FROM Estación_4")
-            tags_registrados_4 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            try:
+                cursor.execute("SELECT Tag FROM Estación_4")
+                tags_registrados_4 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            except Exception as e:
+                tags_registrados_4 = []
             index=tags_registrados_4.index(tag_registrado)+1
             print("index= ",index)
             print("lista_ceros: ",lista_ceros_4)
@@ -1018,8 +1031,11 @@ while True:
     Estación=5
     try:
         for tag_registrado in tags_registrados_5: #REGISTRO HORA DE SALIDA
-            cursor.execute("SELECT Tag FROM Estación_5")
-            tags_registrados_5 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            try:
+                cursor.execute("SELECT Tag FROM Estación_5")
+                tags_registrados_5 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            except Exception as e:
+                tags_registrados_5 = []
             index=tags_registrados_5.index(tag_registrado)+1
             print("index= ",index)
             print("lista_ceros: ",lista_ceros_5)
@@ -1106,8 +1122,11 @@ while True:
     Estación=6
     try:
         for tag_registrado in tags_registrados_6: #REGISTRO HORA DE SALIDA
-            cursor.execute("SELECT Tag FROM Estación_6")
-            tags_registrados_6 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            try:
+                cursor.execute("SELECT Tag FROM Estación_6")
+                tags_registrados_6 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            except Exception as e:
+                print("ERROR!")
             index=tags_registrados_6.index(tag_registrado)+1
             print("index= ",index)
             print("lista_ceros: ",lista_ceros_6)
@@ -1193,8 +1212,11 @@ while True:
     Estación=7
     try:
         for tag_registrado in tags_registrados_7: #REGISTRO HORA DE SALIDA
-            cursor.execute("SELECT Tag FROM Estación_7")
-            tags_registrados_7 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            try:
+                cursor.execute("SELECT Tag FROM Estación_7")
+                tags_registrados_7 = [registro[0] for registro in cursor.fetchall()] #TAGS INCLUIDOS DENTRO DE LA TABLA DE LA ESTACIÓN 1
+            except Exception as e:
+                tags_registrados_7 = []
             index=tags_registrados_7.index(tag_registrado)+1
             print("index= ",index)
             print("lista_ceros: ",lista_ceros_7)
