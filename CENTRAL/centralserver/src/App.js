@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+
+
+
+// App.js
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Estado from "./pages/Estado";
 import Eventos from "./pages/Eventos";
@@ -11,16 +15,53 @@ import Register from "./pages/Register";
 import Solicitud from "./pages/Solicitud";
 import Asignacion from "./pages/Asignacion";
 import Contenido from "./pages/Contenido";
-import Pick from "./pages/Pick"
-
+import Pick from "./pages/Pick";
 import Pick2 from "./pages/Pick2";
+import axios from 'axios';
+import '../src/components/Popup.css'; // Asegúrate de tener los estilos para el popup
 
-function PrivateRoute({ element, isAuthenticated }) {
-  return isAuthenticated ? element : <Navigate to="/" replace />;
+function PrivateRoute({ element, isAuthenticated, showPopup, message }) {
+  return isAuthenticated ? (
+    <>
+      {showPopup && <Popup show={showPopup} message={message} />}
+      {element}
+    </>
+  ) : (
+    <Navigate to="/" replace />
+  );
 }
 
-function App() {
+const Popup = ({ show, message }) => {
+  return show ? (
+    <div className="popup">
+      <div className="popup-inner">
+        <h2>{message}</h2>
+      </div>
+    </div>
+  ) : null;
+};
+
+const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    const checkTimeDifference = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/check-time-difference');
+        const { timeDifference } = response.data;
+        console.log(`Time difference: ${timeDifference} seconds`);
+        setShowPopup(timeDifference > 20);
+      } catch (error) {
+        console.error('Error checking time difference:', error);
+      }
+    };
+
+    checkTimeDifference();
+    const interval = setInterval(checkTimeDifference, 5000); // Check every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <BrowserRouter>
@@ -45,6 +86,8 @@ function App() {
             <PrivateRoute
               element={<Solicitud />}
               isAuthenticated={isAuthenticated}
+              showPopup={showPopup}
+              message="Tiempo excedido. Por favor, revise el sistema."
             />
           }
         />
@@ -63,6 +106,8 @@ function App() {
             <PrivateRoute
               element={<IngresoMaterial />}
               isAuthenticated={isAuthenticated}
+              showPopup={showPopup}
+              message="Tiempo excedido. Por favor, revise el sistema."
             />
           }
         />
@@ -92,6 +137,6 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;
