@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import Header from '../components/header'; // Ajusta la ruta según tu estructura
 import './Contenido.css'; // Archivo CSS para los estilos
