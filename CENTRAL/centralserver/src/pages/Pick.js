@@ -157,10 +157,8 @@ function Pick() {
   return (
     <div>
       <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
         <link
-          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          href="./Media/Nunito-Italic-VariableFont_wght.ttf"
           rel="stylesheet"
         />
       </Helmet>
@@ -181,7 +179,7 @@ function Pick() {
         <p>Último EP encontrado: {epValue}</p>
       </div>
       <div className="status-container">
-        
+
         <div className="status-box">
           <h3>Piezas por verificar:</h3>
           <p>{piezasPorVerificar.join(', ')}</p>

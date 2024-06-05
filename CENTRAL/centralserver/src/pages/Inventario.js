@@ -30,7 +30,10 @@ function Inventario() {
   return (
     <div>
       <Helmet>
-
+        <link
+          href="./Media/Nunito-Italic-VariableFont_wght.ttf"
+          rel="stylesheet"
+        />
       </Helmet>
       <Header titulo="INVENTARIO" />
       <div className="container-inventario">

@@ -2,9 +2,12 @@
 .eventos-body {
   margin: 0;
   padding: 0;
-  min-height: 100vh; /* Altura mínima para ocupar toda la pantalla */
-  overflow-x: hidden; /* Ocultar desplazamiento horizontal */
-  overflow-y: auto; /* Permitir desplazamiento vertical */
+  min-height: 100vh;
+  /* Altura mínima para ocupar toda la pantalla */
+  overflow-x: hidden;
+  /* Ocultar desplazamiento horizontal */
+  overflow-y: auto;
+  /* Permitir desplazamiento vertical */
   font-family: "Nunito", sans-serif;
 }
 
@@ -12,14 +15,16 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  align-items: center; /* Centrar horizontalmente */
+  align-items: center;
+  /* Centrar horizontalmente */
 }
 
 /* Contenedor principal */
 .eventos-container {
   margin: 20px auto;
   width: 120vw;
-  max-width: 1200px; /* Limitar el ancho máximo */
+  max-width: 1200px;
+  /* Limitar el ancho máximo */
   padding: 10px;
   background-color: #fefaf6;
   border-radius: 10px;
@@ -34,10 +39,13 @@
 }
 
 /* Estilo para los contenedores de filtros y checkboxes */
-.eventos-container-filtros, .eventos-container-checkboxes, .eventos-container-conteo {
+.eventos-container-filtros,
+.eventos-container-checkboxes,
+.eventos-container-conteo {
   margin: 10px auto;
   width: 100%;
-  max-width: 1200px; /* Limitar el ancho máximo */
+  max-width: 1200px;
+  /* Limitar el ancho máximo */
   background-color: #f7b97b;
   border-radius: 10px;
   padding: 10px;
@@ -48,7 +56,8 @@
 }
 
 /* Estilo para las etiquetas */
-.eventos-contenedor-label1, .eventos-elemento-label {
+.eventos-contenedor-label1,
+.eventos-elemento-label {
   display: flex;
   align-items: center;
   margin: 5px;
@@ -75,7 +84,8 @@
   margin: 20px auto;
   width: 100%;
   max-width: 1200px;
-  background-color: #f0e0d6; /* Fondo marrón suave */
+  background-color: #f0e0d6;
+  /* Fondo marrón suave */
   border-radius: 10px;
   padding: 10px;
 }
@@ -87,7 +97,8 @@
   border-spacing: 2px;
   border-radius: 10px;
   overflow: hidden;
-  background-color: #f0e0d6; /* Fondo marrón suave */
+  background-color: #f0e0d6;
+  /* Fondo marrón suave */
 }
 
 .eventos-tabla-eventos thead {
@@ -95,12 +106,14 @@
   color: #fff;
 }
 
-.eventos-tabla-eventos th, .eventos-tabla-eventos td {
+.eventos-tabla-eventos th,
+.eventos-tabla-eventos td {
   padding: 7px;
   text-align: left;
 }
 
-.eventos-tabla-eventos th.estado, .eventos-tabla-eventos td.estado {
+.eventos-tabla-eventos th.estado,
+.eventos-tabla-eventos td.estado {
   padding: 7px;
   background: #fefaf6;
 }
@@ -116,6 +129,7 @@
   border-radius: 20px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
   transition: box-shadow 0.3s ease;
+  font-family: "Nunito", sans-serif;
   margin: 1vh;
 }
 
@@ -130,7 +144,9 @@
     padding: 5px;
   }
 
-  .eventos-contenedor-label1, .eventos-elemento-label, .eventos-elemento-valor {
+  .eventos-contenedor-label1,
+  .eventos-elemento-label,
+  .eventos-elemento-valor {
     width: 100%;
     font-size: 10px;
     justify-content: center;
@@ -154,7 +170,9 @@
     padding: 8px;
   }
 
-  .eventos-contenedor-label1, .eventos-elemento-label, .eventos-elemento-valor {
+  .eventos-contenedor-label1,
+  .eventos-elemento-label,
+  .eventos-elemento-valor {
     width: 100%;
     font-size: 18px;
     justify-content: center;
@@ -178,7 +196,9 @@
     padding: 10px;
   }
 
-  .eventos-contenedor-label1, .eventos-elemento-label, .eventos-elemento-valor {
+  .eventos-contenedor-label1,
+  .eventos-elemento-label,
+  .eventos-elemento-valor {
     width: 100%;
     font-size: 18px;
     justify-content: center;
@@ -206,9 +226,10 @@
 
 .eventos-contenedor-label1 {
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-around; /* Esto crea espacio uniforme entre los elementos */
+  justify-content: space-around;
+  /* Esto crea espacio uniforme entre los elementos */
   align-items: center;
   margin: 10px;
   font-size: min(1vw, 18px);
@@ -217,85 +238,122 @@
   background-color: #ecd4b6;
   border-radius: 20px;
   color: #292929;
-  min-width: 300px; /* Ajusta según sea necesario para mantener la disposición diagonal */
+  min-width: 300px;
+  /* Ajusta según sea necesario para mantener la disposición diagonal */
 }
 
 .eventos-container {
   margin: 1px auto;
-  width: 80%; /* Asegúrate de que ocupe todo el espacio disponible */
-  max-width: 1800px; /* Ajusta esta medida según necesites */
-  padding: 20px; /* Asegúrate de que el relleno sea suficiente */
-  background-color: #fefaf6; /* Color de fondo blanco */
+  width: 80%;
+  /* Asegúrate de que ocupe todo el espacio disponible */
+  max-width: 1800px;
+  /* Ajusta esta medida según necesites */
+  padding: 20px;
+  /* Asegúrate de que el relleno sea suficiente */
+  background-color: #fefaf6;
+  /* Color de fondo blanco */
   border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* Opcional: añade sombra para mejor visibilidad */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  /* Opcional: añade sombra para mejor visibilidad */
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra los elementos verticalmente */
-  justify-content: flex-start; /* Alinea los elementos desde el inicio del contenedor */
-  overflow: hidden; /* Oculta cualquier desbordamiento */
+  align-items: center;
+  /* Centra los elementos verticalmente */
+  justify-content: flex-start;
+  /* Alinea los elementos desde el inicio del contenedor */
+  overflow: hidden;
+  /* Oculta cualquier desbordamiento */
 }
 
 /* Ajusta los márgenes y el padding en los sub-contenedores si es necesario */
-.eventos-container-checkboxes, .eventos-container-filtros {
-  width: 100%; /* Asegúrate de que ocupen todo el ancho del contenedor principal */
-  padding: 10px; /* Relleno adecuado */
-  margin-bottom: 10px; /* Espacio entre contenedores */
+.eventos-container-checkboxes,
+.eventos-container-filtros {
+  width: 100%;
+  /* Asegúrate de que ocupen todo el ancho del contenedor principal */
+  padding: 10px;
+  /* Relleno adecuado */
+  margin-bottom: 10px;
+  /* Espacio entre contenedores */
 }
 
 .eventos-contenedor-label1 {
   display: flex;
-  flex-wrap: wrap; /* Permite que los elementos se envuelvan en la pantalla */
-  justify-content: space-between; /* Espacia los elementos uniformemente */
-  width: 100%; /* Ocupa todo el ancho del subcontenedor */
+  flex-wrap: wrap;
+  /* Permite que los elementos se envuelvan en la pantalla */
+  justify-content: space-between;
+  /* Espacia los elementos uniformemente */
+  width: 100%;
+  /* Ocupa todo el ancho del subcontenedor */
 }
 
 /* Asegúrate de que todos los contenedores de filtros y botones también estén adecuadamente estilizados */
 .eventos-container-boton-consulta {
   padding: 10px;
   display: flex;
-  justify-content: center; /* Centra el botón de consulta */
+  justify-content: center;
+  /* Centra el botón de consulta */
 }
+
 .eventos-bottom-time-estado {
-  font-size: 20px; /* Ajusta el tamaño de la fuente según necesites */
+  font-size: 20px;
+  /* Ajusta el tamaño de la fuente según necesites */
   font-weight: bold;
   color: black;
-  background-color: #be7530; /* Color de fondo del botón */
+  background-color: #be7530;
+  /* Color de fondo del botón */
   padding: 8px 16px;
   border-radius: 20px;
-  border: none; /* No border */
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* Sombra para dar un efecto 3D ligero */
-  transition: box-shadow 0.3s ease; /* Transición suave para el efecto de sombra */
-  cursor: pointer; /* Cambia el cursor a una mano cuando se pasa sobre el botón */
+  border: none;
+  /* No border */
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  /* Sombra para dar un efecto 3D ligero */
+  transition: box-shadow 0.3s ease;
+  /* Transición suave para el efecto de sombra */
+  cursor: pointer;
+  /* Cambia el cursor a una mano cuando se pasa sobre el botón */
 }
 
 .eventos-bottom-time-estado:hover {
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Efecto de sombra más pronunciado al pasar el ratón */
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  /* Efecto de sombra más pronunciado al pasar el ratón */
 }
 
 .eventos-container-conteo {
-  margin: 10px auto; /* Ajustar según la necesidad real */
-  padding: 10px; /* Reducir si es necesario */
+  margin: 10px auto;
+  /* Ajustar según la necesidad real */
+  padding: 10px;
+  /* Reducir si es necesario */
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alinea los items a la izquierda */
+  align-items: flex-start;
+  /* Alinea los items a la izquierda */
   width: 35%
 }
 
 .eventos-contenedor-label1 {
-  margin: 5px 0; /* Reduce el margen vertical para que los elementos estén más juntos */
-  padding: 5px; /* Reducir padding si es necesario */
+  margin: 5px 0;
+  /* Reduce el margen vertical para que los elementos estén más juntos */
+  padding: 5px;
+  /* Reducir padding si es necesario */
   display: flex;
-  align-items: center; /* Asegura que los elementos estén centrados verticalmente dentro del contenedor */
-  justify-content: space-between; /* Esto espara asegurar que el label y el valor estén en los extremos del contenedor */
-  width: 100%; /* Asegúrate de que el contenedor ocupe todo el ancho posible */
+  align-items: center;
+  /* Asegura que los elementos estén centrados verticalmente dentro del contenedor */
+  justify-content: space-between;
+  /* Esto espara asegurar que el label y el valor estén en los extremos del contenedor */
+  width: 100%;
+  /* Asegúrate de que el contenedor ocupe todo el ancho posible */
 }
 
-.eventos-elemento-label, .eventos-elemento-valor {
-  padding: 2px 5px; /* Reducir el padding puede ayudar a hacer los elementos más compactos */
+.eventos-elemento-label,
+.eventos-elemento-valor {
+  padding: 2px 5px;
+  /* Reducir el padding puede ayudar a hacer los elementos más compactos */
 }
 
 /* Ajustar select para que se alinee bien con otros elementos */
 select.eventos-elemento-valor {
-  padding: 2px 5px; /* Alinea el padding del select con el de otros elementos de valor */
-  border: 1px solid #ccc; /* Opcional, añade un borde si es necesario para mejor visibilidad */
+  padding: 2px 5px;
+  /* Alinea el padding del select con el de otros elementos de valor */
+  border: 1px solid #ccc;
+  /* Opcional, añade un borde si es necesario para mejor visibilidad */
 }

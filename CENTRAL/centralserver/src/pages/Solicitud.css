@@ -8,6 +8,11 @@
   gap: 20px;
   padding: 20px;
   overflow: auto;
+  font-family: "Nunito", sans-serif;
+}
+
+.boton-solicitud {
+  font-family: "Nunito", sans-serif;
 }
 
 .kit-container {
@@ -22,6 +27,7 @@
   /* Ancho del 30% con espacio entre recuadros */
   margin-bottom: 20px;
   /* Espacio entre recuadros */
+  font-family: "Nunito", sans-serif;
 }
 
 .kit-container h3 {
@@ -53,7 +59,8 @@
 
 .picking-container {
   overflow-y: auto;
-  max-height: 80vh; /* Altura máxima del contenedor */
+  max-height: 80vh;
+  /* Altura máxima del contenedor */
 }
 
 .container-items {

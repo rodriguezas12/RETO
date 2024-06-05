@@ -82,10 +82,8 @@ export default function Register() {
   return (
     <>
       <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          href="./Media/Nunito-Italic-VariableFont_wght.ttf"
           rel="stylesheet"
         />
       </Helmet>
@@ -128,10 +126,10 @@ export default function Register() {
             <p className="error-message">El usuario ya está registrado</p>
           )}
           {registroExitoso && <p>{registroExitoso}</p>}
-          <button type="submit">Registrar</button>
+          <button className='boton-registro' type="submit">Registrar</button>
         </form>
         <Link to="/">
-          <button type="button">Volver</button>
+          <button className='boton-registro' type="button">Volver</button>
         </Link>
       </div>
     </>
