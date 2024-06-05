@@ -15,7 +15,7 @@ const Popup = ({ mensaje, showPopup, setShowPopup }) => {
   if (!showPopup) return null;
 
   return (
-    <div className="popup">
+    <div className="popup-juanito">
       <p>{mensaje}</p>
     </div>
   );

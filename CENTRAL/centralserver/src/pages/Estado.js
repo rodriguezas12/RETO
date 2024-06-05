@@ -208,7 +208,7 @@ function Estado() {
     const updateModeTable = async () => {
       if (selectedStation) {
         const stationNumber = selectedStation.split(" ")[1]; // Obtener el número de estación
-  
+
         try {
           // Verificar si hubo un cambio en la estación seleccionada
           if (previousStationNumber !== stationNumber) {
@@ -224,18 +224,18 @@ function Estado() {
                   columnValue: "No Armado", // Cambiar el estado a "No Armado"
                 }),
               });
-  
+
               if (!responsePrev.ok) {
                 throw new Error(
                   "Error al enviar datos a la base de datos (estación anterior)"
                 );
               }
-  
+
               console.log(
                 `Estado de estación ${previousStationNumber} actualizado a 'No Armado'`
               );
             }
-  
+
             // Enviar solicitud para actualizar el estado de la nueva estación a "Armado"
             const responseCurr = await fetch("http://localhost:5000/modos", {
               method: "POST",
@@ -247,24 +247,24 @@ function Estado() {
                 columnValue: "Armado", // Establecer el estado en "Armado"
               }),
             });
-  
+
             if (!responseCurr.ok) {
               throw new Error(
                 "Error al enviar datos a la base de datos (nueva estación)"
               );
             }
-  
+
             console.log(
               `Estado de estación ${stationNumber} actualizado a 'Armado'`
             );
-  
+
             // Actualizar el estado anterior con el nuevo valor de stationNumber
             setPreviousStationNumber(stationNumber);
           }
         } catch (error) {
           console.error("Error:", error);
         }
-      }else {
+      } else {
         const sendDataToDatabase = async () => {
           try {
             // Iterar sobre las estaciones del 1 al 7
@@ -313,7 +313,7 @@ function Estado() {
   return (
     <div>
       <Helmet>
-      <link
+        <link
           href="./Media/Nunito-Italic-VariableFont_wght.ttf"
           rel="stylesheet"
         />

@@ -28,19 +28,21 @@ db.connect((err) => {
   );
 });
 
-
-app.get('/api/check-time-difference', (req, res) => {
-  db.query('SELECT Hora FROM picking ORDER BY Hora DESC LIMIT 1', (error, results) => {
-    if (error) {
-      console.error('Database query error:', error);
-      return res.status(500).json({ error: 'Database query error' });
+app.get("/api/check-time-difference", (req, res) => {
+  db.query(
+    "SELECT Hora FROM picking ORDER BY Hora DESC LIMIT 1",
+    (error, results) => {
+      if (error) {
+        console.error("Database query error:", error);
+        return res.status(500).json({ error: "Database query error" });
+      }
+      const lastTime = results[0].Hora;
+      const currentTime = new Date();
+      const timeDifference = (currentTime - new Date(lastTime)) / 1000; // Convert to seconds
+      console.log(`Last time: ${lastTime}, Current time: ${currentTime}`);
+      return res.json({ lastTime, currentTime, timeDifference });
     }
-    const lastTime = results[0].Hora;
-    const currentTime = new Date();
-    const timeDifference = (currentTime - new Date(lastTime)) / 1000; // Convert to seconds
-    console.log(`Last time: ${lastTime}, Current time: ${currentTime}`);
-    return res.json({ lastTime, currentTime, timeDifference });
-  });
+  );
 });
 
 app.post("/register", (req, res) => {
@@ -963,7 +965,9 @@ app.post("/modos", (req, res) => {
 
   // Verificar que stationNumber esté dentro de los valores permitidos (1 a 7)
   if (stationNumber < 1 || stationNumber > 7) {
-    return res.status(400).json({ error: "Número de estación fuera de rango válido (1-7)" });
+    return res
+      .status(400)
+      .json({ error: "Número de estación fuera de rango válido (1-7)" });
   }
 
   // Nombre de la columna basado en stationNumber
@@ -994,18 +998,50 @@ app.post("/modos", (req, res) => {
           console.error("Error al actualizar datos:", err);
           return res.status(500).json({ error: "Error al actualizar datos" });
         }
-        res.status(200).json({ message: "Datos actualizados correctamente en la base de datos" });
+        res
+          .status(200)
+          .json({
+            message: "Datos actualizados correctamente en la base de datos",
+          });
       });
     } else {
-      console.error("No se encontró ninguna fila en la tabla Modo para actualizar");
-      res.status(404).json({ error: "No se encontró ninguna fila para actualizar" });
+      console.error(
+        "No se encontró ninguna fila en la tabla Modo para actualizar"
+      );
+      res
+        .status(404)
+        .json({ error: "No se encontró ninguna fila para actualizar" });
     }
   });
 });
 
+// Endpoint para crear la tabla 'M1'
+app.post("/tableM1", (req, res) => {
+  const createTableM1Query = `
+  CREATE TABLE IF NOT EXISTS M1 (
+  fila INT AUTO_INCREMENT PRIMARY KEY,
+  Columna1 VARCHAR(100) NOT NULL,
+  Columna2 VARCHAR(100) NOT NULL,
+  Columna3 VARCHAR(100) NOT NULL,
+  Columna4 VARCHAR(100) NOT NULL,
+  Columna5 VARCHAR(100) NOT NULL,
+  Columna6 VARCHAR(100) NOT NULL,
+  Columna7 VARCHAR(100) NOT NULL,
+  Columna8 VARCHAR(100) NOT NULL,
+  Columna9 VARCHAR(100) NOT NULL,
+  Columna10 VARCHAR(100) NOT NULL,
+  UNIQUE KEY unique_fila (fila)
+    )
+  `;
 
-
-
+  db.query(createTableM1Query, (err, result) => {
+    if (err) {
+      console.error("Error al crear la tabla M1:", err);
+      return res.status(500).json({ error: "Error al crear la tabla M1" });
+    }
+    res.status(200).json({ message: "Tabla M1 creada o ya existe" });
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
