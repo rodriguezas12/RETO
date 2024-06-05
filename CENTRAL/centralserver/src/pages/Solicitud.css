@@ -11,7 +11,7 @@
 }
 
 .kit-container {
-  background-color: #a1602a;
+  background-color: #ecd4b6;
   /* Color de fondo */
   padding: 15px;
   border-radius: 8px;
@@ -86,14 +86,14 @@
 .kit-container button {
   padding: 5px 10px;
   cursor: pointer;
-  background-color: #007bff;
+  background-color: #8b4513;
   color: #fff;
   border: none;
   border-radius: 5px;
 }
 
 .kit-container button:hover {
-  background-color: #0056b3;
+  background-color: #8b4513;
 }
 
 .kit-container span {
