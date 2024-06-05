@@ -35,7 +35,6 @@
     "server": "cd backend && node server.js",
     "fusion": "cd ../../ANTENAS && python fusion.py"
   },
-
   "eslintConfig": {
     "extends": [
       "react-app",
