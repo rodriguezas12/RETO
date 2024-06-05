@@ -24,21 +24,22 @@ function Contenido() {
         };
 
         fetchData();
-        const intervalId = setInterval(fetchData, 1000);
+        const intervalId = setInterval(fetchData, 5000);
 
         return () => clearInterval(intervalId);
     }, []);
 
-    const fetchNombreKit = async (tag) => {
-      try {
-        const nombreKitResponse = await axios.get(
-          `http://localhost:5000/nombrekit/${tag}`
-        );
-        return nombreKitResponse.data || "";
-      } catch (error) {
-        console.error(`Error al obtener el nombre del kit para el tag ${tag}:`, error);
-        return "";
-      }
+    const handleEditClick = (index, item) => {
+        setEditIndex(index);
+        setEditFormData({ Contenido: item.Contenido });
+    };
+
+    const handleEditFormChange = (e) => {
+        const { name, value } = e.target;
+        setEditFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
     };
 
     const handleSaveClick = (index) => {
@@ -48,7 +49,7 @@ function Contenido() {
         setData(updatedData);
         setEditIndex(null);
 
-        fetch(`http://localhost:5000/contenido/${data[index].Kits}`, {
+        fetch(`http://localhost:5000/contenido1/${data[index].Kits}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,10 +74,9 @@ function Contenido() {
 
     const handleAddRow = () => {
         const newKitNumber = data.length + 1;
-        const newRow = { Kits: `Kit  ${newKitNumber}`, Contenido: '' };
-        setData([...data, newRow]);
+        const newRow = { Kits: `Kit ${newKitNumber}`, Contenido: '' };
 
-        fetch("http://localhost:5000/contenido", {
+        fetch("http://localhost:5000/contenido1", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -90,6 +90,7 @@ function Contenido() {
                 return response.json();
             })
             .then((newItem) => {
+                // Actualiza el estado de data con el nuevo elemento
                 setData((prevData) => [...prevData, newItem]);
             })
             .catch((error) => console.error('Error:', error));
@@ -108,7 +109,7 @@ function Contenido() {
             <Header titulo="Asignación de contenido" />
             <div className="container-inventario">
                 <button onClick={handleAddRow}>Añadir Fila</button>
-                <div className="table-container">
+                <div className="table-contenido">
                     <table>
                         <thead>
                             <tr>
