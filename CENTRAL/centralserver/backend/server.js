@@ -320,7 +320,7 @@ app.post("/sets", (req, res) => {
 });
 
 app.get("/said", (req, res) => {
-  // Consulta para obtener las últimas 3 filas ordenadas por una columna específica
+  // Consulta para obtener las últimas 3 filas ordenadas por una col específica
   db.query(
     `
   SELECT * FROM (
@@ -763,7 +763,7 @@ app.post("/solicitar", (req, res) => {
 app.post("/guardarCambios", (req, res) => {
   const updates = req.body; // Los datos enviados desde el frontend
 
-  // Define la consulta SQL para actualizar la columna Bahia en la tabla Datos
+  // Define la consulta SQL para actualizar la col Bahia en la tabla Datos
   const query = "UPDATE RETORFID.Datos SET Bahia = ? WHERE ID = ?";
   // Ejecuta la consulta SQL para cada actualización
   updates.forEach((update) => {
@@ -970,7 +970,7 @@ app.post("/modos", (req, res) => {
       .json({ error: "Número de estación fuera de rango válido (1-7)" });
   }
 
-  // Nombre de la columna basado en stationNumber
+  // Nombre de la col basado en stationNumber
   const columnName = `Estación_${stationNumber}`;
 
   // Obtener el id de la primera fila
@@ -998,11 +998,9 @@ app.post("/modos", (req, res) => {
           console.error("Error al actualizar datos:", err);
           return res.status(500).json({ error: "Error al actualizar datos" });
         }
-        res
-          .status(200)
-          .json({
-            message: "Datos actualizados correctamente en la base de datos",
-          });
+        res.status(200).json({
+          message: "Datos actualizados correctamente en la base de datos",
+        });
       });
     } else {
       console.error(
@@ -1015,33 +1013,169 @@ app.post("/modos", (req, res) => {
   });
 });
 
-// Endpoint para crear la tabla 'M1'
-app.post("/tableM1", (req, res) => {
+// Endpoint para crear la tabla M1 si no existe
+app.post("/createTableM1", (req, res) => {
   const createTableM1Query = `
   CREATE TABLE IF NOT EXISTS M1 (
-  fila INT AUTO_INCREMENT PRIMARY KEY,
-  Columna1 VARCHAR(100) NOT NULL,
-  Columna2 VARCHAR(100) NOT NULL,
-  Columna3 VARCHAR(100) NOT NULL,
-  Columna4 VARCHAR(100) NOT NULL,
-  Columna5 VARCHAR(100) NOT NULL,
-  Columna6 VARCHAR(100) NOT NULL,
-  Columna7 VARCHAR(100) NOT NULL,
-  Columna8 VARCHAR(100) NOT NULL,
-  Columna9 VARCHAR(100) NOT NULL,
-  Columna10 VARCHAR(100) NOT NULL,
-  UNIQUE KEY unique_fila (fila)
-    )
-  `;
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    Col1 VARCHAR(100) NOT NULL,
+    Col2 VARCHAR(100) NOT NULL,
+    Col3 VARCHAR(100) NOT NULL,
+    Col4 VARCHAR(100) NOT NULL,
+    Col5 VARCHAR(100) NOT NULL,
+    Col6 VARCHAR(100) NOT NULL,
+    Col7 VARCHAR(100) NOT NULL,
+    Col8 VARCHAR(100) NOT NULL,
+    Col9 VARCHAR(100) NOT NULL,
+    Col10 VARCHAR(100) NOT NULL
+  )
+`;
 
+  // Ejecutar la consulta para crear la tabla M1
   db.query(createTableM1Query, (err, result) => {
     if (err) {
       console.error("Error al crear la tabla M1:", err);
       return res.status(500).json({ error: "Error al crear la tabla M1" });
     }
+    console.log("Tabla M1 creada o ya existente");
     res.status(200).json({ message: "Tabla M1 creada o ya existe" });
   });
 });
+
+// Endpoint para obtener los datos de las columnas Nombre y Bahia de la tabla DATOS
+app.get("/getm1", (req, res) => {
+  const getDatosQuery = "SELECT Nombre, Bahia FROM Datos";
+
+  db.query(getDatosQuery, (err, results) => {
+    if (err) {
+      console.error("Error al obtener los datos de la tabla Datos:", err);
+      return res
+        .status(500)
+        .json({ error: "Error al obtener los datos de la tabla DATOS" });
+    }
+    res.status(200).json(results);
+  });
+});
+
+// Endpoint para guardar la matriz ordenada en la base de datos
+app.post("/saveM1", async (req, res) => {
+  const matrizOrdenada = req.body.matriz;
+
+  // Validar la matriz recibida
+  if (
+    !matrizOrdenada ||
+    !Array.isArray(matrizOrdenada) ||
+    matrizOrdenada.length !== 3 ||
+    !Array.isArray(matrizOrdenada[0]) ||
+    matrizOrdenada[0].length !== 10 ||
+    !Array.isArray(matrizOrdenada[1]) ||
+    matrizOrdenada[1].length !== 10 ||
+    !Array.isArray(matrizOrdenada[2]) ||
+    matrizOrdenada[2].length !== 10
+  ) {
+    return res.status(400).json({ error: "Matriz ordenada inválida" });
+  }
+
+  // Definir la consulta de actualización
+  const updateQuery = `
+    UPDATE M1
+    SET 
+      Col1 = ?,
+      Col2 = ?,
+      Col3 = ?,
+      Col4 = ?,
+      Col5 = ?,
+      Col6 = ?,
+      Col7 = ?,
+      Col8 = ?,
+      Col9 = ?,
+      Col10 = ?
+    WHERE id = ?;`;
+
+  // Preparar los valores para la consulta de actualización de la primera fila
+  const values1 = [
+    matrizOrdenada[0][0] || null,
+    matrizOrdenada[0][1] || null,
+    matrizOrdenada[0][2] || null,
+    matrizOrdenada[0][3] || null,
+    matrizOrdenada[0][4] || null,
+    matrizOrdenada[0][5] || null,
+    matrizOrdenada[0][6] || null,
+    matrizOrdenada[0][7] || null,
+    matrizOrdenada[0][8] || null,
+    matrizOrdenada[0][9] || null,
+    1, // Reemplaza con el valor de 'id' correspondiente a la primera fila que deseas actualizar
+  ];
+
+  // Preparar los valores para la consulta de actualización de la segunda fila
+  const values2 = [
+    matrizOrdenada[1][0] || null,
+    matrizOrdenada[1][1] || null,
+    matrizOrdenada[1][2] || null,
+    matrizOrdenada[1][3] || null,
+    matrizOrdenada[1][4] || null,
+    matrizOrdenada[1][5] || null,
+    matrizOrdenada[1][6] || null,
+    matrizOrdenada[1][7] || null,
+    matrizOrdenada[1][8] || null,
+    matrizOrdenada[1][9] || null,
+    2, // Reemplaza con el valor de 'id' correspondiente a la segunda fila que deseas actualizar
+  ];
+
+  // Preparar los valores para la consulta de actualización de la tercera fila
+  const values3 = [
+    matrizOrdenada[2][0] || null,
+    matrizOrdenada[2][1] || null,
+    matrizOrdenada[2][2] || null,
+    matrizOrdenada[2][3] || null,
+    matrizOrdenada[2][4] || null,
+    matrizOrdenada[2][5] || null,
+    matrizOrdenada[2][6] || null,
+    matrizOrdenada[2][7] || null,
+    matrizOrdenada[2][8] || null,
+    matrizOrdenada[2][9] || null,
+    3, // Reemplaza con el valor de 'id' correspondiente a la tercera fila que deseas actualizar
+  ];
+
+  // Ejecutar las tres consultas de actualización en la base de datos en paralelo
+  try {
+    await Promise.all([
+      new Promise((resolve, reject) => {
+        db.query(updateQuery, values1, (err, result) => {
+          if (err) {
+            console.error("Error al actualizar datos en la tabla M1 (fila 1):", err);
+            return reject(err);
+          }
+          resolve(result);
+        });
+      }),
+      new Promise((resolve, reject) => {
+        db.query(updateQuery, values2, (err, result) => {
+          if (err) {
+            console.error("Error al actualizar datos en la tabla M1 (fila 2):", err);
+            return reject(err);
+          }
+          resolve(result);
+        });
+      }),
+      new Promise((resolve, reject) => {
+        db.query(updateQuery, values3, (err, result) => {
+          if (err) {
+            console.error("Error al actualizar datos en la tabla M1 (fila 3):", err);
+            return reject(err);
+          }
+          resolve(result);
+        });
+      }),
+    ]);
+
+    res.status(200).json({ message: "Matriz actualizada exitosamente" });
+  } catch (error) {
+    console.error("Error al guardar la matriz en la base de datos:", error);
+    res.status(500).json({ error: "Error al guardar la matriz en la base de datos" });
+  }
+});
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
