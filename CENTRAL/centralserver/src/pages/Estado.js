@@ -18,6 +18,7 @@ function Estado() {
   const [elapsedTime, setElapsedTime] = useState(0); // Guarda el tiempo transcurrido en milisegundos
   const [showPopup, setShowPopup] = useState(false);
   const [mensaje, setMensaje] = useState("");
+  const [previousStationNumber, setPreviousStationNumber] = useState(null);
 
   // Simulación de datos de estaciones
   const stations = [
@@ -31,8 +32,23 @@ function Estado() {
   ];
 
   useEffect(() => {
+    // Crear la tabla cuando el componente se monte
+    const createTable = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/tablemode", {
+          method: "POST",
+        });
+        if (!response.ok) {
+          throw new Error("Error al crear la tabla");
+        }
+        console.log("Tabla 'Modo' creada o ya existe");
+      } catch (error) {
+        console.error("Error al crear la tabla:", error);
+      }
+    };
+
+    createTable();
     const fetchData = async () => {
-      
       if (selectedStation) {
         // Sustituir espacio por '_' para coincidir con el nombre de la tabla
         const stationNumber = selectedStation.split(" ")[1];
@@ -187,6 +203,112 @@ function Estado() {
   useEffect(() => {
     return () => clearInterval(intervalId);
   }, [intervalId]);
+
+  useEffect(() => {
+    const updateModeTable = async () => {
+      if (selectedStation) {
+        const stationNumber = selectedStation.split(" ")[1]; // Obtener el número de estación
+  
+        try {
+          // Verificar si hubo un cambio en la estación seleccionada
+          if (previousStationNumber !== stationNumber) {
+            // Si hay una estación anterior y es diferente a la actual, enviar solicitud para actualizar su estado a "No Armado"
+            if (previousStationNumber) {
+              const responsePrev = await fetch("http://localhost:5000/modos", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  stationNumber: previousStationNumber,
+                  columnValue: "No Armado", // Cambiar el estado a "No Armado"
+                }),
+              });
+  
+              if (!responsePrev.ok) {
+                throw new Error(
+                  "Error al enviar datos a la base de datos (estación anterior)"
+                );
+              }
+  
+              console.log(
+                `Estado de estación ${previousStationNumber} actualizado a 'No Armado'`
+              );
+            }
+  
+            // Enviar solicitud para actualizar el estado de la nueva estación a "Armado"
+            const responseCurr = await fetch("http://localhost:5000/modos", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                stationNumber: stationNumber,
+                columnValue: "Armado", // Establecer el estado en "Armado"
+              }),
+            });
+  
+            if (!responseCurr.ok) {
+              throw new Error(
+                "Error al enviar datos a la base de datos (nueva estación)"
+              );
+            }
+  
+            console.log(
+              `Estado de estación ${stationNumber} actualizado a 'Armado'`
+            );
+  
+            // Actualizar el estado anterior con el nuevo valor de stationNumber
+            setPreviousStationNumber(stationNumber);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }else {
+        const sendDataToDatabase = async () => {
+          try {
+            // Iterar sobre las estaciones del 1 al 7
+            for (let stationNumber = 1; stationNumber <= 7; stationNumber++) {
+              const columnName = `Estación_${stationNumber}`;
+
+              const response = await fetch("http://localhost:5000/modos", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  stationNumber: stationNumber, // Envía el número de estación actual
+                  columnValue: "No Armado",
+                }),
+              });
+
+              if (!response.ok) {
+                throw new Error(
+                  `Error en la solicitud POST para ${columnName}`
+                );
+              }
+
+              const data = await response.json();
+              console.log(
+                `Datos enviados correctamente para ${columnName}:`,
+                data
+              );
+            }
+          } catch (error) {
+            console.error("Error al enviar datos a la base de datos:", error);
+          }
+        };
+        sendDataToDatabase();
+      }
+    };
+    // Llamar a la función al cargar el componente y cuando selectedStation cambie
+    updateModeTable();
+
+    const intervalId = setInterval(updateModeTable, 2000);
+
+    // Limpiar el intervalo al desmontar el componente
+    return () => clearInterval(intervalId);
+  }, [previousStationNumber, selectedStation]);
 
   return (
     <div>

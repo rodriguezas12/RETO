@@ -159,7 +159,7 @@ app.post("/posicion", (req, res) => {
   } = req.body;
 
   // Crear la tabla si no existe
-  const createTableQuery = `
+  const createTableM1Query = `
     CREATE TABLE IF NOT EXISTS M1 (
       \`ID\` INT AUTO_INCREMENT PRIMARY KEY,
       \`Col1\` VARCHAR(255),
@@ -175,7 +175,7 @@ app.post("/posicion", (req, res) => {
     );
   `;
 
-  db.query(createTableQuery, (createErr) => {
+  db.query(createTableM1Query, (createErr) => {
     if (createErr) {
       console.error("Error al crear/verificar la tabla M1:", createErr);
       res.status(500).send("Error al crear la tabla M1");
@@ -763,22 +763,26 @@ app.post("/guardarCambios", (req, res) => {
   res.send({ status: "success", message: "Datos actualizados correctamente" });
 });
 
-
-
-
 // Obtener el último pedido realizado
 app.get("/ultimoPedido", (req, res) => {
   // Consultar el último pedido en la tabla Solicitud
-  db.query("SELECT Pedido FROM Solicitud ORDER BY ID DESC LIMIT 1", (pedidoErr, pedidoResults) => {
-    if (pedidoErr) {
-      console.error("Error al verificar el Pedido en la tabla Solicitud:", pedidoErr);
-      res.status(500).send("Error interno del servidor");
-      return;
-    }
+  db.query(
+    "SELECT Pedido FROM Solicitud ORDER BY ID DESC LIMIT 1",
+    (pedidoErr, pedidoResults) => {
+      if (pedidoErr) {
+        console.error(
+          "Error al verificar el Pedido en la tabla Solicitud:",
+          pedidoErr
+        );
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
 
-    const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
-    res.json({ pedidoRealizado: ultimoPedido });
-  });
+      const ultimoPedido =
+        pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
+      res.json({ pedidoRealizado: ultimoPedido });
+    }
+  );
 });
 
 app.post("/actualizarINV", (req, res) => {
@@ -802,7 +806,9 @@ app.post("/actualizarINV", (req, res) => {
     }
 
     if (results.length === 0) {
-      console.log(`No se pudo encontrar el número del Kit en el nombre para EP: ${EP}`);
+      console.log(
+        `No se pudo encontrar el número del Kit en el nombre para EP: ${EP}`
+      );
       res.status(500).send("Error interno del servidor");
       return;
     }
@@ -816,8 +822,14 @@ app.post("/actualizarINV", (req, res) => {
       kitNumber = match[1]; // Aquí asignamos el número de kit encontrado
       console.log(`Número del Kit del EP: ${kitNumber}`);
     } else {
-      console.log(`No se pudo encontrar el número del Kit en el nombre: ${nombre}`);
-      res.status(500).send(`Error: No se pudo encontrar el número del Kit en el nombre: ${nombre}`);
+      console.log(
+        `No se pudo encontrar el número del Kit en el nombre: ${nombre}`
+      );
+      res
+        .status(500)
+        .send(
+          `Error: No se pudo encontrar el número del Kit en el nombre: ${nombre}`
+        );
       return;
     }
 
@@ -827,66 +839,158 @@ app.post("/actualizarINV", (req, res) => {
       [currentDateTime, EP],
       (updateErr, updateResults) => {
         if (updateErr) {
-          console.error("Error al actualizar INV y Hora_salida_bodega:", updateErr);
+          console.error(
+            "Error al actualizar INV y Hora_salida_bodega:",
+            updateErr
+          );
           res.status(500).send("Error interno del servidor");
           return;
         }
-        console.log(`INV y Hora_salida_bodega actualizados para EP: ${EP}, ${currentDateTime}`);
+        console.log(
+          `INV y Hora_salida_bodega actualizados para EP: ${EP}, ${currentDateTime}`
+        );
       }
     );
 
     // Verificar el pedido actual en la tabla Solicitud
-    db.query("SELECT Pedido FROM Solicitud ORDER BY ID DESC LIMIT 1", (pedidoErr, pedidoResults) => {
-      if (pedidoErr) {
-        console.error("Error al verificar el Pedido en la tabla Solicitud:", pedidoErr);
-        res.status(500).send("Error interno del servidor");
-        return;
-      }
+    db.query(
+      "SELECT Pedido FROM Solicitud ORDER BY ID DESC LIMIT 1",
+      (pedidoErr, pedidoResults) => {
+        if (pedidoErr) {
+          console.error(
+            "Error al verificar el Pedido en la tabla Solicitud:",
+            pedidoErr
+          );
+          res.status(500).send("Error interno del servidor");
+          return;
+        }
 
-      const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
-      console.log(`Último pedido en la tabla Solicitud: ${ultimoPedido}`);
+        const ultimoPedido =
+          pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
+        console.log(`Último pedido en la tabla Solicitud: ${ultimoPedido}`);
 
-      // Verificar si kitNumber está dentro de ultimoPedido
-      if (ultimoPedido.includes(kitNumber)) {
-        const pedidoArray = ultimoPedido.split(",");
-        descuentoPedido = pedidoArray.filter((item) => item !== kitNumber).join(",");
-        console.log(`Haz pickeado correctamente el Kit: ${kitNumber}`);
+        // Verificar si kitNumber está dentro de ultimoPedido
+        if (ultimoPedido.includes(kitNumber)) {
+          const pedidoArray = ultimoPedido.split(",");
+          descuentoPedido = pedidoArray
+            .filter((item) => item !== kitNumber)
+            .join(",");
+          console.log(`Haz pickeado correctamente el Kit: ${kitNumber}`);
 
-        // Insertar el nuevo pedido en la tabla Solicitud
-        db.query(
-          "INSERT INTO Solicitud (Pedido) VALUES (?)",
-          [descuentoPedido],
-          (insertErr, insertResults) => {
-            if (insertErr) {
-              console.error("Error al insertar el nuevo pedido en la tabla Solicitud:", insertErr);
-              res.status(500).send("Error interno del servidor");
-              return;
+          // Insertar el nuevo pedido en la tabla Solicitud
+          db.query(
+            "INSERT INTO Solicitud (Pedido) VALUES (?)",
+            [descuentoPedido],
+            (insertErr, insertResults) => {
+              if (insertErr) {
+                console.error(
+                  "Error al insertar el nuevo pedido en la tabla Solicitud:",
+                  insertErr
+                );
+                res.status(500).send("Error interno del servidor");
+                return;
+              }
+              console.log("Nuevo pedido insertado en la tabla Solicitud");
+
+              const piezasVerificadas =
+                ultimoPedido.length - descuentoPedido.length;
+              const piezasPorVerificar = descuentoPedido.length;
+
+              res.json({
+                piezasPorVerificar: pedidoArray
+                  .filter((item) => item !== kitNumber)
+                  .join(","),
+                piezasVerificadas: pedidoArray
+                  .filter((item) => item === kitNumber)
+                  .join(","),
+                pedidoRealizado: ultimoPedido,
+                descuentoPedido: descuentoPedido,
+              });
             }
-            console.log("Nuevo pedido insertado en la tabla Solicitud");
-
-            const piezasVerificadas = ultimoPedido.length - descuentoPedido.length;
-            const piezasPorVerificar = descuentoPedido.length;
-
-            res.json({
-              piezasPorVerificar: pedidoArray.filter(item => item !== kitNumber).join(','),
-              piezasVerificadas: pedidoArray.filter(item => item === kitNumber).join(','),
-              pedidoRealizado: ultimoPedido,
-              descuentoPedido: descuentoPedido
-            });
-          }
-        );
-      } else {
-        console.log(`No fue solicitado el Kit: ${kitNumber}`);
-        res.status(200).json({
-          piezasPorVerificar: 0,
-          piezasVerificadas: 0,
-          pedidoRealizado: ultimoPedido,
-          descuentoPedido: ultimoPedido
-        });
+          );
+        } else {
+          console.log(`No fue solicitado el Kit: ${kitNumber}`);
+          res.status(200).json({
+            piezasPorVerificar: 0,
+            piezasVerificadas: 0,
+            pedidoRealizado: ultimoPedido,
+            descuentoPedido: ultimoPedido,
+          });
+        }
       }
-    });
+    );
   });
-}); 
+});
+// Endpoint para crear la tabla 'Modo'
+app.post("/tablemode", (req, res) => {
+  const createTableModoQuery = `
+    CREATE TABLE IF NOT EXISTS Modo (
+      id INT AUTO_INCREMENT,
+      Estación_1 VARCHAR(100) NOT NULL,
+      Estación_2 VARCHAR(100) NOT NULL,
+      Estación_3 VARCHAR(100) NOT NULL,
+      Estación_4 VARCHAR(100) NOT NULL,
+      Estación_5 VARCHAR(100) NOT NULL,
+      Estación_6 VARCHAR(100) NOT NULL,
+      Estación_7 VARCHAR(100) NOT NULL,
+      PRIMARY KEY (id)
+    )
+  `;
+
+  db.query(createTableModoQuery, (err, result) => {
+    if (err) {
+      console.error("Error al crear la tabla Modo:", err);
+      return res.status(500).json({ error: "Error al crear la tabla Modo" });
+    }
+    res.status(200).json({ message: "Tabla Modo creada o ya existe" });
+  });
+});
+
+// Endpoint para manejar la solicitud POST de datos y actualizar la primera fila de la tabla
+app.post("/modos", (req, res) => {
+  const { stationNumber, columnValue } = req.body;
+
+  // Verificar que stationNumber esté dentro de los valores permitidos (1 a 7)
+  if (stationNumber < 1 || stationNumber > 7) {
+    return res.status(400).json({ error: "Número de estación fuera de rango válido (1-7)" });
+  }
+
+  // Nombre de la columna basado en stationNumber
+  const columnName = `Estación_${stationNumber}`;
+
+  // Obtener el id de la primera fila
+  const getFirstRowIdQuery = `SELECT id FROM Modo ORDER BY id ASC LIMIT 1`;
+
+  db.query(getFirstRowIdQuery, (err, rows) => {
+    if (err) {
+      console.error("Error al obtener el id de la primera fila:", err);
+      return res.status(500).json({ error: "Error al actualizar datos" });
+    }
+
+    // Asegurarse de que se haya encontrado un id
+    if (rows.length > 0) {
+      const firstRowId = rows[0].id;
+
+      // Actualizar la primera fila basada en el id obtenido
+      const updateQuery = `
+        UPDATE Modo
+        SET ${columnName} = ?
+        WHERE id = ?
+      `;
+
+      db.query(updateQuery, [columnValue, firstRowId], (err, result) => {
+        if (err) {
+          console.error("Error al actualizar datos:", err);
+          return res.status(500).json({ error: "Error al actualizar datos" });
+        }
+        res.status(200).json({ message: "Datos actualizados correctamente en la base de datos" });
+      });
+    } else {
+      console.error("No se encontró ninguna fila en la tabla Modo para actualizar");
+      res.status(404).json({ error: "No se encontró ninguna fila para actualizar" });
+    }
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
