@@ -28,6 +28,21 @@ db.connect((err) => {
   );
 });
 
+
+app.get('/api/check-time-difference', (req, res) => {
+  db.query('SELECT Hora FROM picking ORDER BY Hora DESC LIMIT 1', (error, results) => {
+    if (error) {
+      console.error('Database query error:', error);
+      return res.status(500).json({ error: 'Database query error' });
+    }
+    const lastTime = results[0].Hora;
+    const currentTime = new Date();
+    const timeDifference = (currentTime - new Date(lastTime)) / 1000; // Convert to seconds
+    console.log(`Last time: ${lastTime}, Current time: ${currentTime}`);
+    return res.json({ lastTime, currentTime, timeDifference });
+  });
+});
+
 app.post("/register", (req, res) => {
   const { nombre, codigoEstudiantil, nrc } = req.body;
 
@@ -987,6 +1002,10 @@ app.post("/modos", (req, res) => {
     }
   });
 });
+
+
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
