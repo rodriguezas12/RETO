@@ -9,76 +9,92 @@ function Ingresomaterial() {
   const [selectedStation, setSelectedStation] = useState("1");
   const [isEditing, setIsEditing] = useState(false); // Estado para controlar el modo edición
 
-  useEffect(() => {
-    const GenerarM1 = async () => {
-      try {
-        // Realizar la solicitud al endpoint para obtener los datos
-        const response = await fetch("http://localhost:5000/getm1");
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos de la tabla DATOS");
+  const GenerarM1 = async () => {
+    try {
+      // Realizar la solicitud al endpoint para obtener los datos
+      const response = await fetch("http://localhost:5000/getm1");
+      if (!response.ok) {
+        throw new Error("Error al obtener los datos de la tabla DATOS");
+      }
+
+      const results = await response.json();
+
+      // Matriz para guardar los datos transformados
+      const matrizOriginal = [[], []];
+
+      // Función para extraer solo el número del texto si es una cadena
+      const extractNumber = (text) => {
+        if (typeof text === "string") {
+          const match = text.match(/\d+/); // Busca el primer número en el texto
+          return match ? match[0] : text; // Si encuentra un número, lo devuelve, de lo contrario devuelve el texto original
+        }
+        return text; // Si no es una cadena, devuelve el valor original
+      };
+
+      // Recorrer los resultados y transformar los valores
+      results.forEach((row) => {
+        matrizOriginal[0].push(extractNumber(row.Nombre));
+        matrizOriginal[1].push(extractNumber(row.Bahia));
+      });
+
+      console.log(matrizOriginal);
+
+      // Función para ordenar los datos en una nueva matriz 3x10
+      const ordenarMatriz = (matriz) => {
+        const nuevaMatriz = Array.from({ length: 3 }, () => Array(10).fill(""));
+
+        // Recorrer la matriz original y colocar los datos en la nueva matriz
+        for (let i = 0; i < matriz[0].length; i++) {
+          const nombre = matriz[0][i];
+          const bahia = matriz[1][i] - 1; // Ajustar bahía para índice 0
+
+          // Calcular la posición en la nueva matriz
+          const fila = Math.floor(bahia / 10);
+          const columna = bahia % 10;
+
+          // Concatenar los valores con comas si ya existe un valor en esa posición
+          if (nuevaMatriz[fila][columna]) {
+            nuevaMatriz[fila][columna] += `,${nombre}`;
+          } else {
+            nuevaMatriz[fila][columna] = nombre;
+          }
         }
 
-        const results = await response.json();
+        return nuevaMatriz;
+      };
 
-        // Matriz para guardar los datos transformados
-        const matrizOriginal = [[], []];
+      // Llamar a la función para ordenar la matriz
+      const matrizOrdenada = ordenarMatriz(matrizOriginal);
+      console.log("Matriz ordenada:", matrizOrdenada);
 
-        // Función para extraer solo el número del texto si es una cadena
-        const extractNumber = (text) => {
-          if (typeof text === "string") {
-            const match = text.match(/\d+/); // Busca el primer número en el texto
-            return match ? match[0] : text; // Si encuentra un número, lo devuelve, de lo contrario devuelve el texto original
-          }
-          return text; // Si no es una cadena, devuelve el valor original
-        };
-
-        // Recorrer los resultados y transformar los valores
-        results.forEach((row) => {
-          matrizOriginal[0].push(extractNumber(row.Nombre));
-          matrizOriginal[1].push(extractNumber(row.Bahia));
+      try {
+        const saveResponse = await fetch("http://localhost:5000/saveM1", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ matriz: matrizOrdenada }), // Asegúrate de tener 'matrizOrdenada' definida aquí
         });
 
-        console.log(matrizOriginal);
-
-        // Función para ordenar los datos en una nueva matriz 3x10
-        const ordenarMatriz = (matriz) => {
-          const nuevaMatriz = Array.from({ length: 3 }, () =>
-            Array(10).fill("")
-          );
-
-          // Recorrer la matriz original y colocar los datos en la nueva matriz
-          for (let i = 0; i < matriz[0].length; i++) {
-            const nombre = matriz[0][i];
-            const bahia = matriz[1][i] - 1; // Ajustar bahía para índice 0
-
-            // Calcular la posición en la nueva matriz
-            const fila = Math.floor(bahia / 10);
-            const columna = bahia % 10;
-
-            // Concatenar los valores con comas si ya existe un valor en esa posición
-            if (nuevaMatriz[fila][columna]) {
-              nuevaMatriz[fila][columna] += `,${nombre}`;
-            } else {
-              nuevaMatriz[fila][columna] = nombre;
-            }
-          }
-
-          return nuevaMatriz;
-        };
-
-        // Llamar a la función para ordenar la matriz
-        const matrizOrdenada = ordenarMatriz(matrizOriginal);
-        console.log("Matriz ordenada:", matrizOrdenada);
+        if (!saveResponse.ok) {
+          throw new Error("Error al guardar la matriz en la base de datos");
+        }
+        console.log("Matriz guardada exitosamente");
       } catch (error) {
-        console.error("Error al generar la matriz M1:", error);
+        console.error("Error al guardar la matriz en la base de datos:", error);
       }
-    };
+    } catch (error) {
+      console.error("Error al generar la matriz M1:", error);
+    }
+  };
 
+  useEffect(() => {
     // Llamar a la función para generar la matriz
     GenerarM1();
   }, []); // Se ejecutará solo una vez cuando el componente se monte
 
   useEffect(() => {
+    // Llamar a la función para crear la tabla cuando el componente se monte
     createTable();
 
     if (!isEditing) {
@@ -88,20 +104,10 @@ function Ingresomaterial() {
     }
   }, [selectedStation, isEditing]);
 
-  useEffect(() => {
-    createTable();
-
-    if (!isEditing) {
-      fetchData(selectedStation);
-      const interval = setInterval(() => fetchData(selectedStation), 2000); // Actualiza cada 2 segundos
-      return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente o cambiar el modo
-    }
-  }, [selectedStation, isEditing]);
-
   // Crear la tabla cuando el componente se monte
   const createTable = async () => {
     try {
-      const response = await fetch("http://localhost:5000/tableM1", {
+      const response = await fetch("http://localhost:5000/createTableM1", {
         method: "POST",
       });
       if (!response.ok) {
