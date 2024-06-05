@@ -11,13 +11,33 @@ function Ingresomaterial() {
   const [selectedStation, setSelectedStation] = useState('1');
   const [isEditing, setIsEditing] = useState(false); // Estado para controlar el modo edición
 
+
   useEffect(() => {
+    
+      // Crear la tabla cuando el componente se monte
+  const createTable = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/tableM1", {
+        method: "POST",
+      });
+      if (!response.ok) {
+        throw new Error("Error al crear la tabla");
+      }
+      console.log("Tabla 'M1' creada o ya existe");
+    } catch (error) {
+      console.error("Error al crear la tabla:", error);
+    }
+  };
+
+  createTable();
+
     if (!isEditing) {
       fetchData(selectedStation);
       const interval = setInterval(() => fetchData(selectedStation), 2000); // Actualiza cada 5 segundos
       return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente o cambiar el modo
     }
   }, [selectedStation, isEditing]);
+
 
   const fetchData = async (stationNumber) => {
     try {
