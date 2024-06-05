@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from 'react-helmet';
+import { Link } from "react-router-dom";
 import Header from "../components/header";
 import "./IngresoMaterial.css";
-import { Link } from "react-router-dom";
 
 
 
@@ -72,28 +72,17 @@ function Ingresomaterial() {
 
   };
 
+
   return (
     <div>
       <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          href="./Media/Nunito-Italic-VariableFont_wght.ttf"
           rel="stylesheet"
         />
       </Helmet>
       <Header titulo="Ingreso de material" />
       <div className="container-Ingreso">
-        <div className="contenedor-labelingreso">
-          <span className="elemento-labelingreso"></span>
-          <input
-            type="checkbox"
-            id="checklist"
-            className="custom-checkbox-estado"
-            onChange={handleCheckboxChange} // Maneja el cambio en el checkbox
-          />
-          <span className="elemento-label"> Estado de Edición</span>
-        </div>
         <div className="container-estacion" style={{ textAlign: 'left' }}>
           <span>Seleccione la estación de interés:</span>
           <select
@@ -109,6 +98,16 @@ function Ingresomaterial() {
             <button className="boton-ingreso"
               onClick={handleSaveChanges}>Guardar Cambios</button>
           </Link>
+        </div>
+        <div className="contenedor-labelingreso">
+          <span className="elemento-labelingreso"></span>
+          <input
+            type="checkbox"
+            id="checklist"
+            className="custom-checkbox-estado"
+            onChange={handleCheckboxChange} // Maneja el cambio en el checkbox
+          />
+          <span className="elemento-label"> Estado de Edición</span>
         </div>
       </div>
       <div className="container-ingreso">
@@ -134,4 +133,5 @@ function Ingresomaterial() {
     </div>
   );
 }
+
 export default Ingresomaterial;

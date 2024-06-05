@@ -54,6 +54,10 @@ td {
     /* Color del texto */
 }
 
+.botton {
+    font-family: "Nunito", sans-serif;
+}
+
 /* Media query para pantallas de hasta 600px de ancho (teléfonos en modo vertical) */
 @media only screen and (max-width: 600px) {
     .container-inventario {
@@ -107,7 +111,10 @@ td {
         /* Ajustar el tamaño de la fuente */
     }
 }
+
 .table-contenido {
-    max-height: 400px; /* Altura máxima del contenedor */
-    overflow-y: auto; /* Scroll vertical cuando sea necesario */
+    max-height: 400px;
+    /* Altura máxima del contenedor */
+    overflow-y: auto;
+    /* Scroll vertical cuando sea necesario */
 }
