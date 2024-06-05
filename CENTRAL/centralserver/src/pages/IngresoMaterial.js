@@ -171,6 +171,7 @@ function Ingresomaterial() {
       .catch((error) => {
         console.error("Error:", error);
       });
+      GenerarM1();
   };
 
   return (
