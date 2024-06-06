@@ -44,12 +44,14 @@ function Pick() {
         })
         .then((data) => {
           const pedido = data.pedidoRealizado;
-          const kits = pedido.split(',').map(num => `Kit ${num}`);
-          setPiezasPorVerificar(kits);
-          setPedidoRealizado(kits);
-          setPiezasVerificadas([]);
-          if (initialPedidoRealizado.length === 0) {
-            setInitialPedidoRealizado(kits);
+          if (pedido) {
+            const kits = pedido.split(',').map(num => `Kit ${num}`);
+            setPiezasPorVerificar(kits);
+            setPedidoRealizado(kits);
+            setPiezasVerificadas([]);
+            if (initialPedidoRealizado.length === 0) {
+              setInitialPedidoRealizado(kits);
+            }
           }
         })
         .catch((error) => {
@@ -98,7 +100,7 @@ function Pick() {
       .then((data) => {
         const pedidoVerificado = data.pedidoRealizado.split(',').map(num => `Kit ${num}`);
         const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
-        setPiezasPorVerificar((prevState) => prevState.filter(kit => !kitsVerificados.includes(kit)));
+        setPiezasPorVerificar(pedidoVerificado);
         setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
 
         if (data.descuentoPedido === "") {
@@ -123,12 +125,14 @@ function Pick() {
       })
       .then((data) => {
         const pedido = data.pedidoRealizado;
-        const pedidoVerificado = pedido.split(',').map(num => `Kit ${num}`);
-        const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
-        setPiezasPorVerificar(pedidoVerificado);
-        setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
-        if (pedidoVerificado.length === 0) {
-          setPopupVisible(true);
+        if (pedido) {
+          const pedidoVerificado = pedido.split(',').map(num => `Kit ${num}`);
+          const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
+          setPiezasPorVerificar(pedidoVerificado);
+          setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
+          if (pedidoVerificado.length === 0) {
+            setPopupVisible(true);
+          }
         }
       })
       .catch((error) => {
@@ -179,14 +183,13 @@ function Pick() {
         <p>Último EP encontrado: {epValue}</p>
       </div>
       <div className="status-container">
-
         <div className="status-box">
           <h3>Piezas por verificar:</h3>
-          <p>{piezasPorVerificar.join(', ')}</p>
+          <p>{piezasPorVerificar.length > 0 ? piezasPorVerificar.join(', ') : "Ninguna"}</p>
         </div>
         <div className="status-box">
           <h3>Piezas verificadas:</h3>
-          <p>{piezasVerificadas.join(', ')}</p>
+          <p>{piezasVerificadas.length > 0 ? piezasVerificadas.join(', ') : "Ninguna"}</p>
         </div>
       </div>
       {popupVisible && (
