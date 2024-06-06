@@ -214,7 +214,7 @@ function Estado() {
           if (previousStationNumber !== stationNumber) {
             // Si hay una Estacion anterior y es diferente a la actual, enviar solicitud para actualizar su estado a "No Armado"
             if (previousStationNumber) {
-              const responsePrev = await fetch("http://10.20.5.134:5000/modos", {
+              const responsePrev = await fetch("http://localhost:5000/modos", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -237,7 +237,7 @@ function Estado() {
             }
 
             // Enviar solicitud para actualizar el estado de la nueva Estacion a "Armado"
-            const responseCurr = await fetch("http://10.20.5.134:5000/modos", {
+            const responseCurr = await fetch("http://localhost:5000/modos", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -271,7 +271,7 @@ function Estado() {
             for (let stationNumber = 1; stationNumber <= 7; stationNumber++) {
               const columnName = `Estacion_${stationNumber}`;
 
-              const response = await fetch("http://10.20.5.134:5000/modos", {
+              const response = await fetch("http://localhost:5000/modos", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

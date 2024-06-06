@@ -12,7 +12,7 @@ function Ingresomaterial() {
   const GenerarM1 = async () => {
     try {
       // Realizar la solicitud al endpoint para obtener los datos
-      const response = await fetch("http://10.20.5.134:5000/getm1");
+      const response = await fetch("http://localhost:5000/getm1");
       if (!response.ok) {
         throw new Error("Error al obtener los datos de la tabla DATOS");
       }
@@ -108,7 +108,7 @@ function Ingresomaterial() {
   // Crear la tabla cuando el componente se monte
   const createTable = async () => {
     try {
-      const response = await fetch("http://10.20.5.134:5000/createTableM1", {
+      const response = await fetch("http://localhost:5000/createTableM1", {
         method: "POST",
       });
       if (!response.ok) {
@@ -123,7 +123,7 @@ function Ingresomaterial() {
   const fetchData = async (stationNumber) => {
     try {
       const response = await fetch(
-        `http://10.20.5.134:5000/estaciones/${stationNumber}`
+        `http://localhost:5000/estaciones/${stationNumber}`
       );
       if (!response.ok) {
         throw new Error("Error al obtener los datos");
@@ -152,7 +152,7 @@ function Ingresomaterial() {
   };
 
   const handleSaveChanges = () => {
-    fetch("http://10.20.5.134:5000/guardarCambios", {
+    fetch("http://localhost:5000/guardarCambios", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

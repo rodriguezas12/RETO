@@ -35,7 +35,7 @@ function Pick() {
 
   useEffect(() => {
     const fetchUltimoPedido = () => {
-      fetch("http://10.20.5.134:5000/ultimoPedido")
+      fetch("http://localhost:5000/ultimoPedido")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -82,7 +82,7 @@ function Pick() {
   };
 
   const updateInventory = (ep) => {
-    fetch("http://10.20.5.134:5000/actualizarInventario", {
+    fetch("http://localhost:5000/actualizarInventario", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -144,7 +144,7 @@ function Pick() {
     setInitialPedidoRealizado([]);
 
     // Realizar el POST al backend para cancelar el pedido
-    fetch("http://10.20.5.134:5000/cancelarPedido", {
+    fetch("http://localhost:5000/cancelarPedido", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
