@@ -98,8 +98,14 @@ export default function Picking() {
   return (
     <div className="picking-container">
       <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
-          href="./Media/Nunito-Italic-VariableFont_wght.ttf"
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="true"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
           rel="stylesheet"
         />
       </Helmet>
@@ -125,9 +131,9 @@ export default function Picking() {
           );
         })}
       </div>
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
+      <div style={{ textAlign: "center", marginTop: "10px" }}>
         <Link to="/pick">
-          <button className='boton-solicitud' onClick={enviarPedido}>Enviar</button>
+          <button className='boton-solicitud' onClick={enviarPedido} style={{ fontSize: "17px" }}>Enviar</button>
         </Link>
       </div>
     </div>

@@ -43,9 +43,11 @@ nombres_tags = {
 #CONEXIÓN A LA DB#
 ##################
 
-conexion = mysql.connector.connect(user='admin', password='usuario123', host='db-retorfid.cdsc040qszy0.us-east-2.rds.amazonaws.com',
-database='RETORFID', port='3306')
+# conexion = mysql.connector.connect(user='admin', password='usuario123', host='db-retorfid.cdsc040qszy0.us-east-2.rds.amazonaws.com',
+#                                   database='RETORFID', port='3306')
 
+conexion = mysql.connector.connect(user='root', password='asdasd', host='localhost',
+                                   database='prueba', port='3306')
 cursor = conexion.cursor()
 
 ####################
