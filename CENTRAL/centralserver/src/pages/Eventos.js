@@ -30,13 +30,13 @@ function Eventos() {
   const [showStationDropdown, setShowStationDropdown] = useState(false);
 
   const stations = [
-    "Estación 1",
-    "Estación 2",
-    "Estación 3",
-    "Estación 4",
-    "Estación 5",
-    "Estación 6",
-    "Estación 7",
+    "Estacion 1",
+    "Estacion 2",
+    "Estacion 3",
+    "Estacion 4",
+    "Estacion 5",
+    "Estacion 6",
+    "Estacion 7",
   ];
 
   useEffect(() => {
@@ -77,7 +77,7 @@ function Eventos() {
         entrada: checkboxes.entrada ? "true" : "",
       }).toString();
 
-      const response = await fetch(`http://localhost:5000/eventos?${query}`);
+      const response = await fetch(`http://10.20.5.134:5000/eventos?${query}`);
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
@@ -368,7 +368,7 @@ function Eventos() {
       {showStationDropdown && (
         <div className="eventos-container-conteo">
           <div className="eventos-contenedor-label1">
-            <span className="eventos-elemento-label">Seleccione la estación de interés:</span>
+            <span className="eventos-elemento-label">Seleccione la Estacion de interés:</span>
             <select
               className="eventos-elemento-valor"
               value={selectedStation}
@@ -376,8 +376,8 @@ function Eventos() {
             >
               <option value="Seleccionar">Seleccionar</option>
               {stations.map((station, index) => (
-                <option key={index} value={`Estación ${index + 1}`}>
-                  Estación {index + 1}
+                <option key={index} value={`Estacion ${index + 1}`}>
+                  Estacion {index + 1}
                 </option>
               ))}
             </select>

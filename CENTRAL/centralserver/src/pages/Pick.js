@@ -35,7 +35,7 @@ function Pick() {
 
   useEffect(() => {
     const fetchUltimoPedido = () => {
-      fetch("http://localhost:5000/ultimoPedido")
+      fetch("http://10.20.5.134:5000/ultimoPedido")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -45,7 +45,7 @@ function Pick() {
         .then((data) => {
           const pedido = data.pedidoRealizado;
           if (pedido) {
-            const kits = pedido.split(',').map(num => `Kit ${num}`);
+            const kits = pedido.split(",").map((num) => `Kit ${num}`);
             setPiezasPorVerificar(kits);
             setPedidoRealizado(kits);
             setPiezasVerificadas([]);
@@ -60,32 +60,29 @@ function Pick() {
     };
 
     fetchUltimoPedido();
-  }, []);
 
-  useEffect(() => {
-    let colorr;
     const interval = setInterval(() => {
       if (piezasPorVerificar.length > 0) {
-        updatePiezas(colorr);
+        fetchUltimoPedido();
       }
     }, 2000); // Consulta cada 2 segundos
 
     return () => clearInterval(interval);
-  }, [piezasPorVerificar]);
+  }, [piezasPorVerificar, initialPedidoRealizado.length]);
 
   const searchEP = (text) => {
     const regex = /EP:\s*([A-Z0-9]+)/;
     const match = text.match(regex);
     if (match) {
       setEpValue(match[1]);
-      updateInv(match[1]);
+      updateInventory(match[1]);
     } else {
       setEpValue("");
     }
   };
 
-  const updateInv = (ep) => {
-    fetch("http://localhost:5000/actualizarINV", {
+  const updateInventory = (ep) => {
+    fetch("http://10.20.5.134:5000/actualizarInventario", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -99,10 +96,23 @@ function Pick() {
         return response.json();
       })
       .then((data) => {
-        const pedidoVerificado = data.pedidoRealizado.split(',').map(num => `Kit ${num}`);
-        const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
+        console.log("Data received from server:", data);
+
+        if (!data.pedidoRealizado) {
+          console.error("pedidoRealizado is missing in the response data");
+          return;
+        }
+
+        const pedidoVerificado = data.pedidoRealizado
+          .split(",")
+          .map((num) => `Kit ${num}`);
+        const kitsVerificados = piezasPorVerificar.filter(
+          (kit) => !pedidoVerificado.includes(kit)
+        );
         setPiezasPorVerificar(pedidoVerificado);
-        setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
+        setPiezasVerificadas((prevState) => [
+          ...new Set([...prevState, ...kitsVerificados]),
+        ]);
 
         if (data.descuentoPedido === "") {
           setPopupVisible(true);
@@ -110,31 +120,6 @@ function Pick() {
 
         // Incrementa el contador de POST
         setPostCount((prevCount) => prevCount + 1);
-      })
-      .catch((error) => {
-        console.error("There was an error with the fetch operation:", error);
-      });
-  };
-
-  const updatePiezas = (colorr) => {
-    fetch("http://localhost:5000/ultimoPedido")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const pedido = data.pedidoRealizado;
-        if (pedido) {
-          const pedidoVerificado = pedido.split(',').map(num => `Kit ${num}`);
-          const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
-          setPiezasPorVerificar(pedidoVerificado);
-          setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
-          if (pedidoVerificado.length === 0) {
-            setPopupVisible(true);
-          }
-        }
       })
       .catch((error) => {
         console.error("There was an error with the fetch operation:", error);
@@ -159,7 +144,7 @@ function Pick() {
     setInitialPedidoRealizado([]);
 
     // Realizar el POST al backend para cancelar el pedido
-    fetch("http://localhost:5000/cancelarPedido", {
+    fetch("http://10.20.5.134:5000/cancelarPedido", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -238,4 +223,3 @@ function Pick() {
 }
 
 export default Pick;
-

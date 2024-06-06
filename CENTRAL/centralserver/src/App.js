@@ -45,23 +45,7 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
-  useEffect(() => {
-    const checkTimeDifference = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/check-time-difference');
-        const { timeDifference } = response.data;
-        console.log(`Time difference: ${timeDifference} seconds`);
-        setShowPopup(timeDifference > 20);
-      } catch (error) {
-        console.error('Error checking time difference:', error);
-      }
-    };
-
-    //checkTimeDifference();
-    const interval = setInterval(checkTimeDifference, 5000); // Check every 5 seconds
-
-    return () => clearInterval(interval);
-  }, []);
+  
 
   return (
     <BrowserRouter>

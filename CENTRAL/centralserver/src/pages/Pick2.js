@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import Header from "../components/header";
 import "./Pick.css";
+import axios from 'axios';
 
-function Pick() {
+function Pick2() {
     const [rfidText, setRfidText] = useState("");
     const [epValue, setEpValue] = useState("");
 
@@ -44,7 +45,7 @@ function Pick() {
     };
 
     const updateInv = (ep) => {
-        fetch("http://localhost:5000/ingresoabodega", {
+        fetch("http://10.20.5.134:5000/actualizarINV", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -57,7 +58,17 @@ function Pick() {
                 }
                 return response.json();
             })
+            .then((data) => {
+                // Manejar los datos de la respuesta
+                console.log("Respuesta del servidor:", data);
+                // Aquí puedes agregar cualquier lógica adicional para manejar la respuesta
+            })
+            .catch((error) => {
+                console.error("Hubo un problema con la solicitud fetch:", error);
+                // Manejar el error, por ejemplo, mostrar un mensaje al usuario
+            });
     };
+    
 
     const handleRfidTextChange = (event) => {
         const text = event.target.value.slice(0, 36);
@@ -105,4 +116,4 @@ function Pick() {
     );
 }
 
-export default Pick;
+export default Pick2;
