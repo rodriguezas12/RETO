@@ -39,7 +39,6 @@ app.get("/api/check-time-difference", (req, res) => {
       const lastTime = results[0].Hora;
       const currentTime = new Date();
       const timeDifference = (currentTime - new Date(lastTime)) / 1000; // Convert to seconds
-      console.log(`Last time: ${lastTime}, Current time: ${currentTime}`);
       return res.json({ lastTime, currentTime, timeDifference });
     }
   );
@@ -855,6 +854,7 @@ app.post("/actualizarINV", (req, res) => {
     // Extraer el número del Kit desde el nombre
     const regex = /Kit (\d+)/;
     const match = nombre.match(regex);
+
     if (match) {
       kitNumber = match[1]; // Aquí asignamos el número de kit encontrado
       console.log(`Número del Kit del EP: ${kitNumber}`);
@@ -943,6 +943,7 @@ app.post("/actualizarINV", (req, res) => {
           );
         } else {
           console.log(`No fue solicitado el Kit: ${kitNumber}`);
+
           res.status(200).json({
             piezasPorVerificar: 0,
             piezasVerificadas: 0,
@@ -1163,7 +1164,10 @@ app.post("/saveM1", async (req, res) => {
       new Promise((resolve, reject) => {
         db.query(updateQuery, values1, (err, result) => {
           if (err) {
-            console.error("Error al actualizar datos en la tabla M1 (fila 1):", err);
+            console.error(
+              "Error al actualizar datos en la tabla M1 (fila 1):",
+              err
+            );
             return reject(err);
           }
           resolve(result);
@@ -1172,7 +1176,10 @@ app.post("/saveM1", async (req, res) => {
       new Promise((resolve, reject) => {
         db.query(updateQuery, values2, (err, result) => {
           if (err) {
-            console.error("Error al actualizar datos en la tabla M1 (fila 2):", err);
+            console.error(
+              "Error al actualizar datos en la tabla M1 (fila 2):",
+              err
+            );
             return reject(err);
           }
           resolve(result);
@@ -1181,7 +1188,10 @@ app.post("/saveM1", async (req, res) => {
       new Promise((resolve, reject) => {
         db.query(updateQuery, values3, (err, result) => {
           if (err) {
-            console.error("Error al actualizar datos en la tabla M1 (fila 3):", err);
+            console.error(
+              "Error al actualizar datos en la tabla M1 (fila 3):",
+              err
+            );
             return reject(err);
           }
           resolve(result);
@@ -1192,10 +1202,11 @@ app.post("/saveM1", async (req, res) => {
     res.status(200).json({ message: "Matriz actualizada exitosamente" });
   } catch (error) {
     console.error("Error al guardar la matriz en la base de datos:", error);
-    res.status(500).json({ error: "Error al guardar la matriz en la base de datos" });
+    res
+      .status(500)
+      .json({ error: "Error al guardar la matriz en la base de datos" });
   }
 });
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
