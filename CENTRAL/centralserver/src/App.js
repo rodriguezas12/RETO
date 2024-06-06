@@ -2,8 +2,12 @@
 
 
 // App.js
-import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import '../src/components/Popup.css'; // Asegúrate de tener los estilos para el popup
+import Asignacion from "./pages/Asignacion";
+import Contenido from "./pages/Contenido";
 import Estado from "./pages/Estado";
 import Eventos from "./pages/Eventos";
 import Home from "./pages/Home";
@@ -11,14 +15,10 @@ import IngresoMaterial from "./pages/IngresoMaterial";
 import Inventario from "./pages/Inventario";
 import Menu from "./pages/Menu";
 import Nopage from "./pages/Nopage";
-import Register from "./pages/Register";
-import Solicitud from "./pages/Solicitud";
-import Asignacion from "./pages/Asignacion";
-import Contenido from "./pages/Contenido";
 import Pick from "./pages/Pick";
 import Pick2 from "./pages/Pick2";
-import axios from 'axios';
-import '../src/components/Popup.css'; // Asegúrate de tener los estilos para el popup
+import Register from "./pages/Register";
+import Solicitud from "./pages/Solicitud";
 
 function PrivateRoute({ element, isAuthenticated, showPopup, message }) {
   return isAuthenticated ? (
@@ -57,7 +57,7 @@ const App = () => {
       }
     };
 
-    checkTimeDifference();
+    //checkTimeDifference();
     const interval = setInterval(checkTimeDifference, 5000); // Check every 5 seconds
 
     return () => clearInterval(interval);
