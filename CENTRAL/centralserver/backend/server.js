@@ -442,10 +442,6 @@ app.get("/kits_info", (req, res) => {
     WHERE INV = 'SI'
     GROUP BY Nombre
   `;
-  const contenidoCompletoQuery = `
-    SELECT Kits, Contenido
-    FROM Contenido
-  `;
 
   db.query(contenidoQuery, (err, contenidoResults) => {
     if (err) {
@@ -461,31 +457,17 @@ app.get("/kits_info", (req, res) => {
         return;
       }
 
-      db.query(contenidoCompletoQuery, (err, contenidoCompletoResults) => {
-        if (err) {
-          console.error("Error al obtener el contenido de los kits:", err);
-          res.status(500).send("Error en el servidor");
-          return;
-        }
+      const disponibles = disponibilidadResults.reduce((acc, row) => {
+        acc[row.Nombre] = row.Disponibles;
+        return acc;
+      }, {});
 
-        const disponibles = disponibilidadResults.reduce((acc, row) => {
-          acc[row.Nombre] = row.Disponibles;
-          return acc;
-        }, {});
+      console.log("Número de kits en Contenido:", contenidoResults[0].count);
+      console.log("Disponibles:", disponibles);
 
-        const contenido = contenidoCompletoResults.reduce((acc, row) => {
-          acc[row.Kits] = row.Contenido;
-          return acc;
-        }, {});
-
-        console.log("Número de kits en Contenido:", contenidoResults[0].count);
-        console.log("Disponibles:", disponibles);
-
-        res.json({
-          contenidoCount: contenidoResults[0].count,
-          disponibles: disponibles,
-          contenido: contenido,
-        });
+      res.json({
+        contenidoCount: contenidoResults[0].count,
+        disponibles: disponibles,
       });
     });
   });
@@ -674,8 +656,6 @@ app.post("/solicitar", (req, res) => {
     });
   });
 });
-
-
 // Desde aqui se implementa ingreso de material
 app.post("/guardarCambios", (req, res) => {
   const updates = req.body; // Los datos enviados desde el frontend
