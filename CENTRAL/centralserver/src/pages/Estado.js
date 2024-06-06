@@ -22,20 +22,20 @@ function Estado() {
 
   // Simulación de datos de estaciones
   const stations = [
-    "Estación 1",
-    "Estación 2",
-    "Estación 3",
-    "Estación 4",
-    "Estación 5",
-    "Estación 6",
-    "Estación 7",
+    "Estacion 1",
+    "Estacion 2",
+    "Estacion 3",
+    "Estacion 4",
+    "Estacion 5",
+    "Estacion 6",
+    "Estacion 7",
   ];
 
   useEffect(() => {
     // Crear la tabla cuando el componente se monte
     const createTable = async () => {
       try {
-        const response = await fetch("http://localhost:5000/tablemode", {
+        const response = await fetch("http://10.20.5.134:5000/tablemode", {
           method: "POST",
         });
         if (!response.ok) {
@@ -53,10 +53,10 @@ function Estado() {
         // Sustituir espacio por '_' para coincidir con el nombre de la tabla
         const stationNumber = selectedStation.split(" ")[1];
 
-        // Realizar la consulta a la tabla correspondiente para la estación seleccionada
+        // Realizar la consulta a la tabla correspondiente para la Estacion seleccionada
         try {
           const response = await fetch(
-            `http://localhost:5000/estaciones/${stationNumber}`
+            `http://10.20.5.134:5000/estaciones/${stationNumber}`
           );
           if (!response.ok) {
             throw new Error(
@@ -124,7 +124,7 @@ function Estado() {
   // Función para manejar el clic en el botón de Play/Pause
   const handlePlayPauseClick = () => {
     if (!stations.includes(selectedStation)) {
-      setMensaje("Por favor, seleccione una estación de trabajo");
+      setMensaje("Por favor, seleccione una Estacion de trabajo");
       setShowPopup(true);
       return;
     }
@@ -171,7 +171,7 @@ function Estado() {
     const descripcion = `Tiempo total de armado del Set: ${tiempoSet}`;
 
     // Enviar datos a la base de datos mediante POST
-    fetch("http://localhost:5000/sets", {
+    fetch("http://10.20.5.134:5000/sets", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -207,14 +207,14 @@ function Estado() {
   useEffect(() => {
     const updateModeTable = async () => {
       if (selectedStation) {
-        const stationNumber = selectedStation.split(" ")[1]; // Obtener el número de estación
+        const stationNumber = selectedStation.split(" ")[1]; // Obtener el número de Estacion
 
         try {
-          // Verificar si hubo un cambio en la estación seleccionada
+          // Verificar si hubo un cambio en la Estacion seleccionada
           if (previousStationNumber !== stationNumber) {
-            // Si hay una estación anterior y es diferente a la actual, enviar solicitud para actualizar su estado a "No Armado"
+            // Si hay una Estacion anterior y es diferente a la actual, enviar solicitud para actualizar su estado a "No Armado"
             if (previousStationNumber) {
-              const responsePrev = await fetch("http://localhost:5000/modos", {
+              const responsePrev = await fetch("http://10.20.5.134:5000/modos", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -227,17 +227,17 @@ function Estado() {
 
               if (!responsePrev.ok) {
                 throw new Error(
-                  "Error al enviar datos a la base de datos (estación anterior)"
+                  "Error al enviar datos a la base de datos (Estacion anterior)"
                 );
               }
 
               console.log(
-                `Estado de estación ${previousStationNumber} actualizado a 'No Armado'`
+                `Estado de Estacion ${previousStationNumber} actualizado a 'No Armado'`
               );
             }
 
-            // Enviar solicitud para actualizar el estado de la nueva estación a "Armado"
-            const responseCurr = await fetch("http://localhost:5000/modos", {
+            // Enviar solicitud para actualizar el estado de la nueva Estacion a "Armado"
+            const responseCurr = await fetch("http://10.20.5.134:5000/modos", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -250,12 +250,12 @@ function Estado() {
 
             if (!responseCurr.ok) {
               throw new Error(
-                "Error al enviar datos a la base de datos (nueva estación)"
+                "Error al enviar datos a la base de datos (nueva Estacion)"
               );
             }
 
             console.log(
-              `Estado de estación ${stationNumber} actualizado a 'Armado'`
+              `Estado de Estacion ${stationNumber} actualizado a 'Armado'`
             );
 
             // Actualizar el estado anterior con el nuevo valor de stationNumber
@@ -269,15 +269,15 @@ function Estado() {
           try {
             // Iterar sobre las estaciones del 1 al 7
             for (let stationNumber = 1; stationNumber <= 7; stationNumber++) {
-              const columnName = `Estación_${stationNumber}`;
+              const columnName = `Estacion_${stationNumber}`;
 
-              const response = await fetch("http://localhost:5000/modos", {
+              const response = await fetch("http://10.20.5.134:5000/modos", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  stationNumber: stationNumber, // Envía el número de estación actual
+                  stationNumber: stationNumber, // Envía el número de Estacion actual
                   columnValue: "No Armado",
                 }),
               });
@@ -328,7 +328,7 @@ function Estado() {
       <div className="container-conteo">
         <div className="contenedor-label1">
           <span className="elemento-label">
-            Seleccione la estación de interés:
+            Seleccione la Estacion de interés:
           </span>
           <select
             className="elemento-valor"
@@ -350,7 +350,7 @@ function Estado() {
             className="custom-checkbox-estado"
             onChange={handleCheckboxChange} // Maneja el cambio en el checkbox
           />
-          <span className="elemento-label">Estación Ensamble</span>
+          <span className="elemento-label">Estacion Ensamble</span>
         </div>
 
         {showButtons && (
@@ -382,7 +382,7 @@ function Estado() {
               <tr>
                 <th className="estado">ID</th>
                 <th className="estado">KIT</th>
-                <th className="estado">Hora de entrada a la estación</th>
+                <th className="estado">Hora de entrada a la Estacion</th>
                 <th className="estado">Tiempo Transcurrido</th>
               </tr>
             </thead>

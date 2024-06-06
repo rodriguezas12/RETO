@@ -12,7 +12,7 @@ function Ingresomaterial() {
   const GenerarM1 = async () => {
     try {
       // Realizar la solicitud al endpoint para obtener los datos
-      const response = await fetch("http://localhost:5000/getm1");
+      const response = await fetch("http://10.20.5.134:5000/getm1");
       if (!response.ok) {
         throw new Error("Error al obtener los datos de la tabla DATOS");
       }
@@ -46,7 +46,7 @@ function Ingresomaterial() {
         // Recorrer la matriz original y colocar los datos en la nueva matriz
         for (let i = 0; i < matriz[0].length; i++) {
           const nombre = matriz[0][i];
-          const bahia = matriz[1][i] - 1; // Ajustar bahía para índice 0
+          const bahia = matriz[1][i]; // Ajustar bahía para índice 0
 
           // Calcular la posición en la nueva matriz
           const fila = Math.floor(bahia / 10);
@@ -68,7 +68,7 @@ function Ingresomaterial() {
       console.log("Matriz ordenada:", matrizOrdenada);
 
       try {
-        const saveResponse = await fetch("http://localhost:5000/saveM1", {
+        const saveResponse = await fetch("http://10.20.5.134:5000/saveM1", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -108,7 +108,7 @@ function Ingresomaterial() {
   // Crear la tabla cuando el componente se monte
   const createTable = async () => {
     try {
-      const response = await fetch("http://localhost:5000/createTableM1", {
+      const response = await fetch("http://10.20.5.134:5000/createTableM1", {
         method: "POST",
       });
       if (!response.ok) {
@@ -123,7 +123,7 @@ function Ingresomaterial() {
   const fetchData = async (stationNumber) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/estaciones/${stationNumber}`
+        `http://10.20.5.134:5000/estaciones/${stationNumber}`
       );
       if (!response.ok) {
         throw new Error("Error al obtener los datos");
@@ -152,7 +152,7 @@ function Ingresomaterial() {
   };
 
   const handleSaveChanges = () => {
-    fetch("http://localhost:5000/guardarCambios", {
+    fetch("http://10.20.5.134:5000/guardarCambios", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
