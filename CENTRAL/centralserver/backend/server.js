@@ -486,6 +486,32 @@ app.post("/contenido1/:kits", (req, res) => {
   });
 });
 
+app.get("/contenido_kits", (req, res) => {
+  const contenidoQuery = `
+    SELECT Kits, Contenido
+    FROM Contenido
+  `;
+
+  db.query(contenidoQuery, (err, contenidoResults) => {
+    if (err) {
+      console.error("Error al obtener el contenido de los kits:", err);
+      res.status(500).send("Error en el servidor");
+      return;
+    }
+
+    const contenido = contenidoResults.reduce((acc, row) => {
+      acc[row.Kits] = row.Contenido;
+      return acc;
+    }, {});
+
+    res.json({
+      contenido: contenido,
+    });
+  });
+});
+
+
+
 app.post("/contenido1", (req, res) => {
   const { Kits, Contenido } = req.body;
 
