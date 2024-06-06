@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 export default function Picking() {
   const [numKits, setNumKits] = useState(0);
   const [disponibles, setDisponibles] = useState({});
+  const [contenido, setContenido] = useState({});
   const [carrito, setCarrito] = useState({});
 
   useEffect(() => {
@@ -16,8 +17,10 @@ export default function Picking() {
       .then((data) => {
         console.log("Número de kits en Contenido:", data.contenidoCount);
         console.log("Disponibles:", data.disponibles);
+        console.log("Contenido:", data.contenido);
         setNumKits(data.contenidoCount);
         setDisponibles(data.disponibles);
+        setContenido(data.contenido);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -104,6 +107,7 @@ export default function Picking() {
           return (
             <div key={index} className="kit-container">
               <h3>{kitName}</h3>
+              <p>{`Contenido: ${contenido[kitName] || 'No disponible'}`}</p>
               <p>{`Disponibles: ${disponibles[kitName] !== undefined ? disponibles[kitName] : 0}`}</p>
               <div>
                 <button onClick={() => addToCart(kitName)}>+</button>
