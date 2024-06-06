@@ -1156,9 +1156,6 @@ app.post("/ingresoabodega", (req, res) => {
   // Variable para almacenar el número de kit encontrado
   let kitNumber = null;
 
-  // Variable para almacenar el pedido descuentado
-  let descuentoPedido = null;
-
   // Verificar si el EP está en la tabla Datos
   db.query("SELECT Nombre FROM Datos WHERE Tag = ?", [EP], (err, results) => {
       if (err) {
@@ -1186,19 +1183,7 @@ app.post("/ingresoabodega", (req, res) => {
           console.log(`Número del Kit del EP: ${kitNumber}`);
 
           // Insertar el kitNumber en la tabla dropeo
-          db.query(
-              "INSERT INTO dropeo (dropp) VALUES (?)",
-              [kitNumber],
-              (insertErr, insertResults) => {
-                  if (insertErr) {
-                      console.error("Error al insertar en la tabla dropeo:", insertErr);
-                      res.status(500).send("Error interno del servidor");
-                      return;
-                  }
-                  console.log(`Número del Kit ${kitNumber} insertado en la tabla dropeo.`);
-              }
-          );
-
+          insertarEnDropeo(kitNumber);
       } else {
           console.log(
               `No se pudo encontrar el número del Kit en el nombre: ${nombre}`
@@ -1212,6 +1197,27 @@ app.post("/ingresoabodega", (req, res) => {
       }
 
       // Actualizar INV y Hora_salida_bodega en la tabla Datos
+      actualizarDatos(currentDateTime, EP);
+  });
+
+  // Función para insertar en la tabla dropeo
+  function insertarEnDropeo(kitNumber) {
+      db.query(
+          "INSERT INTO dropeo (dropp) VALUES (?)",
+          [kitNumber],
+          (insertErr, insertResults) => {
+              if (insertErr) {
+                  console.error("Error al insertar en la tabla dropeo:", insertErr);
+                  // No enviamos una respuesta de error aquí para no interrumpir la respuesta de la solicitud original
+                  return;
+              }
+              console.log(`Número del Kit ${kitNumber} insertado en la tabla dropeo.`);
+          }
+      );
+  }
+
+  // Función para actualizar INV y Hora_entrada_bodega en la tabla Datos
+  function actualizarDatos(currentDateTime, EP) {
       db.query(
           "UPDATE Datos SET INV = 'SI', Hora_entrada_bodega = ? WHERE Tag = ?",
           [currentDateTime, EP],
@@ -1227,10 +1233,12 @@ app.post("/ingresoabodega", (req, res) => {
               console.log(
                   `INV y Hora_entrada_bodega actualizados para EP: ${EP}, ${currentDateTime}`
               );
+              res.status(200).send("Operación completada correctamente");
           }
       );
-  });
+  }
 });
+
 
 
 
