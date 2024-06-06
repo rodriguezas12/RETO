@@ -157,6 +157,27 @@ function Pick() {
     setPiezasVerificadas([]);
     setPostCount(0);
     setInitialPedidoRealizado([]);
+
+    // Realizar el POST al backend para cancelar el pedido
+    fetch("http://localhost:5000/cancelarPedido", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data.message); // Log para verificar en la consola del navegador
+      })
+      .catch((error) => {
+        console.error("There was an error with the fetch operation:", error);
+      });
   };
 
   return (
@@ -208,8 +229,13 @@ function Pick() {
             </div>
           </div>
         )}
+        <div style={{ textAlign: "center", margin: "20px" }}>
+          <button onClick={closePopup}>Cancelar</button>
+        </div>
       </div>
     </div>
   );
 }
+
 export default Pick;
+

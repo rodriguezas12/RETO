@@ -1127,6 +1127,25 @@ app.get("/contenido_kits", (req, res) => {
   });
 });
 
+// Endpoint POST para cancelar el pedido
+app.post("/cancelarPedido", (req, res) => {
+  const pedido = ""; // Campo vacío para cancelar el pedido
+
+  db.query(
+    "INSERT INTO Solicitud (Pedido) VALUES (?)",
+    [pedido],
+    (err, result) => {
+      if (err) {
+        console.error("Error al cancelar el pedido:", err);
+        res.status(500).json({ error: "Error interno del servidor" });
+        return;
+      }
+      console.log("Pedido cancelado exitosamente");
+      res.status(200).json({ message: "Pedido cancelado exitosamente" });
+    }
+  );
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
