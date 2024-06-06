@@ -194,6 +194,10 @@ function Ingresomaterial() {
             <option value="1">Estación 1</option>
             <option value="2">Estación 2</option>
             <option value="3">Estación 3</option>
+            <option value="4">Estación 4</option>
+            <option value="5">Estación 5</option>
+            <option value="6">Estación 6</option>
+            <option value="7">Estación 7</option>
           </select>
           <Link to="/pick2">
             <button className="boton-ingreso" onClick={handleSaveChanges}>
@@ -235,5 +239,4 @@ function Ingresomaterial() {
     </div>
   );
 }
-//HOLAMUNDO
 export default Ingresomaterial;

@@ -39,7 +39,6 @@ app.get("/api/check-time-difference", (req, res) => {
       const lastTime = results[0].Hora;
       const currentTime = new Date();
       const timeDifference = (currentTime - new Date(lastTime)) / 1000; // Convert to seconds
-      console.log(`Last time: ${lastTime}, Current time: ${currentTime}`);
       return res.json({ lastTime, currentTime, timeDifference });
     }
   );
@@ -691,6 +690,7 @@ app.post("/actualizarINV", (req, res) => {
     // Extraer el número del Kit desde el nombre
     const regex = /Kit (\d+)/;
     const match = nombre.match(regex);
+
     if (match) {
       kitNumber = match[1]; // Aquí asignamos el número de kit encontrado
       console.log(`Número del Kit del EP: ${kitNumber}`);
@@ -779,6 +779,7 @@ app.post("/actualizarINV", (req, res) => {
           );
         } else {
           console.log(`No fue solicitado el Kit: ${kitNumber}`);
+
           res.status(200).json({
             piezasPorVerificar: 0,
             piezasVerificadas: 0,
@@ -999,7 +1000,10 @@ app.post("/saveM1", async (req, res) => {
       new Promise((resolve, reject) => {
         db.query(updateQuery, values1, (err, result) => {
           if (err) {
-            console.error("Error al actualizar datos en la tabla M1 (fila 1):", err);
+            console.error(
+              "Error al actualizar datos en la tabla M1 (fila 1):",
+              err
+            );
             return reject(err);
           }
           resolve(result);
@@ -1008,7 +1012,10 @@ app.post("/saveM1", async (req, res) => {
       new Promise((resolve, reject) => {
         db.query(updateQuery, values2, (err, result) => {
           if (err) {
-            console.error("Error al actualizar datos en la tabla M1 (fila 2):", err);
+            console.error(
+              "Error al actualizar datos en la tabla M1 (fila 2):",
+              err
+            );
             return reject(err);
           }
           resolve(result);
@@ -1017,7 +1024,10 @@ app.post("/saveM1", async (req, res) => {
       new Promise((resolve, reject) => {
         db.query(updateQuery, values3, (err, result) => {
           if (err) {
-            console.error("Error al actualizar datos en la tabla M1 (fila 3):", err);
+            console.error(
+              "Error al actualizar datos en la tabla M1 (fila 3):",
+              err
+            );
             return reject(err);
           }
           resolve(result);
@@ -1028,169 +1038,11 @@ app.post("/saveM1", async (req, res) => {
     res.status(200).json({ message: "Matriz actualizada exitosamente" });
   } catch (error) {
     console.error("Error al guardar la matriz en la base de datos:", error);
-    res.status(500).json({ error: "Error al guardar la matriz en la base de datos" });
+    res
+      .status(500)
+      .json({ error: "Error al guardar la matriz en la base de datos" });
   }
 });
-
-////////////////////////////////////////////////////////QUERYS NO USADOS//////////////////////////////
-
-app.get("/Kits_armados", (req, res) => {
-  db.query("SELECT * FROM Contenido", (err, results) => {
-    if (err) {
-      console.error("Error al obtener los datos de la tabla Solicitud:", err);
-      res.status(500).send("Error en el servidor");
-      return;
-    }
-    res.json(results);
-  });
-});
-
-
-app.post("/posicion", (req, res) => {
-  const {
-    Col1: col1,
-    Col2: col2,
-    Col3: col3,
-    Col4: col4,
-    Col5: col5,
-    Col6: col6,
-    Col7: col7,
-    Col8: col8,
-    Col9: col9,
-    Col10: col10,
-  } = req.body;
-
-  // Crear la tabla si no existe
-  const createTableM1Query = `
-    CREATE TABLE IF NOT EXISTS M1 (
-      \`ID\` INT AUTO_INCREMENT PRIMARY KEY,
-      \`Col1\` VARCHAR(255),
-      \`Col2\` VARCHAR(255),
-      \`Col3\` VARCHAR(255),
-      \`Col4\` VARCHAR(255),
-      \`Col5\` VARCHAR(255),
-      \`Col6\` VARCHAR(255),
-      \`Col7\` VARCHAR(255),
-      \`Col8\` VARCHAR(255),
-      \`Col9\` VARCHAR(255),
-      \`Col10\` VARCHAR(255)
-    );
-  `;
-
-  db.query(createTableM1Query, (createErr) => {
-    if (createErr) {
-      console.error("Error al crear/verificar la tabla M1:", createErr);
-      res.status(500).send("Error al crear la tabla M1");
-      return;
-    }
-
-    // Insertar datos en la tabla una vez creada
-    const insertQuery =
-      "INSERT INTO M1 (`Col1`, `Col2`, `Col3`, `Col4`, `Col5`, `Col6`, `Col7`, `Col8`, `Col9`, `Col10`) VALUES (?,?,?,?,?,?,?,?,?,?)";
-    db.query(
-      insertQuery,
-      [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10],
-      (err, results) => {
-        if (err) {
-          console.error("Error al insertar el registro:", err);
-          res.status(500).send("Error interno del servidor");
-          return;
-        }
-        console.log("Registro insertado correctamente");
-        res.status(201).send("Registro insertado correctamente");
-      }
-    );
-  });
-});
-
-
-app.get("/inventario_rack", (req, res) => {
-  const query = `
-      SELECT Nombre, COUNT(*) as Cantidad
-      FROM Datos
-      WHERE Nombre LIKE 'Kit %' AND INV = 'SI'
-      GROUP BY Nombre
-    `;
-
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error("Error al seleccionar registros:", err);
-      res.status(500).send("Error interno del servidor");
-    } else {
-      res.json(results);
-    }
-  });
-});
-
-app.get("/contabilidad-kits", (req, res) => {
-  db.query("SELECT * FROM Contabilidad_Kits", (err, results) => {
-    if (err) {
-      console.error("Error al obtener los datos de Contabilidad_Kits:", err);
-      res.status(500).send("Error en el servidor");
-      return;
-    }
-
-    res.json(results);
-  });
-});
-
-app.get("/said", (req, res) => {
-  // Consulta para obtener las últimas 3 filas ordenadas por una col específica
-  db.query(
-    `
-  SELECT * FROM (
-    SELECT *,
-    ROW_NUMBER() OVER (ORDER BY ID DESC) AS rn
-    FROM M1
-  ) AS numberedRows
-  WHERE rn <= 3
-  ORDER BY rn DESC;  
-  
-  `,
-    (err, results) => {
-      if (err) {
-        console.error("Error al obtener los datos de M1:", err);
-        res.status(500).send("Error en el servidor");
-        return;
-      }
-      res.json(results);
-    }
-  );
-});
-
-app.post("/eventosIngreso", (req, res) => {
-  const { usuario, evento, descripcion, fecha, hora } = req.body;
-
-  const insertEventoQuery =
-    "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)";
-
-  db.query(
-    insertEventoQuery,
-    [usuario, evento, descripcion, fecha, hora],
-    (err, results) => {
-      if (err) {
-        console.error("Error al insertar el evento:", err);
-        res.status(500).send("Error interno del servidor");
-        return;
-      }
-      console.log("Evento insertado correctamente");
-      res.status(201).send("Evento insertado correctamente");
-    }
-  );
-});
-
-app.get("/Datos", (req, res) => {
-  db.query("SELECT * FROM Datos", (err, results) => {
-    if (err) {
-      console.error("Error al obtener los datos de la tabla Solicitud:", err);
-      res.status(500).send("Error en el servidor");
-      return;
-    }
-    res.json(results);
-  });
-});
-
-
 
 
 const PORT = process.env.PORT || 5000;
