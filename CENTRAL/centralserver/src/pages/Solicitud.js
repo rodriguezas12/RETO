@@ -83,9 +83,7 @@ export default function Picking() {
       body: JSON.stringify({ nuevoPedido: pedido.join(","), nombreUsuario }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        alert(data.message); // Mostrar mensaje de éxito o error
-        // Limpiar el carrito después de enviar el pedido
+      .then((data) => { 
         setCarrito({});
       })
       .catch((error) => {
