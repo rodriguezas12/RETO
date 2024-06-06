@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet";
-import "./Asignacion.css";
-import Header from '../components/header';
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
+import Header from '../components/header';
+import "./Asignacion.css";
 
 const Asignacion = () => {
   const [tags, setTags] = useState([]);
@@ -99,17 +99,12 @@ const Asignacion = () => {
   return (
     <div>
       <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="true"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+          href="./Media/Nunito-Italic-VariableFont_wght.ttf"
           rel="stylesheet"
         />
       </Helmet>
+      <Header titulo="Asignación Kits" />
 
       <div className="contenedor">
         {/* Sección para TAG LEIDO */}

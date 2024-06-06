@@ -29,20 +29,31 @@ db.connect((err) => {
 });
 
 app.get("/api/check-time-difference", (req, res) => {
-  db.query(
-    "SELECT Hora FROM picking ORDER BY Hora DESC LIMIT 1",
-    (error, results) => {
-      if (error) {
-        console.error("Database query error:", error);
-        return res.status(500).json({ error: "Database query error" });
+  try {
+    db.query(
+      "SELECT Hora FROM picking ORDER BY Hora DESC LIMIT 1",
+      (error, results) => {
+        if (error) {
+          console.error("Database query error:", error);
+          return res.status(500).json({ error: "Database query error" });
+        }
+
+        if (results.length === 0) {
+          return res.status(404).json({ error: "No records found" });
+        }
+
+        const lastTime = results[0].Hora;
+        const currentTime = new Date();
+        const timeDifference = (currentTime - new Date(lastTime)) / 1000; // Convert to seconds
+        return res.json({ lastTime, currentTime, timeDifference });
       }
-      const lastTime = results[0].Hora;
-      const currentTime = new Date();
-      const timeDifference = (currentTime - new Date(lastTime)) / 1000; // Convert to seconds
-      return res.json({ lastTime, currentTime, timeDifference });
-    }
-  );
+    );
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    return res.status(500).json({ error: "Unexpected error" });
+  }
 });
+
 
 app.post("/register", (req, res) => {
   const { nombre, codigoEstudiantil, nrc } = req.body;
@@ -239,8 +250,7 @@ app.post("/sets", (req, res) => {
     }
   );
 });
-
-// ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+/////////////////////////////////////////////////////////
 // Obtener tags de la estación 1
 app.get("/tag", (req, res) => {
   db.query("SELECT Tag FROM Estación_1", (err, results) => {
@@ -373,7 +383,8 @@ app.post("/idkit/:tag", (req, res) => {
 });
 
 // ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
-// crear tabla de contenido
+
+///////////////////////////////////////////////////////
 
 // Crear la tabla 'Contenido' si no existe
 const createTableQuery = `
