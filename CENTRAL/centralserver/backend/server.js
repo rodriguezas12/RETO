@@ -173,6 +173,7 @@ app.get("/michi", (req, res) => {
               ID,
               Tag,
               Nombre,
+              Bahia,
               Cantidad,
               DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab,
               DATE_FORMAT(Hora_salida_lab, "%Y-%m-%d %H:%i:%s") AS Hora_salida_lab,
@@ -204,7 +205,7 @@ app.get("/contabilidad-kits", (req, res) => {
 });
 
 //Estaciones ^-^// Cambiar la ruta en el servidor para que espere el parámetro en la URL
-app.get("/estaciones/:numeroEstacion", (req, res) => {
+app.get("/Estaciones/:numeroEstacion", (req, res) => {
   const { numeroEstacion } = req.params;
 
   if (
@@ -213,11 +214,11 @@ app.get("/estaciones/:numeroEstacion", (req, res) => {
     numeroEstacion < 1 ||
     numeroEstacion > 7
   ) {
-    res.status(400).send("Número de estación inválido");
+    res.status(400).send("Número de Estacion inválido");
     return;
   }
 
-  const nombreTabla = `Estación_${numeroEstacion}`;
+  const nombreTabla = `Estacion_${numeroEstacion}`;
 
   db.query(`SELECT * FROM ${nombreTabla}`, (err, results) => {
     if (err) {
@@ -249,9 +250,9 @@ app.post("/sets", (req, res) => {
   );
 });
 /////////////////////////////////////////////////////////
-// Obtener tags de la estación 1
+// Obtener tags de la Estacion 1
 app.get("/tag", (req, res) => {
-  db.query("SELECT Tag FROM Estación_1", (err, results) => {
+  db.query("SELECT Tag FROM Estacion_1", (err, results) => {
     if (err) {
       console.error("Error al obtener los tags:", err);
       res.status(500).send("Error interno del servidor");
@@ -271,7 +272,7 @@ app.get("/nombrekit/:tag", (req, res) => {
   const { tag } = req.params;
 
   db.query(
-    "SELECT Kit FROM Estación_1 WHERE Tag = ?",
+    "SELECT Kit FROM Datos WHERE Tag = ?",
     [tag],
     (err, results) => {
       if (err) {
@@ -293,20 +294,20 @@ app.post("/nombrekit/:tag", (req, res) => {
   const { tag } = req.params;
   const { nombreKit } = req.body;
 
-  // Update Estación_1
+  // Update Estacion_1
   db.query(
-    "UPDATE Estación_1 SET Kit = ? WHERE Tag = ?",
+    "UPDATE Estacion_1 SET Kit = ? WHERE Tag = ?",
     [nombreKit, tag],
     (err, results) => {
       if (err) {
         console.error(
-          "Error al actualizar el nombre del kit en Estación_1:",
+          "Error al actualizar el nombre del kit en Estacion_1:",
           err
         );
         res.status(500).send("Error interno del servidor");
         return;
       }
-      console.log(`Nombre de kit actualizado para el tag ${tag} en Estación_1`);
+      console.log(`Nombre de kit actualizado para el tag ${tag} en Estacion_1`);
       // Update Datos
       db.query(
         "UPDATE Datos SET Nombre = ? WHERE Tag = ?",
@@ -332,7 +333,7 @@ app.post("/nombrekit/:tag", (req, res) => {
 app.get("/idkit/:tag", (req, res) => {
   const { tag } = req.params;
 
-  db.query("SELECT Id FROM Estación_1 WHERE Tag = ?", [tag], (err, results) => {
+  db.query("SELECT Id FROM Datos WHERE Tag = ?", [tag], (err, results) => {
     if (err) {
       console.error("Error al obtener el ID del kit:", err);
       res.status(500).send("Error interno del servidor");
@@ -351,17 +352,17 @@ app.post("/idkit/:tag", (req, res) => {
   const { tag } = req.params;
   const { idKit } = req.body;
 
-  // Update Estación_1
+  // Update Estacion_1
   db.query(
-    "UPDATE Estación_1 SET Id = ? WHERE Tag = ?",
+    "UPDATE Estacion_1 SET Id = ? WHERE Tag = ?",
     [idKit, tag],
     (err, results) => {
       if (err) {
-        console.error("Error al actualizar el ID del kit en Estación_1:", err);
+        console.error("Error al actualizar el ID del kit en Estacion_1:", err);
         res.status(500).send("Error interno del servidor");
         return;
       }
-      console.log(`ID de kit actualizado para el tag ${tag} en Estación_1`);
+      console.log(`ID de kit actualizado para el tag ${tag} en Estacion_1`);
       // Update Datos
       db.query(
         "UPDATE Datos SET Id = ? WHERE Tag = ?",
@@ -670,7 +671,7 @@ app.post("/guardarCambios", (req, res) => {
   const updates = req.body; // Los datos enviados desde el frontend
 
   // Define la consulta SQL para actualizar la col Bahia en la tabla Datos
-  const query = "UPDATE RETORFID.Datos SET Bahia = ? WHERE ID = ?";
+  const query = "UPDATE Datos SET Bahia = ? WHERE ID = ?";
   // Ejecuta la consulta SQL para cada actualización
   updates.forEach((update) => {
     const { id, bahia } = update;
@@ -708,7 +709,7 @@ app.get("/ultimoPedido", (req, res) => {
   );
 });
 
-app.post("/actualizarINV", (req, res) => {
+app.post("/actualizarInventario", (req, res) => {
   const { EP } = req.body;
 
   // Función para formatear la fecha y hora
@@ -732,19 +733,15 @@ app.post("/actualizarINV", (req, res) => {
   db.query("SELECT Nombre FROM Datos WHERE Tag = ?", [EP], (err, results) => {
     if (err) {
       console.error("Error al verificar el EP:", err);
-      res.status(500).send("Error interno del servidor");
-      return;
+      return res.status(500).json({ error: "Error interno del servidor" });
     }
 
     if (results.length === 0) {
-      console.log(
-        `No se pudo encontrar el número del Kit en el nombre para EP: ${EP}`
-      );
-      res.status(500).send("Error interno del servidor");
-      return;
+      console.log(`No se pudo encontrar el número del Kit en el nombre para EP: ${EP}`);
+      return res.status(404).json({ error: "No se encontró el número del Kit en el nombre para el EP proporcionado" });
     }
 
-    const nombre = results[0].Nombre; //Kit 2
+    const nombre = results[0].Nombre; // Kit 2
 
     // Extraer el número del Kit desde el nombre
     const regex = /Kit (\d+)/;
@@ -754,15 +751,8 @@ app.post("/actualizarINV", (req, res) => {
       kitNumber = match[1]; // Aquí asignamos el número de kit encontrado
       console.log(`Número del Kit del EP: ${kitNumber}`);
     } else {
-      console.log(
-        `No se pudo encontrar el número del Kit en el nombre: ${nombre}`
-      );
-      res
-        .status(500)
-        .send(
-          `Error: No se pudo encontrar el número del Kit en el nombre: ${nombre}`
-        );
-      return;
+      console.log(`No se pudo encontrar el número del Kit en el nombre: ${nombre}`);
+      return res.status(400).json({ error: `No se pudo encontrar el número del Kit en el nombre: ${nombre}` });
     }
 
     // Actualizar INV y Hora_salida_bodega en la tabla Datos
@@ -771,98 +761,80 @@ app.post("/actualizarINV", (req, res) => {
       [formattedDate, EP],
       (updateErr, updateResults) => {
         if (updateErr) {
-          console.error(
-            "Error al actualizar INV y Hora_salida_bodega:",
-            updateErr
-          );
-          res.status(500).send("Error interno del servidor");
-          return;
+          console.error("Error al actualizar INV y Hora_salida_bodega:", updateErr);
+          return res.status(500).json({ error: "Error interno del servidor" });
         }
-        console.log(
-          `INV y Hora_salida_bodega actualizados para EP: ${EP}, ${currentDateTime}`
-        );
-      }
-    );
+        console.log(`INV y Hora_salida_bodega actualizados para EP: ${EP}, ${currentDateTime}`);
 
-    // Verificar el pedido actual en la tabla Solicitud
-    db.query(
-      "SELECT Pedido FROM Solicitud ORDER BY ID DESC LIMIT 1",
-      (pedidoErr, pedidoResults) => {
-        if (pedidoErr) {
-          console.error(
-            "Error al verificar el Pedido en la tabla Solicitud:",
-            pedidoErr
-          );
-          res.status(500).send("Error interno del servidor");
-          return;
-        }
+        // Verificar el pedido actual en la tabla Solicitud
+        db.query(
+          "SELECT Pedido FROM Solicitud ORDER BY ID DESC LIMIT 1",
+          (pedidoErr, pedidoResults) => {
+            if (pedidoErr) {
+              console.error("Error al verificar el Pedido en la tabla Solicitud:", pedidoErr);
+              return res.status(500).json({ error: "Error interno del servidor" });
+            }
 
-        const ultimoPedido =
-          pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
-        console.log(`Último pedido en la tabla Solicitud: ${ultimoPedido}`);
+            const ultimoPedido = pedidoResults.length > 0 ? pedidoResults[0].Pedido : "";
+            console.log(`Último pedido en la tabla Solicitud: ${ultimoPedido}`);
 
-        // Verificar si kitNumber está dentro de ultimoPedido
-        if (ultimoPedido.includes(kitNumber)) {
-          const pedidoArray = ultimoPedido.split(",");
-          descuentoPedido = pedidoArray
-            .filter((item) => item !== kitNumber)
-            .join(",");
-          console.log(`Haz pickeado correctamente el Kit: ${kitNumber}`);
+            // Verificar si kitNumber está dentro de ultimoPedido
+            if (ultimoPedido.includes(kitNumber)) {
+              const pedidoArray = ultimoPedido.split(",");
+              descuentoPedido = pedidoArray.filter(item => item !== kitNumber).join(",");
+              console.log(`Haz pickeado correctamente el Kit: ${kitNumber}`);
 
-          // Insertar el nuevo pedido en la tabla Solicitud
-          db.query(
-            "INSERT INTO Solicitud (Pedido) VALUES (?)",
-            [descuentoPedido],
-            (insertErr, insertResults) => {
-              if (insertErr) {
-                console.error(
-                  "Error al insertar el nuevo pedido en la tabla Solicitud:",
-                  insertErr
-                );
-                res.status(500).send("Error interno del servidor");
-                return;
-              }
-              console.log("Nuevo pedido insertado en la tabla Solicitud");
+              // Insertar el nuevo pedido en la tabla Solicitud
+              db.query(
+                "INSERT INTO Solicitud (Pedido) VALUES (?)",
+                [descuentoPedido],
+                (insertErr, insertResults) => {
+                  if (insertErr) {
+                    console.error("Error al insertar el nuevo pedido en la tabla Solicitud:", insertErr);
+                    return res.status(500).json({ error: "Error interno del servidor" });
+                  }
+                  console.log("Nuevo pedido insertado en la tabla Solicitud");
 
-              res.json({
-                piezasPorVerificar: pedidoArray
-                  .filter((item) => item !== kitNumber)
-                  .join(","),
-                piezasVerificadas: pedidoArray
-                  .filter((item) => item === kitNumber)
-                  .join(","),
+                  return res.json({
+                    piezasPorVerificar: pedidoArray.filter(item => item !== kitNumber).join(","),
+                    piezasVerificadas: pedidoArray.filter(item => item === kitNumber).join(","),
+                    pedidoRealizado: ultimoPedido,
+                    descuentoPedido: descuentoPedido,
+                  });
+                }
+              );
+            } else {
+              console.log(`No fue solicitado el Kit: ${kitNumber}`);
+
+              return res.status(200).json({
+                piezasPorVerificar: 0,
+                piezasVerificadas: 0,
                 pedidoRealizado: ultimoPedido,
-                descuentoPedido: descuentoPedido,
+                descuentoPedido: ultimoPedido,
               });
             }
-          );
-        } else {
-          console.log(`No fue solicitado el Kit: ${kitNumber}`);
-
-          res.status(200).json({
-            piezasPorVerificar: 0,
-            piezasVerificadas: 0,
-            pedidoRealizado: ultimoPedido,
-            descuentoPedido: ultimoPedido,
-          });
-        }
+          }
+        );
       }
     );
   });
 });
+
+
+
 
 // Endpoint para crear la tabla 'Modo'
 app.post("/tablemode", (req, res) => {
   const createTableModoQuery = `
     CREATE TABLE IF NOT EXISTS Modo (
       id INT AUTO_INCREMENT,
-      Estación_1 VARCHAR(100) NOT NULL,
-      Estación_2 VARCHAR(100) NOT NULL,
-      Estación_3 VARCHAR(100) NOT NULL,
-      Estación_4 VARCHAR(100) NOT NULL,
-      Estación_5 VARCHAR(100) NOT NULL,
-      Estación_6 VARCHAR(100) NOT NULL,
-      Estación_7 VARCHAR(100) NOT NULL,
+      Estacion_1 VARCHAR(100) NOT NULL,
+      Estacion_2 VARCHAR(100) NOT NULL,
+      Estacion_3 VARCHAR(100) NOT NULL,
+      Estacion_4 VARCHAR(100) NOT NULL,
+      Estacion_5 VARCHAR(100) NOT NULL,
+      Estacion_6 VARCHAR(100) NOT NULL,
+      Estacion_7 VARCHAR(100) NOT NULL,
       PRIMARY KEY (id)
     )
   `;
@@ -884,11 +856,11 @@ app.post("/modos", (req, res) => {
   if (stationNumber < 1 || stationNumber > 7) {
     return res
       .status(400)
-      .json({ error: "Número de estación fuera de rango válido (1-7)" });
+      .json({ error: "Número de Estacion fuera de rango válido (1-7)" });
   }
 
   // Nombre de la col basado en stationNumber
-  const columnName = `Estación_${stationNumber}`;
+  const columnName = `Estacion_${stationNumber}`;
 
   // Obtener el id de la primera fila
   const getFirstRowIdQuery = `SELECT id FROM Modo ORDER BY id ASC LIMIT 1`;
