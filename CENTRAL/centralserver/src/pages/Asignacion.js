@@ -11,7 +11,6 @@ const Asignacion = () => {
   const [selectedStation, setSelectedStation] = useState("");
   const [showContendIds, setShowContendIds] = useState(false);
 
-  // Simulación de datos de estaciones
   const stations = [
     "Estación 1",
     "Estación 2",
@@ -25,14 +24,16 @@ const Asignacion = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/tag");
+        if (!selectedStation) return;
+        const stationNumber = selectedStation.split(" ")[1];
+        const response = await axios.get(`http://localhost:5000/tag/${stationNumber}`);
 
         if (response.data.length > 0) {
           const initialNombresKits = {};
           const initialIdsKits = {};
           for (const tag of response.data) {
-            initialNombresKits[tag] = await fetchNombreKit(tag); // Obtener nombres de kits
-            initialIdsKits[tag] = await fetchIdKit(tag); // Obtener IDs de kits
+            initialNombresKits[tag] = await fetchNombreKit(tag, stationNumber);
+            initialIdsKits[tag] = await fetchIdKit(tag, stationNumber);
           }
           setTags(response.data);
           setNombresKits(initialNombresKits);
@@ -46,31 +47,30 @@ const Asignacion = () => {
       }
     };
 
-    const fetchNombreKit = async (tag, station) => {
+    const fetchNombreKit = async (tag, stationNumber) => {
       try {
         const nombreKitResponse = await axios.get(
-          `http://localhost:5000/nombrekit/${tag}/${station}`
+          `http://localhost:5000/nombrekit/${tag}/${stationNumber}`
         );
         return nombreKitResponse.data || "";
       } catch (error) {
         console.error(
-          `Error al obtener el nombre del kit para el tag ${tag} en la estación ${station}:`,
+          `Error al obtener el nombre del kit para el tag ${tag} en la estación ${stationNumber}:`,
           error
         );
         return "";
       }
     };
-    
 
-    const fetchIdKit = async (tag) => {
+    const fetchIdKit = async (tag, stationNumber) => {
       try {
         const idKitResponse = await axios.get(
-          `http://localhost:5000/idkit/${tag}`
+          `http://localhost:5000/idkit/${tag}/${stationNumber}`
         );
         return idKitResponse.data || "";
       } catch (error) {
         console.error(
-          `Error al obtener el ID del kit para el tag ${tag}:`,
+          `Error al obtener el ID del kit para el tag ${tag} en la estación ${stationNumber}:`,
           error
         );
         return "";
@@ -82,15 +82,16 @@ const Asignacion = () => {
     const interval = setInterval(fetchTags, 20000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [selectedStation]);
 
   const handleNombreKitChange = (event, tag) => {
     setNombresKits({ ...nombresKits, [tag]: event.target.value });
   };
 
   const handleGuardarNombreKit = async (tag) => {
+    const stationNumber = selectedStation.split(" ")[1];
     try {
-      await axios.post(`http://localhost:5000/nombrekit/${tag}`, {
+      await axios.post(`http://localhost:5000/nombrekit/${tag}/${stationNumber}`, {
         nombreKit: nombresKits[tag],
       });
       console.log(`Nombre de kit para el tag ${tag} guardado correctamente`);
@@ -107,136 +108,97 @@ const Asignacion = () => {
     setIdsKits({ ...idsKits, [tag]: event.target.value });
   };
 
-  // Función para manejar el cambio en el estado del checkbox
-  const handleCheckboxChange = (e) => {
-    setShowContendIds(e.target.checked); // Cambia el estado de showContendIds según el estado del checkbox
-  };
-
   const handleGuardarIdKit = async (tag) => {
+    const stationNumber = selectedStation.split(" ")[1];
     try {
-      await axios.post(`http://localhost:5000/idkit/${tag}`, {
+      await axios.post(`http://localhost:5000/idkit/${tag}/${stationNumber}`, {
         idKit: idsKits[tag],
       });
       console.log(`ID de kit para el tag ${tag} guardado correctamente`);
       setIdsKits({ ...idsKits, [tag]: idsKits[tag] });
     } catch (error) {
-      console.error(
-        `Error al guardar el ID del kit para el tag ${tag}:`,
-        error
-      );
+      console.error(`Error al guardar el ID del kit para el tag ${tag}:`, error);
     }
   };
 
   return (
-    <div>
+    <div className="container">
       <Helmet>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="true"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
-          rel="stylesheet"
-        />
+        <title>Asignación de Kits</title>
       </Helmet>
-      <Header titulo="Asignación Kits" />
-      <div className="container-conteo">
-        <div className="contenedor-label1">
-          <span className="elemento-label">
-            Seleccione la estación de interés:
-          </span>
-          <select
-            className="elemento-valor"
-            value={selectedStation}
-            onChange={(e) => setSelectedStation(e.target.value)}
-          >
-            <option value="">Seleccionar</option>
-            {stations.map((station, index) => (
-              <option key={index} value={station}>
-                {station}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="contenedor-label1">
-          <input
-            type="checkbox"
-            id="checklist"
-            className="custom-checkbox-estado"
-            onChange={handleCheckboxChange} // Maneja el cambio en el checkbox
-          />
-          <span className="elemento-label">Estación Ensamble</span>
-        </div>
+      <Header />
+      <div className="selector-container">
+        <h3>Seleccionar estación</h3>
+        <select
+          className="station-selector"
+          value={selectedStation}
+          onChange={(e) => setSelectedStation(e.target.value)}
+        >
+          <option value="">Seleccione una estación</option>
+          {stations.map((station) => (
+            <option key={station} value={station}>
+              {station}
+            </option>
+          ))}
+        </select>
       </div>
-
-      <div className="contenedor">
-        {/* Sección para TAG LEIDO */}
-        <div className="column">
-          <div style={{ textAlign: "center", marginBottom: "10px" }}>
-            KITS LEÍDOS
-          </div>
-          {tags.length > 0 ? (
-            tags.map((tag, index) => (
-              <div key={index}>
-                <span>{tag}</span>
-              </div>
-            ))
-          ) : (
-            <span>{tags[0]}</span>
-          )}
-        </div>
-
-        {/* Sección para Nombre del Kit */}
-        <div className="column">
-          <div style={{ textAlign: "center", marginBottom: "10px" }}>
-            NOMBRE DEL KIT
-          </div>
-          {tags.length > 0 ? (
-            tags.map((tag, index) => (
-              <div key={index}>
-                <input
-                  type="text"
-                  value={nombresKits[tag]}
-                  onChange={(event) => handleNombreKitChange(event, tag)}
-                  placeholder="Escribir nombre de kit"
-                />
-                <button onClick={() => handleGuardarNombreKit(tag)}>
-                  Guardar
-                </button>
-              </div>
-            ))
-          ) : (
-            <span>{tags[0]}</span>
-          )}
-        </div>
-
-        {/* Sección para ID DEL KIT */}
-        {showContendIds && (
-          <div className="column">
-            <div style={{ textAlign: "center", marginBottom: "10px" }}>
-              ID DEL KIT
-            </div>
-            {tags.length > 0 ? (
-              tags.map((tag, index) => (
-                <div key={index}>
-                  <input
-                    type="text"
-                    value={idsKits[tag]}
-                    onChange={(event) => handleIdKitChange(event, tag)}
-                    placeholder="Escribir ID de kit"
-                  />
-                  <button onClick={() => handleGuardarIdKit(tag)}>
-                    Guardar
-                  </button>
+      <div className="tags-container">
+        {tags.length > 0 && (
+          <div className="tag-list">
+            {tags[0] === "No hay tags disponibles" ? (
+              <p>No hay tags disponibles para la estación seleccionada</p>
+            ) : tags[0] === "Error al obtener los tags" ? (
+              <p>Error al obtener los tags</p>
+            ) : (
+              tags.map((tag) => (
+                <div key={tag} className="tag-item">
+                  <div className="tag-info">
+                    <h4>Tag: {tag}</h4>
+                    <label htmlFor={`nombreKit-${tag}`}>Nombre del Kit:</label>
+                    <input
+                      type="text"
+                      id={`nombreKit-${tag}`}
+                      value={nombresKits[tag] || ""}
+                      onChange={(e) => handleNombreKitChange(e, tag)}
+                    />
+                    <button
+                      className="save-button"
+                      onClick={() => handleGuardarNombreKit(tag)}
+                    >
+                      Guardar Nombre Kit
+                    </button>
+                    {showContendIds && (
+                      <>
+                        <label htmlFor={`idKit-${tag}`}>ID del Kit:</label>
+                        <input
+                          type="text"
+                          id={`idKit-${tag}`}
+                          value={idsKits[tag] || ""}
+                          onChange={(e) => handleIdKitChange(e, tag)}
+                        />
+                        <button
+                          className="save-button"
+                          onClick={() => handleGuardarIdKit(tag)}
+                        >
+                          Guardar ID Kit
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               ))
-            ) : (
-              <span>{tags[0]}</span>
             )}
           </div>
         )}
+      </div>
+      <div className="show-ids">
+        <label htmlFor="showContendIds">Mostrar IDs:</label>
+        <input
+          type="checkbox"
+          id="showContendIds"
+          checked={showContendIds}
+          onChange={() => setShowContendIds(!showContendIds)}
+        />
       </div>
     </div>
   );
