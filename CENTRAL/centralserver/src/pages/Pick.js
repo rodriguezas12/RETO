@@ -44,12 +44,14 @@ function Pick() {
         })
         .then((data) => {
           const pedido = data.pedidoRealizado;
-          const kits = pedido.split(",").map((num) => `Kit ${num}`);
-          setPiezasPorVerificar(kits);
-          setPedidoRealizado(kits);
-          setPiezasVerificadas([]);
-          if (initialPedidoRealizado.length === 0) {
-            setInitialPedidoRealizado(kits);
+          if (pedido) {
+            const kits = pedido.split(',').map(num => `Kit ${num}`);
+            setPiezasPorVerificar(kits);
+            setPedidoRealizado(kits);
+            setPiezasVerificadas([]);
+            if (initialPedidoRealizado.length === 0) {
+              setInitialPedidoRealizado(kits);
+            }
           }
         })
         .catch((error) => {
@@ -97,18 +99,10 @@ function Pick() {
         return response.json();
       })
       .then((data) => {
-        const pedidoVerificado = data.pedidoRealizado
-          .split(",")
-          .map((num) => `Kit ${num}`);
-        const kitsVerificados = piezasPorVerificar.filter(
-          (kit) => !pedidoVerificado.includes(kit)
-        );
-        setPiezasPorVerificar((prevState) =>
-          prevState.filter((kit) => !kitsVerificados.includes(kit))
-        );
-        setPiezasVerificadas((prevState) => [
-          ...new Set([...prevState, ...kitsVerificados]),
-        ]);
+        const pedidoVerificado = data.pedidoRealizado.split(',').map(num => `Kit ${num}`);
+        const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
+        setPiezasPorVerificar(pedidoVerificado);
+        setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
 
         if (data.descuentoPedido === "") {
           setPopupVisible(true);
@@ -132,16 +126,14 @@ function Pick() {
       })
       .then((data) => {
         const pedido = data.pedidoRealizado;
-        const pedidoVerificado = pedido.split(",").map((num) => `Kit ${num}`);
-        const kitsVerificados = piezasPorVerificar.filter(
-          (kit) => !pedidoVerificado.includes(kit)
-        );
-        setPiezasPorVerificar(pedidoVerificado);
-        setPiezasVerificadas((prevState) => [
-          ...new Set([...prevState, ...kitsVerificados]),
-        ]);
-        if (pedidoVerificado.length === 0) {
-          setPopupVisible(true);
+        if (pedido) {
+          const pedidoVerificado = pedido.split(',').map(num => `Kit ${num}`);
+          const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
+          setPiezasPorVerificar(pedidoVerificado);
+          setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
+          if (pedidoVerificado.length === 0) {
+            setPopupVisible(true);
+          }
         }
       })
       .catch((error) => {
