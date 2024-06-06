@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 export default function Picking() {
   const [numKits, setNumKits] = useState(0);
   const [disponibles, setDisponibles] = useState({});
-  const [contenido, setContenido] = useState({});
   const [carrito, setCarrito] = useState({});
+  const [contenido, setContenido] = useState({});
 
   useEffect(() => {
     // Obtener la información combinada de kits
@@ -17,13 +17,22 @@ export default function Picking() {
       .then((data) => {
         console.log("Número de kits en Contenido:", data.contenidoCount);
         console.log("Disponibles:", data.disponibles);
-        console.log("Contenido:", data.contenido);
         setNumKits(data.contenidoCount);
         setDisponibles(data.disponibles);
-        setContenido(data.contenido);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+      });
+
+    // Obtener el contenido de los kits
+    fetch("http://localhost:5000/contenido_kits")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Contenido de los kits:", data.contenido);
+        setContenido(data.contenido);
+      })
+      .catch((error) => {
+        console.error("Error fetching contenido:", error);
       });
   }, []);
 
@@ -78,7 +87,6 @@ export default function Picking() {
         alert(data.message); // Mostrar mensaje de éxito o error
         // Limpiar el carrito después de enviar el pedido
         setCarrito({});
-
       })
       .catch((error) => {
         console.error("Error al enviar el pedido:", error);
@@ -102,12 +110,11 @@ export default function Picking() {
           <h3>Total de Kits</h3>
           <p>{`Hay ${numKits} kits en total`}</p>
         </div>
-        {[...Array(numKits)].map((_, index) => {
-          const kitName = `Kit ${index + 1}`;
+        {Object.keys(contenido).map((kitName, index) => {
           return (
             <div key={index} className="kit-container">
               <h3>{kitName}</h3>
-              <p>{`Contenido: ${contenido[kitName] || 'No disponible'}`}</p>
+              <p>{`Contenido: ${contenido[kitName]}`}</p>
               <p>{`Disponibles: ${disponibles[kitName] !== undefined ? disponibles[kitName] : 0}`}</p>
               <div>
                 <button onClick={() => addToCart(kitName)}>+</button>
