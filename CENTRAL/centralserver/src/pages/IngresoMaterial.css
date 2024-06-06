@@ -74,6 +74,9 @@
   background-color: #ecd4b6;
   align-items: center;
   border: 2px solid black;
+  margin: 5px;
+  margin-left: 350px;
+  margin-right: 350px;
 }
 
 .column {
@@ -127,6 +130,8 @@
   width: 100%; /* Asegura que ocupe todo el ancho disponible */
   padding: 10px 0;
   background-color: #fff; /* Fondo blanco para destacar la cabecera */
+  margin-left: 350px;
+  margin-right: 350px;
 }
 
 .header-item {
