@@ -258,16 +258,31 @@ app.get("/tag", (req, res) => {
   });
 });
 
-// Obtener el nombre del kit de un tag específico
-app.get("/nombrekit/:tag", (req, res) => {
-  const { tag } = req.params;
+// Obtener el nombre del kit de un tag específico en una estación específica
+app.get("/nombrekit/:tag/:numeroEstacion", (req, res) => {
+  const { tag, numeroEstacion } = req.params;
 
+  // Validación del número de estación
+  if (
+    !numeroEstacion ||
+    isNaN(numeroEstacion) ||
+    numeroEstacion < 1 ||
+    numeroEstacion > 7
+  ) {
+    res.status(400).send("Número de estación inválido");
+    return;
+  }
+
+  // Nombre de la tabla basado en el número de estación
+  const nombreTabla = `Estación_${numeroEstacion}`;
+
+  // Consulta a la base de datos
   db.query(
-    "SELECT Kit FROM Estación_1 WHERE Tag = ?",
+    `SELECT Kit FROM ${nombreTabla} WHERE Tag = ?`,
     [tag],
     (err, results) => {
       if (err) {
-        console.error("Error al obtener el nombre del kit:", err);
+        console.error(`Error al obtener el nombre del kit de ${nombreTabla}:`, err);
         res.status(500).send("Error interno del servidor");
         return;
       }
@@ -279,6 +294,8 @@ app.get("/nombrekit/:tag", (req, res) => {
     }
   );
 });
+
+
 
 // Actualizar el nombre del kit de un tag específico
 app.post("/nombrekit/:tag", (req, res) => {
