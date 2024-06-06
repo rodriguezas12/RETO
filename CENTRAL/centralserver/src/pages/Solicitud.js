@@ -125,9 +125,9 @@ export default function Picking() {
           );
         })}
       </div>
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
+      <div style={{ textAlign: "center", marginTop: "10px" }}>
         <Link to="/pick">
-          <button className='boton-solicitud' onClick={enviarPedido}>Enviar</button>
+          <button className='boton-solicitud' onClick={enviarPedido} style={{ fontSize: "17px" }}>Enviar</button>
         </Link>
       </div>
     </div>
