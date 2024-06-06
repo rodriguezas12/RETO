@@ -48,7 +48,6 @@
 .header {
   display: flex;
   font-weight: bold;
-  border-bottom: 2px solid #ddd;
   padding-bottom: 10px;
 }
 
@@ -69,7 +68,6 @@
 /* Estilo para filas */
 .row {
   display: flex;
-  border-bottom: 1px solid #ddd;
   padding: 10px 0;
 }
 

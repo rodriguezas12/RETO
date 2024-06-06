@@ -10,7 +10,6 @@
   align-items: center;
   flex-wrap: wrap;
 }
-
 .contenedor-labelingreso {
   display: flex;
   align-items: center;
@@ -23,73 +22,180 @@
   border-radius: 20px;
   color: #fff;
 }
-
 .elemento-labelingreso {
   font-family: "Nunito", sans-serif;
   font-size: min(1.5vw, 24px);
   font-weight: bold;
   color: #292929;
   margin-right: 10px;
+
 }
 
 .container-estacion {
   border-radius: 10px;
+  border-radius: 20px;
   background-color: #ecd4b6;
   font-weight: bold;
   padding: 8px;
+  padding: 15px;
   font-family: "Nunito", sans-serif;
   font-size: min(2vw, 20px);
   color: #292929;
   margin-right: 10px;
+  margin-right: 5px;
 }
 
 .boton-ingreso {
-  font-family: "Nunito", sans-serif;
-  font-size: min(1.1vw, 20px);
-  font-weight: bold;
-  color: #292929;
-  border: none;
-  background-color: #be7530;
-  padding: 8px 16px;
-  border-radius: 20px;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-  transition: box-shadow 0.3s ease;
-  margin: 1vh;
-}
 
-/* Estilo de la cabecera */
-.header {
-  display: flex;
-  font-weight: bold;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 10px;
-}
-
-/* Estilo de los items de la cabecera */
-.header-item {
-  flex: 1;
-  padding: 10px;
-  font-family: "Nunito";
-}
-
-/* Estilo de las filas */
-.row {
-  display: flex;
-  border-bottom: 1px solid #ddd;
-  padding: 10px 0;
-}
-
-/* Estilo de las celdas */
-.cell {
-  flex: 1;
-  padding: 10px;
-}
-
-/* Estilo del input */
-.cell input {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
+  border: 1px solid ;
+  border-radius: 4px;
+}
+/* Estilo del contenedor principal */
+.container-ingreso {
+  margin: 10px auto;
+  width: 90vw;
+  background-color: #fefaf6;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2); /* Añadido sombra para consistencia */
+}
+
+/* Estilo para dividir en dos columnas */
+.row {
+  display: flex;
+  width: 100%;
+  background-color: #ecd4b6;
+  align-items: center;
+  border: 2px solid black;
+  margin: 5px;
+  margin-left: 350px;
+  margin-right: 350px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 50%; /* Divide el espacio en dos */
+  padding: 10px;
+  text-align: center;
+}
+
+/* Estilo para mejorar la visualización de las entradas y etiquetas */
+.label-ingreso, .input-ingreso {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.1vw;
+  font-weight: bold;
+  color: #292929;
+  padding: 8px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1px; /* Espaciado para separar elementos verticalmente */
+}
+
+.input-ingreso input {
+  width: 100%;
+  padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
+}
+
+.boton-ingreso {
+  width: auto;
+  padding: 8px 16px;
+  background-color: #be7530;
+  color: white;
+  border-radius: 20px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.boton-ingreso:hover {
+  background-color: #ff4500;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between; /* Asegura que los elementos estén distribuidos uniformemente */
+  align-items: center;
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  padding: 10px 0;
+  background-color: #fff; /* Fondo blanco para destacar la cabecera */
+  margin-left: 350px;
+  margin-right: 350px;
+}
+
+.header-item {
+  flex: 1; /* Distribuye el espacio igualmente */
+  text-align: center; /* Centra el texto */
+  padding: 10px;
+  border-right: 1px solid #ddd; /* Añade un borde entre los elementos */
+}
+
+.header-item:last-child {
+  border-right: none; /* Elimina el borde del último elemento */
+}
+.header-item {
+  flex: 1; /* Distribuye el espacio igualmente */
+  text-align: center; /* Centra el texto */
+  padding: 10px;
+  border-right: 1px solid black; /* Añade un borde entre los elementos */
+}
+
+/* Específico para el elemento 'ID' */
+.header-item:nth-child(1) {
+  background-color: #be7530; /* Verde */
+  color: white; /* Texto blanco para mejor visibilidad */
+  font-family: "Nunito", sans-serif;
+  font-size: min(1.5vw, 24px);
+}
+
+/* Específico para el elemento 'Bahía' */
+.header-item:nth-child(2) {
+  background-color: #be7530; 
+  color: white; /* Texto blanco para mejor visibilidad */
+  font-family: "Nunito", sans-serif;
+  font-size: min(1.5vw, 24px);
+}
+
+.header-item:last-child {
+  border-right: none; /* Elimina el borde del último elemento */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between; /* Asegura que los elementos estén distribuidos uniformemente */
+  align-items: center;
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  padding: 10px 0;
+  border: 2px solid black; /* Mantiene el borde inferior */
+  background-color: #be7530; /* Nuevo color de fondo */
+  border-radius: 10px
+ 
+}
+
+.cell {
+  flex: 1; /* Distribuye el espacio igualmente dentro de su contenedor si está en flex */
+  border-radius: 4px; /* Bordes redondeados para un aspecto más suave */
+  background-color: #ecd4b6;
+  color: black; /* Cambia el color del texto para que contraste bien con el fondo */
+  text-align: center; /* Alinea el texto al centro */
+  margin-bottom: 1px; /* Añade un margen abajo si es necesario para separar de otros elementos */
+  font-family: "Nunito", sans-serif;
+  font-size: min(1.5vw, 24px);
+}
+
+.container-ingreso{
+  background-color: white;
+  border: 2px solid black;
+  margin-bottom: 1px
 }
