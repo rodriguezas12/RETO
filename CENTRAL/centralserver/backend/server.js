@@ -116,6 +116,28 @@ app.post("/verificarUsuario", (req, res) => {
   );
 });
 
+app.get("/", (req, res) => {
+  db.query("SELECT * FROM Usuarios", (err, results) => {
+    if (err) {
+      console.error(
+        "Error al seleccionar registros de la tabla Usuarios:",
+        err
+      );
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
+
+    let table =
+      "<h1>Registros de la tabla Usuarios</h1><table><tr><th>ID</th><th>Nombre completo</th><th>Código estudiantil</th></tr>";
+    results.forEach((row) => {
+      table += `<tr><td>${row.id}</td><td>${row.Nombre}</td><td>${row.Codigo_Estudiantil}</td></tr>`;
+    });
+    table += "</table>";
+
+    res.send(table);
+  });
+});
+
 app.post("/contenido", (req, res) => {
   const { nuevoPedido } = req.body;
 
@@ -145,6 +167,63 @@ app.post("/contenido", (req, res) => {
     });
     // Enviar respuesta después de la primera inserción (considerando que el segundo insert no afecta al cliente)
     res.status(201).send("Registro insertado correctamente");
+  });
+});
+
+app.post("/posicion", (req, res) => {
+  const {
+    Col1: col1,
+    Col2: col2,
+    Col3: col3,
+    Col4: col4,
+    Col5: col5,
+    Col6: col6,
+    Col7: col7,
+    Col8: col8,
+    Col9: col9,
+    Col10: col10,
+  } = req.body;
+
+  // Crear la tabla si no existe
+  const createTableM1Query = `
+    CREATE TABLE IF NOT EXISTS M1 (
+      \`ID\` INT AUTO_INCREMENT PRIMARY KEY,
+      \`Col1\` VARCHAR(255),
+      \`Col2\` VARCHAR(255),
+      \`Col3\` VARCHAR(255),
+      \`Col4\` VARCHAR(255),
+      \`Col5\` VARCHAR(255),
+      \`Col6\` VARCHAR(255),
+      \`Col7\` VARCHAR(255),
+      \`Col8\` VARCHAR(255),
+      \`Col9\` VARCHAR(255),
+      \`Col10\` VARCHAR(255)
+    );
+  `;
+
+  db.query(createTableM1Query, (createErr) => {
+    if (createErr) {
+      console.error("Error al crear/verificar la tabla M1:", createErr);
+      res.status(500).send("Error al crear la tabla M1");
+      return;
+    }
+
+    // Insertar datos en la tabla una vez creada
+    const insertQuery =
+      "INSERT INTO M1 (`Col1`, `Col2`, `Col3`, `Col4`, `Col5`, `Col6`, `Col7`, `Col8`, `Col9`, `Col10`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    db.query(
+      insertQuery,
+      [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10],
+      (err, results) => {
+        if (err) {
+          console.error("Error al insertar el registro:", err);
+          res.status(500).send("Error interno del servidor");
+          return;
+        }
+        console.log("Registro insertado correctamente");
+        res.status(201).send("Registro insertado correctamente");
+      }
+    );
   });
 });
 
@@ -192,17 +271,6 @@ app.get("/michi", (req, res) => {
   );
 });
 
-app.get("/contabilidad-kits", (req, res) => {
-  db.query("SELECT * FROM Contabilidad_Kits", (err, results) => {
-    if (err) {
-      console.error("Error al obtener los datos de Contabilidad_Kits:", err);
-      res.status(500).send("Error en el servidor");
-      return;
-    }
-
-    res.json(results);
-  });
-});
 
 //Estaciones ^-^// Cambiar la ruta en el servidor para que espere el parámetro en la URL
 app.get("/Estaciones/:numeroEstacion", (req, res) => {
@@ -250,7 +318,7 @@ app.post("/sets", (req, res) => {
   );
 });
 /////////////////////////////////////////////////////////
-// Obtener tags de la Estacion 1
+// Obtener tags de la estación 1
 app.get("/tag", (req, res) => {
   db.query("SELECT Tag FROM Estacion_1", (err, results) => {
     if (err) {
@@ -494,26 +562,7 @@ app.get("/solicitud", (req, res) => {
   });
 });
 
-app.post("/eventosIngreso", (req, res) => {
-  const { usuario, evento, descripcion, fecha, hora } = req.body;
 
-  const insertEventoQuery =
-    "INSERT INTO Eventos (usuario, evento, descripcion, fecha, hora) VALUES (?, ?, ?, ?, ?)";
-
-  db.query(
-    insertEventoQuery,
-    [usuario, evento, descripcion, fecha, hora],
-    (err, results) => {
-      if (err) {
-        console.error("Error al insertar el evento:", err);
-        res.status(500).send("Error interno del servidor");
-        return;
-      }
-      console.log("Evento insertado correctamente");
-      res.status(201).send("Evento insertado correctamente");
-    }
-  );
-});
 
 app.get("/eventos", (req, res) => {
   const {
@@ -572,27 +621,6 @@ app.get("/eventos", (req, res) => {
   });
 });
 
-app.get("/Datos", (req, res) => {
-  db.query("SELECT * FROM Datos", (err, results) => {
-    if (err) {
-      console.error("Error al obtener los datos de la tabla Solicitud:", err);
-      res.status(500).send("Error en el servidor");
-      return;
-    }
-    res.json(results);
-  });
-});
-
-app.get("/Kits_armados", (req, res) => {
-  db.query("SELECT * FROM Contenido", (err, results) => {
-    if (err) {
-      console.error("Error al obtener los datos de la tabla Solicitud:", err);
-      res.status(500).send("Error en el servidor");
-      return;
-    }
-    res.json(results);
-  });
-});
 
 app.post("/solicitar", (req, res) => {
   const { nuevoPedido, nombreUsuario } = req.body;
@@ -1073,151 +1101,6 @@ app.post("/saveM1", async (req, res) => {
     res
       .status(500)
       .json({ error: "Error al guardar la matriz en la base de datos" });
-  }
-});
-
-app.get("/contenido_kits", (req, res) => {
-  const contenidoQuery = `
-    SELECT Kits, Contenido
-    FROM Contenido
-  `;
-
-  db.query(contenidoQuery, (err, contenidoResults) => {
-    if (err) {
-      console.error("Error al obtener el contenido de los kits:", err);
-      res.status(500).send("Error en el servidor");
-      return;
-    }
-
-    const contenido = contenidoResults.reduce((acc, row) => {
-      acc[row.Kits] = row.Contenido;
-      return acc;
-    }, {});
-
-    res.json({
-      contenido: contenido,
-    });
-  });
-});
-
-// Endpoint POST para cancelar el pedido
-app.post("/cancelarPedido", (req, res) => {
-  const pedido = ""; // Campo vacío para cancelar el pedido
-
-  db.query(
-    "INSERT INTO Solicitud (Pedido) VALUES (?)",
-    [pedido],
-    (err, result) => {
-      if (err) {
-        console.error("Error al cancelar el pedido:", err);
-        res.status(500).json({ error: "Error interno del servidor" });
-        return;
-      }
-      console.log("Pedido cancelado exitosamente");
-      res.status(200).json({ message: "Pedido cancelado exitosamente" });
-    }
-  );
-});
-
-app.post("/ingresoabodega", (req, res) => {
-  const { EP } = req.body;
-
-  // Función para formatear la fecha y hora
-  function formatDateTime(dateTimeString) {
-    const dateObj = new Date(dateTimeString);
-    const formattedDate = dateObj.toLocaleString(); // Convierte el objeto Date a una cadena en formato legible
-    return formattedDate;
-  }
-
-  // Obtener la hora actual y formatearla
-  const currentDateTime = new Date().toISOString();
-  const formattedDate = formatDateTime(currentDateTime);
-
-  // Variable para almacenar el número de kit encontrado
-  let kitNumber = null;
-
-  // Verificar si el EP está en la tabla Datos
-  db.query("SELECT Nombre FROM Datos WHERE Tag = ?", [EP], (err, results) => {
-    if (err) {
-      console.error("Error al verificar el EP:", err);
-      res.status(500).send("Error interno del servidor");
-      return;
-    }
-
-    if (results.length === 0) {
-      console.log(
-        `No se pudo encontrar el número del Kit en el nombre para EP: ${EP}`
-      );
-      res.status(500).send("Error interno del servidor");
-      return;
-    }
-
-    const nombre = results[0].Nombre; //Kit 2
-
-    // Extraer el número del Kit desde el nombre
-    const regex = /Kit (\d+)/;
-    const match = nombre.match(regex);
-
-    if (match) {
-      kitNumber = match[1]; // Aquí asignamos el número de kit encontrado
-      console.log(`Número del Kit del EP: ${kitNumber}`);
-
-      // Insertar el kitNumber en la tabla dropeo
-      insertarEnDropeo(kitNumber);
-    } else {
-      console.log(
-        `No se pudo encontrar el número del Kit en el nombre: ${nombre}`
-      );
-      res
-        .status(500)
-        .send(
-          `Error: No se pudo encontrar el número del Kit en el nombre: ${nombre}`
-        );
-      return;
-    }
-
-    // Actualizar INV y Hora_salida_bodega en la tabla Datos
-    actualizarDatos(formattedDate, EP);
-  });
-
-  // Función para insertar en la tabla dropeo
-  function insertarEnDropeo(kitNumber) {
-    db.query(
-      "INSERT INTO dropeo (dropp) VALUES (?)",
-      [kitNumber],
-      (insertErr, insertResults) => {
-        if (insertErr) {
-          console.error("Error al insertar en la tabla dropeo:", insertErr);
-          // No enviamos una respuesta de error aquí para no interrumpir la respuesta de la solicitud original
-          return;
-        }
-        console.log(
-          `Número del Kit ${kitNumber} insertado en la tabla dropeo.`
-        );
-      }
-    );
-  }
-
-  // Función para actualizar INV y Hora_entrada_bodega en la tabla Datos
-  function actualizarDatos(formattedDate, EP) {
-    db.query(
-      "UPDATE Datos SET INV = 'SI', Hora_entrada_bodega = ? WHERE Tag = ?",
-      [formattedDate, EP],
-      (updateErr, updateResults) => {
-        if (updateErr) {
-          console.error(
-            "Error al actualizar INV y Hora_entrada_bodega:",
-            updateErr
-          );
-          res.status(500).send("Error interno del servidor");
-          return;
-        }
-        console.log(
-          `INV y Hora_entrada_bodega actualizados para EP: ${EP}, ${currentDateTime}`
-        );
-        res.status(200).send("Operación completada correctamente");
-      }
-    );
   }
 });
 

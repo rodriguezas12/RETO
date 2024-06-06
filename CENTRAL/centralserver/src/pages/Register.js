@@ -28,7 +28,7 @@ export default function Register() {
     }
 
     try {
-      await axios.post("http://10.20.5.134:5000/register", {
+      await axios.post("http://localhost:5000/register", {
         nombre: nombre,
         codigoEstudiantil: codigoEstudiantil,
         nrc: nrc,
