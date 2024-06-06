@@ -63,9 +63,10 @@ function Pick() {
   }, []);
 
   useEffect(() => {
+    let colorr;
     const interval = setInterval(() => {
       if (piezasPorVerificar.length > 0) {
-        updatePiezas();
+        updatePiezas(colorr);
       }
     }, 2000); // Consulta cada 2 segundos
 
@@ -108,14 +109,14 @@ function Pick() {
         }
 
         // Incrementa el contador de POST
-        setPostCount(prevCount => prevCount + 1);
+        setPostCount((prevCount) => prevCount + 1);
       })
       .catch((error) => {
         console.error("There was an error with the fetch operation:", error);
       });
   };
 
-  const updatePiezas = () => {
+  const updatePiezas = (colorr) => {
     fetch("http://localhost:5000/ultimoPedido")
       .then((response) => {
         if (!response.ok) {
@@ -159,49 +160,50 @@ function Pick() {
   };
 
   return (
-    <div>
+    <div id="root">
       <Helmet>
         <link
           href="./Media/Nunito-Italic-VariableFont_wght.ttf"
           rel="stylesheet"
         />
       </Helmet>
-      <Header titulo="VERIFICACIÓN PICK TO LIGHT" />
-      <div className="input-container">
-        <label htmlFor="rfidText">Ingresa el texto RFID (máx. 36 caracteres):</label>
-        <textarea
-          id="rfidText"
-          ref={textAreaRef}
-          rows="4"
-          cols="50"
-          maxLength="36"
-          value={rfidText}
-          onChange={handleRfidTextChange}
-        />
-      </div>
-      <div className="ep-value-display">
-        <p>Último EP encontrado: {epValue}</p>
-      </div>
-      <div className="status-container">
-        <div className="status-box">
-          <h3>Piezas por verificar:</h3>
-          <p>{piezasPorVerificar.length > 0 ? piezasPorVerificar.join(', ') : "Ninguna"}</p>
+      <div>
+        <Header titulo="VERIFICACIÓN PICK TO LIGHT" />
+        <div className="input-container">
+          <h3 htmlFor="rfidText">Escanea el tag RFID:</h3>
+          <textarea
+            id="rfidText"
+            className="textarea-pick"
+            ref={textAreaRef}
+            rows="2"
+            cols="50"
+            maxLength="36"
+            value={rfidText}
+            onChange={handleRfidTextChange}
+          />
+          <p>Último EP encontrado: {epValue}</p>
         </div>
-        <div className="status-box">
-          <h3>Piezas verificadas:</h3>
-          <p>{piezasVerificadas.length > 0 ? piezasVerificadas.join(', ') : "Ninguna"}</p>
-        </div>
-      </div>
-      {popupVisible && (
-        <div className="popup">
-          <div className="popup-content">
-            <h2>PICK TO LIGHT COMPLETO</h2>
-            <button onClick={closePopup}>Cerrar</button>
+        <div></div>
+        <div className="status-container">
+          <div className="status-box">
+            <h3>Piezas por verificar:</h3>
+            <p>{piezasPorVerificar.join(", ")}</p>
+          </div>
+          <div className="status-box">
+            <h3>Piezas verificadas:</h3>
+            <p>{piezasVerificadas.join(", ")}</p>
           </div>
         </div>
-      )}
+        {popupVisible && (
+          <div className="popup">
+            <div className="popup-content">
+              <h2>PICK TO LIGHT COMPLETO</h2>
+              <button onClick={closePopup}>Cerrar</button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
-
 export default Pick;

@@ -1,29 +1,68 @@
-.input-container {
-  margin-bottom: 20px;
+div {
+  text-align: center;
+  align-items: center;
+  margin: 20px;
+}
+.textarea-pick {
+  width: 100%;
+  max-width: 600px; /* Puedes ajustar este valor según tus necesidades */
+  height: 30px; /* Ajusta la altura según sea necesario */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
   font-family: "Nunito", sans-serif;
+  resize: none; /* Evita que el usuario cambie el tamaño del textarea */
 }
 
-.ep-value-display {
-  margin-bottom: 20px;
-  font-family: "Nunito", sans-serif;
+.ep-container {
+  font-family: "nunito";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .status-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  margin: 20px;
+  width: 80%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Nunito", sans-serif;
+  background-color: #ecd4b6;
+  margin: auto; /* Esto centrará el elemento horizontalmente */
 }
 
 .status-box {
-  width: calc(33.33% - 20px);
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-family: "Nunito", sans-serif;
+  margin: 10px 0;
+  font-family: "nunito";
 }
 
-.status-box h3 {
-  margin-bottom: 10px;
+.input-container {
+  margin: 20px;
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-family: "Nunito", sans-serif;
+  background-color: #ecd4b6;
+  margin: auto; /* Esto centrará el elemento horizontalmente */
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.popup-content {
+  text-align: center;
 }
