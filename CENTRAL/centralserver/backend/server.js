@@ -421,6 +421,10 @@ app.get("/kits_info", (req, res) => {
     WHERE INV = 'SI'
     GROUP BY Nombre
   `;
+  const contenidoCompletoQuery = `
+    SELECT Kits, Contenido
+    FROM Contenido
+  `;
 
   db.query(contenidoQuery, (err, contenidoResults) => {
     if (err) {
@@ -436,17 +440,31 @@ app.get("/kits_info", (req, res) => {
         return;
       }
 
-      const disponibles = disponibilidadResults.reduce((acc, row) => {
-        acc[row.Nombre] = row.Disponibles;
-        return acc;
-      }, {});
+      db.query(contenidoCompletoQuery, (err, contenidoCompletoResults) => {
+        if (err) {
+          console.error("Error al obtener el contenido de los kits:", err);
+          res.status(500).send("Error en el servidor");
+          return;
+        }
 
-      console.log("Número de kits en Contenido:", contenidoResults[0].count);
-      console.log("Disponibles:", disponibles);
+        const disponibles = disponibilidadResults.reduce((acc, row) => {
+          acc[row.Nombre] = row.Disponibles;
+          return acc;
+        }, {});
 
-      res.json({
-        contenidoCount: contenidoResults[0].count,
-        disponibles: disponibles,
+        const contenido = contenidoCompletoResults.reduce((acc, row) => {
+          acc[row.Kits] = row.Contenido;
+          return acc;
+        }, {});
+
+        console.log("Número de kits en Contenido:", contenidoResults[0].count);
+        console.log("Disponibles:", disponibles);
+
+        res.json({
+          contenidoCount: contenidoResults[0].count,
+          disponibles: disponibles,
+          contenido: contenido,
+        });
       });
     });
   });
@@ -595,6 +613,8 @@ app.post("/solicitar", (req, res) => {
     });
   });
 });
+
+
 // Desde aqui se implementa ingreso de material
 app.post("/guardarCambios", (req, res) => {
   const updates = req.body; // Los datos enviados desde el frontend
