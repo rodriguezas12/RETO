@@ -251,31 +251,16 @@ app.post("/sets", (req, res) => {
   );
 });
 /////////////////////////////////////////////////////////
-// Obtener tags de la estación seleccionada
-app.get("/tag/:numeroEstacion", (req, res) => {
-  const { numeroEstacion } = req.params;
-
-  // Validación del número de estación
-  if (
-    !numeroEstacion ||
-    isNaN(numeroEstacion) ||
-    numeroEstacion < 1 ||
-    numeroEstacion > 7
-  ) {
-    res.status(400).send("Número de estación inválido");
-    return;
-  }
-
-  const nombreTabla = `Estación_${numeroEstacion}`;
-
-  db.query(`SELECT Tag FROM ${nombreTabla}`, (err, results) => {
+// Obtener tags de la estación 1
+app.get("/tag", (req, res) => {
+  db.query("SELECT Tag FROM Estación_1", (err, results) => {
     if (err) {
       console.error("Error al obtener los tags:", err);
       res.status(500).send("Error interno del servidor");
       return;
     }
     if (results.length > 0) {
-      const tags = results.map((result) => result.Tag);
+      const tags = results.map((result) => result.Tag); // Extraemos solo los tags de los resultados
       res.json(tags);
     } else {
       res.status(404).send("No se encontraron tags");
@@ -283,122 +268,121 @@ app.get("/tag/:numeroEstacion", (req, res) => {
   });
 });
 
-// Obtener el nombre del kit de un tag específico en una estación específica
-app.get("/nombrekit/:tag/:numeroEstacion", (req, res) => {
-  const { tag, numeroEstacion } = req.params;
+// Obtener el nombre del kit de un tag específico
+app.get("/nombrekit/:tag", (req, res) => {
+  const { tag } = req.params;
 
-  if (
-    !numeroEstacion ||
-    isNaN(numeroEstacion) ||
-    numeroEstacion < 1 ||
-    numeroEstacion > 7
-  ) {
-    res.status(400).send("Número de estación inválido");
-    return;
-  }
-
-  const nombreTabla = `Estación_${numeroEstacion}`;
-
-  db.query(`SELECT Kit FROM ${nombreTabla} WHERE Tag = ?`, [tag], (err, results) => {
-    if (err) {
-      console.error(`Error al obtener el nombre del kit de ${nombreTabla}:`, err);
-      res.status(500).send("Error interno del servidor");
-      return;
+  db.query(
+    "SELECT Kit FROM Estación_1 WHERE Tag = ?",
+    [tag],
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener el nombre del kit:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      if (results.length > 0) {
+        res.json(results[0].Kit); // Devolvemos el nombre del kit si existe
+      } else {
+        res.json(""); // Devolvemos un nombre vacío si no existe
+      }
     }
-    if (results.length > 0) {
-      res.json(results[0].Kit);
-    } else {
-      res.json("");
-    }
-  });
+  );
 });
 
 // Actualizar el nombre del kit de un tag específico
-app.post("/nombrekit/:tag/:numeroEstacion", (req, res) => {
-  const { tag, numeroEstacion } = req.params;
+app.post("/nombrekit/:tag", (req, res) => {
+  const { tag } = req.params;
   const { nombreKit } = req.body;
 
-  if (
-    !numeroEstacion ||
-    isNaN(numeroEstacion) ||
-    numeroEstacion < 1 ||
-    numeroEstacion > 7
-  ) {
-    res.status(400).send("Número de estación inválido");
-    return;
-  }
-
-  const nombreTabla = `Estación_${numeroEstacion}`;
-
-  db.query(`UPDATE ${nombreTabla} SET Kit = ? WHERE Tag = ?`, [nombreKit, tag], (err, results) => {
-    if (err) {
-      console.error(`Error al actualizar el nombre del kit en ${nombreTabla}:`, err);
-      res.status(500).send("Error interno del servidor");
-      return;
+  // Update Estación_1
+  db.query(
+    "UPDATE Estación_1 SET Kit = ? WHERE Tag = ?",
+    [nombreKit, tag],
+    (err, results) => {
+      if (err) {
+        console.error(
+          "Error al actualizar el nombre del kit en Estación_1:",
+          err
+        );
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      console.log(`Nombre de kit actualizado para el tag ${tag} en Estación_1`);
+      // Update Datos
+      db.query(
+        "UPDATE Datos SET Nombre = ? WHERE Tag = ?",
+        [nombreKit, tag],
+        (err, results) => {
+          if (err) {
+            console.error(
+              "Error al actualizar el nombre del kit en Datos:",
+              err
+            );
+            res.status(500).send("Error interno del servidor");
+            return;
+          }
+          console.log(`Nombre de kit actualizado para el tag ${tag} en Datos`);
+          res.send("Nombre de kit actualizado correctamente");
+        }
+      );
     }
-    console.log(`Nombre de kit actualizado para el tag ${tag} en ${nombreTabla}`);
-    res.send("Nombre de kit actualizado correctamente");
-  });
+  );
 });
 
-// Obtener el ID del kit de un tag específico en una estación específica
-app.get("/idkit/:tag/:numeroEstacion", (req, res) => {
-  const { tag, numeroEstacion } = req.params;
+// Obtener el ID del kit de un tag específico
+app.get("/idkit/:tag", (req, res) => {
+  const { tag } = req.params;
 
-  if (
-    !numeroEstacion ||
-    isNaN(numeroEstacion) ||
-    numeroEstacion < 1 ||
-    numeroEstacion > 7
-  ) {
-    res.status(400).send("Número de estación inválido");
-    return;
-  }
-
-  const nombreTabla = `Estación_${numeroEstacion}`;
-
-  db.query(`SELECT Id FROM ${nombreTabla} WHERE Tag = ?`, [tag], (err, results) => {
+  db.query("SELECT Id FROM Estación_1 WHERE Tag = ?", [tag], (err, results) => {
     if (err) {
-      console.error(`Error al obtener el ID del kit en ${nombreTabla}:`, err);
+      console.error("Error al obtener el ID del kit:", err);
       res.status(500).send("Error interno del servidor");
       return;
     }
     if (results.length > 0) {
-      res.json(results[0].Id);
+      res.json(results[0].Id); // Devolvemos el ID del kit si existe
     } else {
-      res.json("");
+      res.json(""); // Devolvemos un ID vacío si no existe
     }
   });
 });
 
-// Actualizar el ID del kit de un tag específico en una estación específica
-app.post("/idkit/:tag/:numeroEstacion", (req, res) => {
-  const { tag, numeroEstacion } = req.params;
+// Actualizar el ID del kit de un tag específico
+app.post("/idkit/:tag", (req, res) => {
+  const { tag } = req.params;
   const { idKit } = req.body;
 
-  if (
-    !numeroEstacion ||
-    isNaN(numeroEstacion) ||
-    numeroEstacion < 1 ||
-    numeroEstacion > 7
-  ) {
-    res.status(400).send("Número de estación inválido");
-    return;
-  }
-
-  const nombreTabla = `Estación_${numeroEstacion}`;
-
-  db.query(`UPDATE ${nombreTabla} SET Id = ? WHERE Tag = ?`, [idKit, tag], (err, results) => {
-    if (err) {
-      console.error(`Error al actualizar el ID del kit en ${nombreTabla}:`, err);
-      res.status(500).send("Error interno del servidor");
-      return;
+  // Update Estación_1
+  db.query(
+    "UPDATE Estación_1 SET Id = ? WHERE Tag = ?",
+    [idKit, tag],
+    (err, results) => {
+      if (err) {
+        console.error("Error al actualizar el ID del kit en Estación_1:", err);
+        res.status(500).send("Error interno del servidor");
+        return;
+      }
+      console.log(`ID de kit actualizado para el tag ${tag} en Estación_1`);
+      // Update Datos
+      db.query(
+        "UPDATE Datos SET Id = ? WHERE Tag = ?",
+        [idKit, tag],
+        (err, results) => {
+          if (err) {
+            console.error("Error al actualizar el ID del kit en Datos:", err);
+            res.status(500).send("Error interno del servidor");
+            return;
+          }
+          console.log(`ID de kit actualizado para el tag ${tag} en Datos`);
+          res.send("ID de kit actualizado correctamente");
+        }
+      );
     }
-    console.log(`ID de kit actualizado para el tag ${tag} en ${nombreTabla}`);
-    res.send("ID de kit actualizado correctamente");
-  });
+  );
 });
 
+// ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
 
 ///////////////////////////////////////////////////////
 
