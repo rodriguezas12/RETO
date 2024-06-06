@@ -28,7 +28,7 @@ function Inventario() {
   }, []);
 
   return (
-    <div>
+    <div className="inventario-container">
       <Helmet>
         <link
           href="./Media/Nunito-Italic-VariableFont_wght.ttf"
