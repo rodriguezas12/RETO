@@ -29,19 +29,29 @@ db.connect((err) => {
 });
 
 app.get("/api/check-time-difference", (req, res) => {
-  db.query(
-    "SELECT Hora FROM picking ORDER BY Hora DESC LIMIT 1",
-    (error, results) => {
-      if (error) {
-        console.error("Database query error:", error);
-        return res.status(500).json({ error: "Database query error" });
+  try {
+    db.query(
+      "SELECT Hora FROM picking ORDER BY Hora DESC LIMIT 1",
+      (error, results) => {
+        if (error) {
+          console.error("Database query error:", error);
+          return res.status(500).json({ error: "Database query error" });
+        }
+
+        if (results.length === 0) {
+          return res.status(404).json({ error: "No records found" });
+        }
+
+        const lastTime = results[0].Hora;
+        const currentTime = new Date();
+        const timeDifference = (currentTime - new Date(lastTime)) / 1000; // Convert to seconds
+        return res.json({ lastTime, currentTime, timeDifference });
       }
-      const lastTime = results[0].Hora;
-      const currentTime = new Date();
-      const timeDifference = (currentTime - new Date(lastTime)) / 1000; // Convert to seconds
-      return res.json({ lastTime, currentTime, timeDifference });
-    }
-  );
+    );
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    return res.status(500).json({ error: "Unexpected error" });
+  }
 });
 
 app.post("/register", (req, res) => {
@@ -106,7 +116,27 @@ app.post("/verificarUsuario", (req, res) => {
   );
 });
 
+app.get("/", (req, res) => {
+  db.query("SELECT * FROM Usuarios", (err, results) => {
+    if (err) {
+      console.error(
+        "Error al seleccionar registros de la tabla Usuarios:",
+        err
+      );
+      res.status(500).send("Error interno del servidor");
+      return;
+    }
 
+    let table =
+      "<h1>Registros de la tabla Usuarios</h1><table><tr><th>ID</th><th>Nombre completo</th><th>Código estudiantil</th></tr>";
+    results.forEach((row) => {
+      table += `<tr><td>${row.id}</td><td>${row.Nombre}</td><td>${row.Codigo_Estudiantil}</td></tr>`;
+    });
+    table += "</table>";
+
+    res.send(table);
+  });
+});
 
 app.post("/contenido", (req, res) => {
   const { nuevoPedido } = req.body;
@@ -140,9 +170,80 @@ app.post("/contenido", (req, res) => {
   });
 });
 
+app.post("/posicion", (req, res) => {
+  const {
+    Col1: col1,
+    Col2: col2,
+    Col3: col3,
+    Col4: col4,
+    Col5: col5,
+    Col6: col6,
+    Col7: col7,
+    Col8: col8,
+    Col9: col9,
+    Col10: col10,
+  } = req.body;
 
+  // Crear la tabla si no existe
+  const createTableM1Query = `
+    CREATE TABLE IF NOT EXISTS M1 (
+      \`ID\` INT AUTO_INCREMENT PRIMARY KEY,
+      \`Col1\` VARCHAR(255),
+      \`Col2\` VARCHAR(255),
+      \`Col3\` VARCHAR(255),
+      \`Col4\` VARCHAR(255),
+      \`Col5\` VARCHAR(255),
+      \`Col6\` VARCHAR(255),
+      \`Col7\` VARCHAR(255),
+      \`Col8\` VARCHAR(255),
+      \`Col9\` VARCHAR(255),
+      \`Col10\` VARCHAR(255)
+    );
+  `;
 
+  db.query(createTableM1Query, (createErr) => {
+    if (createErr) {
+      console.error("Error al crear/verificar la tabla M1:", createErr);
+      res.status(500).send("Error al crear la tabla M1");
+      return;
+    }
 
+    // Insertar datos en la tabla una vez creada
+    const insertQuery =
+      "INSERT INTO M1 (`Col1`, `Col2`, `Col3`, `Col4`, `Col5`, `Col6`, `Col7`, `Col8`, `Col9`, `Col10`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    db.query(
+      insertQuery,
+      [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10],
+      (err, results) => {
+        if (err) {
+          console.error("Error al insertar el registro:", err);
+          res.status(500).send("Error interno del servidor");
+          return;
+        }
+        console.log("Registro insertado correctamente");
+        res.status(201).send("Registro insertado correctamente");
+      }
+    );
+  });
+});
+
+app.get("/inventario_rack", (req, res) => {
+  const query = `
+      SELECT Nombre, COUNT(*) as Cantidad
+      FROM Datos
+      WHERE Nombre LIKE 'Kit %' AND INV = 'SI'
+      GROUP BY Nombre
+    `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error al seleccionar registros:", err);
+      res.status(500).send("Error interno del servidor");
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 // inventario llamado de tabla a sql
 app.get("/michi", (req, res) => {
@@ -155,8 +256,8 @@ app.get("/michi", (req, res) => {
               DATE_FORMAT(Hora_entrada_lab, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_lab,
               DATE_FORMAT(Hora_salida_lab, "%Y-%m-%d %H:%i:%s") AS Hora_salida_lab,
               INV,
-              DATE_FORMAT(Hora_entrada_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_entrada_bodega,
-              DATE_FORMAT(Hora_salida_bodega, "%Y-%m-%d %H:%i:%s") AS Hora_salida_bodega 
+              Hora_entrada_bodega,
+              Hora_salida_bodega 
             FROM RETORFID.Datos`,
     (err, results) => {
       if (err) {
@@ -216,7 +317,29 @@ app.post("/sets", (req, res) => {
   );
 });
 
-
+app.get("/said", (req, res) => {
+  // Consulta para obtener las últimas 3 filas ordenadas por una col específica
+  db.query(
+    `
+  SELECT * FROM (
+    SELECT *,
+    ROW_NUMBER() OVER (ORDER BY ID DESC) AS rn
+    FROM M1
+  ) AS numberedRows
+  WHERE rn <= 3
+  ORDER BY rn DESC;  
+  
+  `,
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener los datos de M1:", err);
+        res.status(500).send("Error en el servidor");
+        return;
+      }
+      res.json(results);
+    }
+  );
+});
 
 // ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
 // Obtener tags de la estación 1
@@ -351,7 +474,8 @@ app.post("/idkit/:tag", (req, res) => {
 });
 
 // ESTO ES ASIGNACIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
-// crear tabla de contenido
+
+///////////////////////////////////////////////////////
 
 // Crear la tabla 'Contenido' si no existe
 const createTableQuery = `
@@ -420,10 +544,6 @@ app.get("/kits_info", (req, res) => {
     WHERE INV = 'SI'
     GROUP BY Nombre
   `;
-  const contenidoCompletoQuery = `
-    SELECT Kits, Contenido
-    FROM Contenido
-  `;
 
   db.query(contenidoQuery, (err, contenidoResults) => {
     if (err) {
@@ -439,31 +559,17 @@ app.get("/kits_info", (req, res) => {
         return;
       }
 
-      db.query(contenidoCompletoQuery, (err, contenidoCompletoResults) => {
-        if (err) {
-          console.error("Error al obtener el contenido de los kits:", err);
-          res.status(500).send("Error en el servidor");
-          return;
-        }
+      const disponibles = disponibilidadResults.reduce((acc, row) => {
+        acc[row.Nombre] = row.Disponibles;
+        return acc;
+      }, {});
 
-        const disponibles = disponibilidadResults.reduce((acc, row) => {
-          acc[row.Nombre] = row.Disponibles;
-          return acc;
-        }, {});
+      console.log("Número de kits en Contenido:", contenidoResults[0].count);
+      console.log("Disponibles:", disponibles);
 
-        const contenido = contenidoCompletoResults.reduce((acc, row) => {
-          acc[row.Kits] = row.Contenido;
-          return acc;
-        }, {});
-
-        console.log("Número de kits en Contenido:", contenidoResults[0].count);
-        console.log("Disponibles:", disponibles);
-
-        res.json({
-          contenidoCount: contenidoResults[0].count,
-          disponibles: disponibles,
-          contenido: contenido,
-        });
+      res.json({
+        contenidoCount: contenidoResults[0].count,
+        disponibles: disponibles,
       });
     });
   });
@@ -612,8 +718,6 @@ app.post("/solicitar", (req, res) => {
     });
   });
 });
-
-
 // Desde aqui se implementa ingreso de material
 app.post("/guardarCambios", (req, res) => {
   const updates = req.body; // Los datos enviados desde el frontend
@@ -660,8 +764,16 @@ app.get("/ultimoPedido", (req, res) => {
 app.post("/actualizarINV", (req, res) => {
   const { EP } = req.body;
 
-  // Obtener la hora actual en formato TIMESTAMP
-  const currentDateTime = new Date().getTime();
+  // Función para formatear la fecha y hora
+  function formatDateTime(dateTimeString) {
+    const dateObj = new Date(dateTimeString);
+    const formattedDate = dateObj.toLocaleString(); // Convierte el objeto Date a una cadena en formato legible
+    return formattedDate;
+  }
+
+  // Obtener la hora actual y formatearla
+  const currentDateTime = new Date().toISOString();
+  const formattedDate = formatDateTime(currentDateTime);
 
   // Variable para almacenar el número de kit encontrado
   let kitNumber = null;
@@ -709,7 +821,7 @@ app.post("/actualizarINV", (req, res) => {
     // Actualizar INV y Hora_salida_bodega en la tabla Datos
     db.query(
       "UPDATE Datos SET INV = 'NO', Hora_salida_bodega = ? WHERE Tag = ?",
-      [currentDateTime, EP],
+      [formattedDate, EP],
       (updateErr, updateResults) => {
         if (updateErr) {
           console.error(
@@ -791,6 +903,7 @@ app.post("/actualizarINV", (req, res) => {
     );
   });
 });
+
 // Endpoint para crear la tabla 'Modo'
 app.post("/tablemode", (req, res) => {
   const createTableModoQuery = `
@@ -1043,7 +1156,6 @@ app.post("/saveM1", async (req, res) => {
       .json({ error: "Error al guardar la matriz en la base de datos" });
   }
 });
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

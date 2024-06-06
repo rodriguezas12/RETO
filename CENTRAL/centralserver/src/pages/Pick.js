@@ -44,12 +44,14 @@ function Pick() {
         })
         .then((data) => {
           const pedido = data.pedidoRealizado;
-          const kits = pedido.split(",").map((num) => `Kit ${num}`);
-          setPiezasPorVerificar(kits);
-          setPedidoRealizado(kits);
-          setPiezasVerificadas([]);
-          if (initialPedidoRealizado.length === 0) {
-            setInitialPedidoRealizado(kits);
+          if (pedido) {
+            const kits = pedido.split(',').map(num => `Kit ${num}`);
+            setPiezasPorVerificar(kits);
+            setPedidoRealizado(kits);
+            setPiezasVerificadas([]);
+            if (initialPedidoRealizado.length === 0) {
+              setInitialPedidoRealizado(kits);
+            }
           }
         })
         .catch((error) => {
@@ -97,18 +99,10 @@ function Pick() {
         return response.json();
       })
       .then((data) => {
-        const pedidoVerificado = data.pedidoRealizado
-          .split(",")
-          .map((num) => `Kit ${num}`);
-        const kitsVerificados = piezasPorVerificar.filter(
-          (kit) => !pedidoVerificado.includes(kit)
-        );
-        setPiezasPorVerificar((prevState) =>
-          prevState.filter((kit) => !kitsVerificados.includes(kit))
-        );
-        setPiezasVerificadas((prevState) => [
-          ...new Set([...prevState, ...kitsVerificados]),
-        ]);
+        const pedidoVerificado = data.pedidoRealizado.split(',').map(num => `Kit ${num}`);
+        const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
+        setPiezasPorVerificar(pedidoVerificado);
+        setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
 
         if (data.descuentoPedido === "") {
           setPopupVisible(true);
@@ -132,16 +126,14 @@ function Pick() {
       })
       .then((data) => {
         const pedido = data.pedidoRealizado;
-        const pedidoVerificado = pedido.split(",").map((num) => `Kit ${num}`);
-        const kitsVerificados = piezasPorVerificar.filter(
-          (kit) => !pedidoVerificado.includes(kit)
-        );
-        setPiezasPorVerificar(pedidoVerificado);
-        setPiezasVerificadas((prevState) => [
-          ...new Set([...prevState, ...kitsVerificados]),
-        ]);
-        if (pedidoVerificado.length === 0) {
-          setPopupVisible(true);
+        if (pedido) {
+          const pedidoVerificado = pedido.split(',').map(num => `Kit ${num}`);
+          const kitsVerificados = piezasPorVerificar.filter(kit => !pedidoVerificado.includes(kit));
+          setPiezasPorVerificar(pedidoVerificado);
+          setPiezasVerificadas((prevState) => [...new Set([...prevState, ...kitsVerificados])]);
+          if (pedidoVerificado.length === 0) {
+            setPopupVisible(true);
+          }
         }
       })
       .catch((error) => {
@@ -165,13 +157,40 @@ function Pick() {
     setPiezasVerificadas([]);
     setPostCount(0);
     setInitialPedidoRealizado([]);
+
+    // Realizar el POST al backend para cancelar el pedido
+    fetch("http://localhost:5000/cancelarPedido", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data.message); // Log para verificar en la consola del navegador
+      })
+      .catch((error) => {
+        console.error("There was an error with the fetch operation:", error);
+      });
   };
 
   return (
     <div id="root">
       <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
-          href="./Media/Nunito-Italic-VariableFont_wght.ttf"
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="true"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
           rel="stylesheet"
         />
       </Helmet>
@@ -210,8 +229,13 @@ function Pick() {
             </div>
           </div>
         )}
+        <div style={{ textAlign: "center", margin: "20px" }}>
+          <button onClick={closePopup}>Cancelar</button>
+        </div>
       </div>
     </div>
   );
 }
+
 export default Pick;
+
